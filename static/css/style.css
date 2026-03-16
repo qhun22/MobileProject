@@ -829,62 +829,67 @@ body {
     padding: 0 24px;
 }
 
-/* ----- Top: Lắng nghe bạn | Hotline/Email | Social ----- */
+/* ----- Top: NHẬN TƯ VẤN | LIÊN HỆ | KẾT NỐI (đồng bộ: nền đen, 3 cột) ----- */
 .qh-footer-top {
-    padding: 48px 0 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 40px 0;
+    background: #000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .qh-footer-top-inner {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    align-items: center;
+    align-items: start;
     gap: 32px;
 }
 
-.qh-footer-feedback-title {
-    font-size: 22px;
+/* Tiêu đề chung cho 3 cột: bold, uppercase, màu trắng */
+.qh-footer-feedback-title,
+.qh-footer-block-title {
+    font-size: 18px;
     font-weight: 700;
-    color: var(--qh-white);
+    color: #fff;
     margin: 0 0 12px;
     letter-spacing: 0.02em;
+    text-transform: uppercase;
 }
 
 .qh-footer-feedback-desc {
     font-size: 14px;
-    color: #94a3b8;
+    color: #cbd5e1;
     line-height: 1.6;
     margin: 0 0 20px;
     max-width: 420px;
 }
 
+/* Form: 1 hộp ghép - input trái (lớn) + nút phải (nhỏ), đen-trắng */
 .qh-footer-feedback-form {
     display: flex;
     gap: 0;
     max-width: 420px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 .qh-footer-feedback-input {
     flex: 1;
     padding: 12px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-right: none;
-    border-radius: 8px 0 0 8px;
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--qh-white);
+    border: none;
+    border-right: 1px solid #fff;
+    background: #000;
+    color: #fff;
     font-size: 14px;
     font-family: 'Signika', sans-serif;
     outline: none;
-    transition: border-color 0.2s, background 0.2s;
 }
 
 .qh-footer-feedback-input::placeholder {
-    color: #94a3b8;
+    color: #9ca3af;
 }
 
 .qh-footer-feedback-input:focus {
-    border-color: var(--qh-primary);
-    background: rgba(255, 255, 255, 0.08);
+    background: #000;
 }
 
 .qh-footer-feedback-btn {
@@ -892,22 +897,24 @@ body {
     align-items: center;
     gap: 8px;
     padding: 12px 20px;
-    background: var(--qh-white);
-    color: #0f172a;
+    background: #fff;
+    color: #000;
     border: none;
-    border-radius: 0 8px 8px 0;
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.04em;
     font-family: 'Signika', sans-serif;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
+    transition: background 0.2s, color 0.2s;
     position: relative;
 }
 
 .qh-footer-feedback-btn:hover:not(:disabled) {
-    background: #e2e8f0;
-    transform: translateY(-1px);
+    background: #e5e5e5;
+}
+
+.qh-footer-feedback-btn-arrow {
+    color: #000;
 }
 
 .qh-footer-feedback-btn:disabled {
@@ -930,31 +937,30 @@ body {
     margin-left: 2px;
 }
 
-/* Giữa: Hotline + Email */
-/* Khối Hotline + Email: căn giữa trong cột */
+/* Giữa: LIÊN HỆ - icon tròn xám nhạt trên nền đen */
 .qh-footer-contact-block {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 14px;
     justify-self: center;
 }
 
 .qh-footer-contact-row {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
 .qh-footer-contact-icon {
-    width: 56px;
-    height: 56px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
+    background: #1f2937;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--qh-white);
-    font-size: 26px;
+    color: #94a3b8;
+    font-size: 18px;
     flex-shrink: 0;
 }
 
@@ -962,13 +968,13 @@ body {
     display: block;
     font-size: 13px;
     color: #94a3b8;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .qh-footer-contact-value {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    color: var(--qh-white);
+    color: #fff;
     text-decoration: none;
     transition: color 0.2s;
 }
@@ -977,141 +983,148 @@ body {
     color: var(--qh-primary);
 }
 
-/* Phải: Social icon to, màu đúng thương hiệu */
+/* Phải: KẾT NỐI VỚI CHÚNG TÔI - 4 icon tròn xám nhạt */
 .qh-footer-social-block {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     justify-self: center;
+}
+
+.qh-footer-social-block .qh-footer-block-title {
+    margin-bottom: 16px;
 }
 
 .qh-footer-social-circles {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .qh-footer-social-circle {
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    border: none;
+    background: #1f2937;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
-    color: var(--qh-white);
-    transition: transform 0.2s, box-shadow 0.2s;
+    font-size: 20px;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
 }
 
 .qh-footer-social-circle:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-}
-
-.qh-footer-social-fb {
-    background: #1877F2;
-}
-
-.qh-footer-social-fb:hover {
+    background: #374151;
     color: #fff;
 }
 
-.qh-footer-social-zalo {
-    background: #0068FF;
-}
-
-.qh-footer-social-zalo:hover {
-    color: #fff;
-}
-
-.qh-footer-social-tiktok {
-    background: #000000;
-    color: #fff;
-}
-
-.qh-footer-social-tiktok:hover {
-    color: #fff;
-}
-
-.qh-footer-social-ig {
-    background: linear-gradient(135deg, #F58529, #DD2A7B, #8134AF, #515BD4);
-    color: #fff;
-}
-
-.qh-footer-social-ig:hover {
-    color: #fff;
-}
-
-.qh-footer-social-yt {
-    background: #FF0000;
-}
-
-.qh-footer-social-yt:hover {
-    color: #fff;
-}
-
-/* ----- Giữa: Cột liên kết ----- */
+/* ----- Giữa: Cột liên kết (design: nền đen, title trắng, link xám, 5 cột, nhóm phụ) ----- */
 .qh-footer-mid {
-    padding: 40px 0 36px;
+    padding: 48px 0 40px;
+    background: #000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .qh-footer-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 32px 24px;
+    gap: 40px 48px;
+    text-align: left;
 }
 
 .qh-footer-col-title {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
-    color: var(--qh-white);
-    margin: 0 0 16px;
-    letter-spacing: 0.06em;
+    color: #fff;
+    margin: 0 0 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.qh-footer-col-subtitle {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin: 28px 0 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 .qh-footer-nav {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .qh-footer-nav a {
     font-size: 14px;
-    color: #94a3b8;
+    color: #cbd5e1;
     text-decoration: none;
-    transition: color 0.2s, padding-left 0.2s;
+    line-height: 1.5;
+    transition: color 0.2s;
 }
 
 .qh-footer-nav a:hover {
-    color: var(--qh-white);
-    padding-left: 4px;
+    color: #fff;
 }
 
+.qh-footer-address {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.qh-footer-address-block,
 .qh-footer-address p {
     font-size: 14px;
-    color: #94a3b8;
+    color: #cbd5e1;
     line-height: 1.6;
     margin: 0;
 }
 
 /* ----- Đáy: Copyright + Badges ----- */
+/* Badge Bộ Công Thương: nằm dưới Địa chỉ liên hệ (trong cột đen) */
+.qh-footer-badges {
+    margin-top: 20px;
+}
+
+.qh-footer-badge-img {
+    height: 32px;
+    width: auto;
+    max-width: 90px;
+    object-fit: contain;
+    opacity: 0.95;
+    transition: opacity 0.3s ease;
+    display: block;
+}
+
+.qh-footer-badge-img:hover {
+    opacity: 1;
+}
+
+/* Đáy footer: chỉ Copyright, căn giữa, nền đen (đồng bộ với phần giữa) */
 .qh-footer-bottom {
-    background: #0b1220;
+    background: #000;
     padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .qh-footer-bottom-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
+    justify-content: center;
+}
+
+.qh-footer-copyright {
+    text-align: center;
 }
 
 .qh-footer-copyright p {
     font-size: 13px;
-    color: #64748b;
+    color: #94a3b8;
     margin: 0;
 }
 
@@ -1121,19 +1134,6 @@ body {
     padding: 4px 10px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 4px;
-}
-
-.qh-footer-badge-img {
-    height: 28px;
-    width: auto;
-    max-width: 80px;
-    object-fit: contain;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-}
-
-.qh-footer-badge-img:hover {
-    opacity: 1;
 }
 
 @keyframes qh-newsletter-spin {
@@ -1175,25 +1175,33 @@ body {
     }
 
     .qh-footer-feedback-input {
-        border-right: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
+        border-right: none;
+        border-bottom: 1px solid #fff;
     }
 
     .qh-footer-feedback-btn {
-        border-radius: 8px;
+        border-radius: 0;
     }
 
     .qh-footer-mid {
-        padding: 28px 0 24px;
+        padding: 36px 0 28px;
     }
 
     .qh-footer-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 24px 16px;
+        gap: 32px 24px;
+    }
+
+    .qh-footer-col-subtitle {
+        margin-top: 24px;
     }
 
     .qh-footer-bottom-inner {
-        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .qh-footer-copyright {
         text-align: center;
     }
 }
@@ -1208,11 +1216,11 @@ body {
     }
 }
 
-/* Nút cuộn lên: dưới nút so sánh */
+/* Nút cuộn lên: bên phải, phía trên thanh contact đỏ */
 .qh-scroll-top {
     position: fixed;
-    left: 24px;
-    bottom: 24px;
+    right: 24px;
+    bottom: 80px;
     width: 52px;
     height: 52px;
     border-radius: 50%;
@@ -1271,8 +1279,8 @@ body {
 
 @media (max-width: 768px) {
     .qh-scroll-top {
-        left: 16px;
-        bottom: 16px;
+        right: 16px;
+        bottom: 72px;
         width: 46px;
         height: 46px;
         font-size: 22px;

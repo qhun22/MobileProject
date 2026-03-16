@@ -60,19 +60,14 @@ const QHCompare = {
         const items = this.getItems();
         const count = items.length;
 
-        // Cập nhật badge đếm
+        // Cập nhật badge đếm (nằm trên icon So sánh trong thanh contact đỏ)
         const badge = document.getElementById('qh-compare-fab-count');
-        if (badge) badge.textContent = count;
-
-        // Hiển/ẩn FAB dựa trên số lượng sản phẩm
-        const fab = document.getElementById('qh-compare-fab');
-        if (fab) {
-            if (count > 0) {
-                fab.classList.add('active');
-            } else {
-                fab.classList.remove('active');
-            }
+        if (badge) {
+            badge.textContent = count;
+            badge.style.display = count > 0 ? '' : 'none';
         }
+
+        // Badge đếm đã chuyển vào thanh contact đỏ (qh-compare-fab-count)
 
         // Cập nhật nút "So sánh ngay"
         const goBtn = document.getElementById('qh-compare-go-btn');
@@ -123,14 +118,10 @@ const QHCompare = {
         window.location.href = '/compare/?ids=' + ids;
     },
 
-    // Toggle hiển/ẩn thanh so sánh
+    // Toggle hiển/ẩn thanh so sánh (nút So sánh nằm trong thanh contact đỏ)
     toggleBar: function() {
         const bar = document.getElementById('qh-compare-bar');
-        const fab = document.getElementById('qh-compare-fab');
-        if (bar && fab) {
-            bar.classList.toggle('active');
-            fab.classList.toggle('active');
-        }
+        if (bar) bar.classList.toggle('active');
     }
 };
 

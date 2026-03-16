@@ -1,0 +1,295 @@
+/* ==================== FLOATING CONTACT BAR ====================
+   Compact version: smaller size, softer glow, red bg, curved top-left
+   ==================== */
+
+.qh-contact-bar {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 9998;
+    font-family: 'Signika', sans-serif;
+}
+
+/* Container: compact red bar, curved top-left corner */
+.qh-contact-bar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #b91c1c;
+    padding: 10px 14px 12px 14px;
+    /* Large curved left side (toward page content), straight right side */
+    border-radius: 48px 0 0 48px;
+    /* Soft red glow shadow */
+    box-shadow:
+        0 0 24px rgba(212, 0, 0, 0.25),
+        0 0 12px rgba(212, 0, 0, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.25s ease;
+}
+
+.qh-contact-bar-container:hover {
+    /* Container stays static - only icons animate on hover */
+    box-shadow:
+        0 0 32px rgba(212, 0, 0, 0.3),
+        0 0 16px rgba(212, 0, 0, 0.25),
+        0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+/* Buttons: evenly spaced, centered vertically */
+.qh-contact-bar-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+}
+
+/* Circular buttons: white border, white icon */
+.qh-contact-bar-icon-wrap {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Badge số lượng trên icon So sánh */
+.qh-contact-bar-compare-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background: #fff;
+    color: #d40000;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 16px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.qh-contact-bar-compare-badge:empty {
+    display: none;
+}
+
+.qh-contact-bar-icon-wrap i {
+    font-size: 16px;
+    color: #fff;
+    transition: transform 0.25s ease;
+}
+
+/* Hover: scale slightly and glow */
+.qh-contact-bar-item:hover .qh-contact-bar-icon-wrap {
+    transform: scale(1.1);
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+}
+
+.qh-contact-bar-item:hover .qh-contact-bar-icon-wrap i {
+    transform: scale(1.05);
+}
+
+.qh-contact-bar-item:active .qh-contact-bar-icon-wrap {
+    transform: scale(0.98);
+}
+
+/* Tooltip bên trái (desktop) */
+.qh-contact-bar-tooltip {
+    position: absolute;
+    right: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, right 0.2s ease;
+    pointer-events: none;
+}
+
+.qh-contact-bar-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-left-color: rgba(0, 0, 0, 0.85);
+}
+
+.qh-contact-bar-item:hover .qh-contact-bar-tooltip {
+    opacity: 1;
+    visibility: visible;
+    right: calc(100% + 8px);
+}
+
+/* Animation xuất hiện nhẹ */
+@keyframes qh-contact-bar-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.qh-contact-bar-container {
+    animation: qh-contact-bar-in 0.4s ease-out forwards;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+    .qh-contact-bar {
+        bottom: 8px;
+        right: 8px;
+    }
+
+    .qh-contact-bar-container {
+        padding: 8px 12px 10px 12px;
+        gap: 8px;
+        border-radius: 36px 0 0 36px;
+    }
+
+    .qh-contact-bar-icon-wrap {
+        width: 32px;
+        height: 32px;
+    }
+
+    .qh-contact-bar-icon-wrap i {
+        font-size: 14px;
+    }
+
+    .qh-contact-bar-tooltip {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .qh-contact-bar {
+        bottom: 6px;
+        right: 6px;
+    }
+
+    .qh-contact-bar-container {
+        padding: 6px 10px 8px 10px;
+        gap: 6px;
+        border-radius: 28px 0 0 28px;
+    }
+
+    .qh-contact-bar-icon-wrap {
+        width: 28px;
+        height: 28px;
+    }
+
+    .qh-contact-bar-icon-wrap i {
+        font-size: 12px;
+    }
+}
+
+/* ============================================================
+   SCROLL-TO-TOP BUTTON - EASY POSITION CONFIGURATION
+   ============================================================
+   Use the variables below to easily move the button:
+   - Horizontal: Change 'right' (or use 'left' instead)
+   - Vertical: Change 'bottom' (or use 'top' instead)
+   ============================================================ */
+
+.qh-scroll-top {
+    /* --- POSITION CONTROL --- */
+    /* Horizontal: use 'right' or 'left' (currently: right side) */
+    right: 22px;
+    /* Vertical: use 'bottom' or 'top' (currently: above contact bar) */
+    bottom: 80px;
+    /* Keep fixed position */
+    position: fixed;
+    /* Ensure it stays above other elements */
+    z-index: 9999;
+
+    /* --- STYLE (Do not change unless needed) --- */
+    background: #b91c1c !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+    border-radius: 50% !important;
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    box-shadow:
+        0 0 20px rgba(212, 0, 0, 0.35),
+        0 0 10px rgba(212, 0, 0, 0.25),
+        0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.3s ease !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Show button when scrolled */
+.qh-scroll-top.qh-scroll-top--visible {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Hover: scale up with glow */
+.qh-scroll-top:hover {
+    transform: scale(1.1) !important;
+    box-shadow:
+        0 0 24px rgba(212, 0, 0, 0.45),
+        0 0 16px rgba(255, 255, 255, 0.4),
+        0 6px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 768px) {
+    .qh-scroll-top {
+        /* Move closer to edge on mobile */
+        right: 8px;
+        bottom: 68px;
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 18px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .qh-scroll-top {
+        right: 6px;
+        bottom: 64px;
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 16px !important;
+    }
+}
+
+/* Ẩn Chat FAB (đã gộp vào thanh contact đỏ) */
+.qh-chat-fab.qh-chat-fab--hidden {
+    display: none !important;
+}
+
+/* Giảm chuyển động */
+@media (prefers-reduced-motion: reduce) {
+    .qh-contact-bar-container,
+    .qh-contact-bar-icon-wrap,
+    .qh-contact-bar-icon-wrap i,
+    .qh-contact-bar-tooltip {
+        animation: none;
+        transition: none;
+    }
+}

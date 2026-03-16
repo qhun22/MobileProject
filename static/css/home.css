@@ -1328,3 +1328,27 @@
         font-size: 12px;
     }
 }
+
+/* ==================== PHÂN TRANG TRÒN (home) ==================== */
+.qh-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+}
+
+.qh-pagination .qh-pagination-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 15px;
+}
+
+.qh-pagination .qh-pagination-icon {
+    width: 16px;
+    height: 16px;
+}

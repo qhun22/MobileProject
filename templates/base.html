@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/banner.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
+    <link rel="stylesheet" href="{% static 'css/contact-bar.css' %}">
 
     <!-- Font Google - Signika -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -180,8 +181,9 @@
                             </button>
                         </form>
                     </div>
-                    <!-- Giữa: Hotline + Email -->
+                    <!-- Giữa: LIÊN HỆ -->
                     <div class="qh-footer-contact-block">
+                        <h3 class="qh-footer-block-title">LIÊN HỆ TRỰC TIẾP</h3>
                         <div class="qh-footer-contact-row">
                             <div class="qh-footer-contact-icon"><i class="ri-phone-fill"></i></div>
                             <div>
@@ -197,78 +199,96 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Phải: Social (màu từng thương hiệu) -->
+                    <!-- Phải: KẾT NỐI VỚI CHÚNG TÔI (4 icon) -->
                     <div class="qh-footer-social-block">
+                        <h3 class="qh-footer-block-title">KẾT NỐI VỚI CHÚNG TÔI</h3>
                         <div class="qh-footer-social-circles">
-                            <a href="#" class="qh-footer-social-circle qh-footer-social-fb" aria-label="Facebook"><i class="ri-facebook-fill"></i></a>
-                            <a href="https://zalo.me/0327221005" class="qh-footer-social-circle qh-footer-social-zalo" aria-label="Zalo"><i class="ri-chat-3-fill"></i></a>
-                            <a href="#" class="qh-footer-social-circle qh-footer-social-tiktok" aria-label="TikTok"><i class="ri-tiktok-fill"></i></a>
-                            <a href="#" class="qh-footer-social-circle qh-footer-social-ig" aria-label="Instagram"><i class="ri-instagram-fill"></i></a>
-                            <a href="#" class="qh-footer-social-circle qh-footer-social-yt" aria-label="YouTube"><i class="ri-youtube-fill"></i></a>
+                            <a href="#" class="qh-footer-social-circle" aria-label="Facebook"><i class="ri-facebook-fill"></i></a>
+                            <a href="https://zalo.me/0327221005" class="qh-footer-social-circle" aria-label="Zalo"><i class="ri-chat-3-fill"></i></a>
+                            <a href="#" class="qh-footer-social-circle" aria-label="TikTok"><i class="ri-tiktok-fill"></i></a>
+                            <a href="#" class="qh-footer-social-circle" aria-label="Instagram"><i class="ri-instagram-fill"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Giữa: Cột liên kết -->
+        <!-- Giữa: Cột liên kết (design: nền đen, 5 cột, title trắng, nhóm phụ) -->
         <div class="qh-footer-mid">
             <div class="qh-footer-container">
                 <div class="qh-footer-grid">
+                    <!-- Cột 1: TÀI KHOẢN + nhóm phụ -->
                     <div class="qh-footer-col">
                         <h3 class="qh-footer-col-title">TÀI KHOẢN</h3>
                         <nav class="qh-footer-nav">
-                            <a href="{% url 'store:profile' %}">Tài khoản của tôi</a>
+                            <a href="{% url 'store:profile' %}">Tài khoản QHUN22</a>
                             <a href="{% url 'store:register' %}">Đăng ký thành viên</a>
-                            <a href="{% url 'store:cart_detail' %}">Ưu đãi & Giỏ hàng</a>
+                            <a href="{% url 'store:cart_detail' %}">Ưu đãi & Đặc quyền</a>
+                        </nav>
+                        <h4 class="qh-footer-col-subtitle">TÀI LIỆU - TUYỂN DỤNG</h4>
+                        <nav class="qh-footer-nav">
+                            <a href="{% url 'store:order_tracking' %}">Đăng ký bản quyền</a>
+                            <a href="#">Tuyển dụng cộng tác</a>
                         </nav>
                     </div>
+                    <!-- Cột 2: CHÍNH SÁCH + nhóm phụ -->
                     <div class="qh-footer-col">
                         <h3 class="qh-footer-col-title">CHÍNH SÁCH</h3>
                         <nav class="qh-footer-nav">
-                            <a href="#">Chính sách đổi trả</a>
-                            <a href="#">Chính sách bảo hành</a>
+                            <a href="#">Chính sách đổi trả tại cửa hàng</a>
+                            <a href="#">Chính sách đổi trả online</a>
                             <a href="#">Chính sách khuyến mãi</a>
                             <a href="#">Chính sách bảo mật</a>
                             <a href="#">Chính sách giao hàng</a>
                         </nav>
                     </div>
+                    <!-- Cột 3: CHĂM SÓC KHÁCH HÀNG + nhóm phụ -->
                     <div class="qh-footer-col">
                         <h3 class="qh-footer-col-title">CHĂM SÓC KHÁCH HÀNG</h3>
                         <nav class="qh-footer-nav">
                             <a href="{% url 'store:order_tracking' %}">Tra cứu đơn hàng</a>
                             <a href="#">Hỏi đáp - FAQs</a>
                         </nav>
+                        <h4 class="qh-footer-col-subtitle">KIẾN THỨC MUA SẮM</h4>
+                        <nav class="qh-footer-nav">
+                            <a href="{% url 'store:product_search' %}">Hướng dẫn chọn máy</a>
+                            <a href="#">Blog</a>
+                        </nav>
                     </div>
+                    <!-- Cột 4: VỀ QHUN22 (một danh sách dài) -->
                     <div class="qh-footer-col">
                         <h3 class="qh-footer-col-title">VỀ QHUN22</h3>
                         <nav class="qh-footer-nav">
                             <a href="{% url 'store:home' %}">Trang chủ</a>
                             <a href="{% url 'store:product_search' %}">Sản phẩm</a>
-                            <a href="#">Liên hệ</a>
+                            <a href="#">Chính sách bảo hành</a>
+                            <a href="#">Cam kết chất lượng</a>
+                            <a href="#">Câu chuyện thương hiệu</a>
                         </nav>
                     </div>
+                    <!-- Cột 5: ĐỊA CHỈ LIÊN HỆ + Bộ Công Thương bên dưới -->
                     <div class="qh-footer-col">
                         <h3 class="qh-footer-col-title">ĐỊA CHỈ LIÊN HỆ</h3>
                         <div class="qh-footer-address">
-                            <p>Thái Nguyên, Việt Nam</p>
+                            <p class="qh-footer-address-block">Cửa hàng: B2, Tầng B2, Hanoi Centre, 175 Nguyễn Thái Học, Đống Đa, Hà Nội</p>
+                            <p class="qh-footer-address-block">Trung tâm vận hành: Lô C8, KCN Lại Yên, Xã Lại Yên, Huyện Hoài Đức, Thành phố Hà Nội</p>
                         </div>
+                        {% if badge_banner %}
+                        <div class="qh-footer-badges">
+                            <img src="{{ badge_banner.image.url }}" alt="Đã thông báo Bộ Công Thương" class="qh-footer-badge-img">
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Đáy: Copyright + Chứng nhận -->
+        <!-- Đáy: chỉ Copyright, căn giữa -->
         <div class="qh-footer-bottom">
             <div class="qh-footer-container">
                 <div class="qh-footer-bottom-inner">
                     <div class="qh-footer-copyright">
-                        <p>©QHUN22 MOBILE. All rights reserved.</p>
-                    </div>
-                    <div class="qh-footer-badges" aria-hidden="true">
-                        {% if badge_banner %}
-                        <img src="{{ badge_banner.image.url }}" alt="Đã thông báo Bộ Công Thương" class="qh-footer-badge-img">
-                        {% endif %}
+                        <p>© 2026 QHUN22 MOBILE.</p>
                     </div>
                 </div>
             </div>
@@ -314,10 +334,6 @@
     <button type="button" id="qh-scroll-top" class="qh-scroll-top" aria-label="Cuộn lên đầu trang">
         <i class="ri-arrow-up-s-line"></i>
     </button>
-    <!-- Nút Zalo / Liên hệ (phải dưới) -->
-    <a href="https://zalo.me/0327221005" class="qh-zalo-fab" aria-label="Liên hệ Zalo" target="_blank" rel="noopener">
-        <i class="ri-chat-3-fill"></i>
-    </a>
     <script>
     (function() {
         var scrollBtn = document.getElementById('qh-scroll-top');
@@ -350,12 +366,6 @@
         </div>
     </div>
 
-    <!-- Nút nổi so sánh -->
-    <button id="qh-compare-fab" class="qh-compare-fab" onclick="QHCompare.toggleBar()">
-        <i class="ri-arrow-left-right-line" style="font-size:22px;"></i>
-        <span id="qh-compare-fab-count" class="qh-compare-fab-badge">0</span>
-    </button>
-
     <!-- Các file JavaScript -->
     <script src="{% static 'js/compare.js' %}"></script>
 
@@ -383,10 +393,46 @@
             <button id="qh-chat-send" class="qh-chat-send" title="Gửi"><i class="ri-send-plane-2-fill"></i></button>
         </div>
     </div>
-    <button id="qh-chat-fab" class="qh-chat-fab" title="Chat với AI">
+    <!-- Nút Chat FAB giữ trong DOM cho chatbot.js (đóng/mở), ẩn vì đã gộp vào thanh contact đỏ -->
+    <button id="qh-chat-fab" class="qh-chat-fab qh-chat-fab--hidden" title="Chat với AI" aria-hidden="true">
         <i class="ri-chat-smile-3-line qh-chat-fab-open"></i>
         <i class="ri-close-line qh-chat-fab-close"></i>
     </button>
+
+    <!-- ==================== FLOATING CONTACT BAR (thanh ngang đỏ, góc trên-trái cong) ==================== -->
+    <div class="qh-contact-bar" id="qh-contact-bar">
+        <div class="qh-contact-bar-container">
+            <!-- Chatbot AI -->
+            <a href="javascript:void(0)" class="qh-contact-bar-item" onclick="QHFloatingContact.openChatbot(event)" title="Chat với AI">
+                <span class="qh-contact-bar-icon-wrap"><i class="ri-robot-2-line"></i></span>
+                <span class="qh-contact-bar-tooltip">Chat AI</span>
+            </a>
+            <!-- Zalo -->
+            <a href="https://zalo.me/0327221005" target="_blank" rel="noopener" class="qh-contact-bar-item" title="Chat Zalo">
+                <span class="qh-contact-bar-icon-wrap"><i class="ri-chat-3-fill"></i></span>
+                <span class="qh-contact-bar-tooltip">Zalo</span>
+            </a>
+            <!-- So sánh sản phẩm -->
+            <a href="javascript:void(0)" class="qh-contact-bar-item qh-contact-bar-item--compare" onclick="QHCompare.toggleBar()" title="So sánh sản phẩm">
+                <span class="qh-contact-bar-icon-wrap">
+                    <i class="ri-arrow-left-right-line"></i>
+                    <span id="qh-compare-fab-count" class="qh-contact-bar-compare-badge">0</span>
+                </span>
+                <span class="qh-contact-bar-tooltip">So sánh</span>
+            </a>
+        </div>
+    </div>
+    <script>
+    var QHFloatingContact = {
+        openChatbot: function(e) {
+            e.preventDefault();
+            var fab = document.getElementById('qh-chat-fab');
+            if (fab) fab.click();
+        }
+    };
+    </script>
+    <!-- ==================== END FLOATING CONTACT BAR ==================== -->
+
     <script src="{% static 'js/chatbot.js' %}"></script>
 
     <script>

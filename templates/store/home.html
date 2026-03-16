@@ -150,7 +150,6 @@
         </div>
     </div>
 
-    <!-- HOT SALE HÀNG NGÀY Section -->
     <!-- HOT SALE HÀNG NGÀY Section - 24h countdown + sản phẩm từ featured -->
     <div class="qh-hotsale-section" style="margin: 32px 0; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); border-radius: 16px; overflow: hidden;">
         <div style="padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
@@ -528,10 +527,10 @@
     <div id="qhPaginationContainer">
     <!-- Phân trang -->
     {% if products.has_other_pages %}
-    <div class="qh-pagination" style="display: flex; justify-content: center; gap: 8px; margin-top: 40px;">
+    <div class="qh-pagination">
         {% if products.has_previous %}
-        <a href="#" onclick="QHProductFilter.loadPage({{ products.previous_page_number }}); return false;" class="qh-btn qh-btn-secondary" style="padding: 8px 16px;">
-            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href="#" onclick="QHProductFilter.loadPage({{ products.previous_page_number }}); return false;" class="qh-btn qh-btn-secondary qh-pagination-btn">
+            <svg class="qh-pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
             </svg>
         </a>
@@ -539,15 +538,15 @@
         
         {% for num in products.paginator.page_range %}
             {% if products.number == num %}
-            <span class="qh-btn qh-btn-primary" style="padding: 8px 16px; cursor: default;">{{ num }}</span>
+            <span class="qh-btn qh-btn-primary qh-pagination-btn qh-pagination-current">{{ num }}</span>
             {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
-            <a href="#" onclick="QHProductFilter.loadPage({{ num }}); return false;" class="qh-btn qh-btn-secondary" style="padding: 8px 16px;">{{ num }}</a>
+            <a href="#" onclick="QHProductFilter.loadPage({{ num }}); return false;" class="qh-btn qh-btn-secondary qh-pagination-btn">{{ num }}</a>
             {% endif %}
         {% endfor %}
         
         {% if products.has_next %}
-        <a href="#" onclick="QHProductFilter.loadPage({{ products.next_page_number }}); return false;" class="qh-btn qh-btn-secondary" style="padding: 8px 16px;">
-            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href="#" onclick="QHProductFilter.loadPage({{ products.next_page_number }}); return false;" class="qh-btn qh-btn-secondary qh-pagination-btn">
+            <svg class="qh-pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
         </a>
