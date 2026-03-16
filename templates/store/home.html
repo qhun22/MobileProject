@@ -175,7 +175,7 @@
             <div class="qh-product-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
                 {% if hot_sale_products and hot_sale_products|length > 0 %}
                 {% for product in hot_sale_products %}
-                <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
+                <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
                     <div class="qh-product-image" style="position: relative; aspect-ratio: 1; background: #ffffff; overflow: hidden;">
                         {% if product.image %}
                         <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -267,7 +267,7 @@
     <div class="qh-product-grid">
         {% for item in best_sellers %}
         {% with product=item.product %}
-        <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
+        <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
             
             <!-- Ảnh sản phẩm -->
             <div class="qh-product-image" style="position: relative; aspect-ratio: 1; background: #ffffff; overflow: hidden;">
@@ -429,7 +429,7 @@
     <!-- Container for AJAX product list -->
     <div id="qhProductListContainer" class="qh-product-grid">
         {% for product in products %}
-        <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
+        <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
             
             <!-- Ảnh sản phẩm -->
             <div class="qh-product-image" style="position: relative; aspect-ratio: 1; background: #ffffff; overflow: hidden;">
