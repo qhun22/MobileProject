@@ -103,19 +103,22 @@
 .qh-otp-btn {
     white-space: nowrap;
     padding: 12px 20px;
-    background: var(--qh-primary);
-    color: var(--qh-white);
-    border: none;
+    background: var(--qh-white);
+    color: var(--qh-text);
+    border: 2px solid var(--qh-border);
     border-radius: var(--qh-radius);
     cursor: pointer;
     font-family: 'Signika', sans-serif;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     transition: all 0.3s ease;
 }
 
 .qh-otp-btn:hover:not(:disabled) {
-    background: var(--qh-primary-dark);
+    background: var(--qh-bg);
+    color: var(--qh-text);
+    border-color: var(--qh-primary);
+    transform: translateY(-1px);
 }
 
 .qh-otp-btn:disabled {
@@ -147,4 +150,21 @@
 /* Toast Message (for Django messages) */
 .qh-toast-message {
     display: none;
+}
+
+/* Submit button in register form: keep simple, no gradient */
+.qh-auth-box .qh-btn-primary {
+    background: var(--qh-white);
+    color: var(--qh-text);
+    border: 2px solid var(--qh-border);
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.qh-auth-box .qh-btn-primary:hover {
+    background: var(--qh-bg);
+    color: var(--qh-text);
+    border-color: var(--qh-primary);
+    transform: translateY(-1px);
+    box-shadow: none;
 }

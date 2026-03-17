@@ -127,3 +127,20 @@
     justify-content: center;
     margin-bottom: 20px;
 }
+
+/* ========== Auth Submit Button (simple style) ========== */
+.qh-auth-box .qh-btn-primary {
+    background: var(--qh-white);
+    color: var(--qh-text);
+    border: 2px solid var(--qh-border);
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.qh-auth-box .qh-btn-primary:hover {
+    background: var(--qh-bg);
+    color: var(--qh-text);
+    border-color: var(--qh-primary);
+    transform: translateY(-1px);
+    box-shadow: none;
+}

@@ -120,6 +120,12 @@ function showStep2(email) {
 
     document.getElementById('hiddenEmail').value = email;
 
+    var otpSentInfo = document.getElementById('otpSentInfo');
+    if (otpSentInfo) {
+        otpSentInfo.textContent = 'Mã OTP đã được gửi về Email: ' + email;
+        otpSentInfo.style.display = 'block';
+    }
+
     startCountdown();
 }
 
