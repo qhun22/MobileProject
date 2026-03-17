@@ -11,6 +11,7 @@
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     overflow: hidden;
+    position: relative;
 }
 
 /* ========== Hero: icon + title ========== */
@@ -139,7 +140,7 @@
 
 .qh-os-btn:hover {
     border-color: var(--qh-primary);
-    background: rgba(169, 204, 240, 0.08);
+    background: var(--qh-primary-light);
 }
 
 .qh-os-btn:active {
@@ -151,14 +152,16 @@
 }
 
 .qh-os-btn.primary {
-    background: linear-gradient(135deg, var(--qh-primary), var(--qh-primary-dark));
-    border-color: var(--qh-primary-dark);
-    box-shadow: 0 4px 12px rgba(169, 204, 240, 0.4);
+    background: var(--qh-white);
+    color: var(--qh-primary);
+    border-color: var(--qh-primary);
+    box-shadow: none;
 }
 
 .qh-os-btn.primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(169, 204, 240, 0.5);
+    background: var(--qh-primary-light);
+    box-shadow: none;
 }
 
 /* ========== Footer message ========== */
