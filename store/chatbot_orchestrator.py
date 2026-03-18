@@ -23,7 +23,16 @@ class HybridChatbotOrchestrator:
         "staff",
         "installment",
         "warranty",
+        "compare",
         "list_products",
+        "brand_query",
+        "model_types",
+        "product_mention",
+        "consult",
+        "price",
+        "stock",
+        "variant",
+        "spec",
     }
 
     PRODUCT_RELIANT_AI_INTENTS = {
@@ -162,6 +171,19 @@ class HybridChatbotOrchestrator:
             return {"message": "Vui lòng nhập nội dung.", "suggestions": []}
 
         detected_local_intent = self.local_service.detect_intent(text)
+        # Nếu câu đã nhận diện được sản phẩm trong DB thì ưu tiên local để ổn định,
+        # tránh vòng AI trả thiếu context rồi mới fallback.
+        try:
+            detected_products = self.local_service.detect_product_names(text)
+        except Exception:
+            detected_products = []
+
+        if detected_products:
+            local_result = self.local_service.process_message(text, user=user, session=session)
+            local_result.setdefault("engine", "django_local")
+            local_result.setdefault("source", "local")
+            return local_result
+
         if self._should_route_local(text, detected_local_intent):
             local_result = self.local_service.process_message(text, user=user, session=session)
             local_result.setdefault("engine", "django_local")

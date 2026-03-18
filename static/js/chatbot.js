@@ -9,6 +9,7 @@ const QHChat = (() => {
     const WELCOME_SUGGESTIONS = ['Tư vấn chọn máy', 'So sánh sản phẩm', 'Kiểm tra đơn hàng', 'Gặp nhân viên'];
     let isOpen = false;
     let isSending = false;
+    let activeRequestController = null;
     let history = [];
 
     const $ = (sel) => document.querySelector(sel);
@@ -89,6 +90,14 @@ const QHChat = (() => {
         setSendDisabled(true);
         showTyping(true);
 
+        // Ensure only one active request and avoid stale responses.
+        if (activeRequestController) {
+            activeRequestController.abort();
+        }
+        activeRequestController = new AbortController();
+        const requestId = `qh_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        const timeoutId = setTimeout(() => activeRequestController?.abort('timeout'), 30000);
+
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value
             || document.cookie.match(/csrftoken=([^;]+)/)?.[1]
             || '';
@@ -99,25 +108,56 @@ const QHChat = (() => {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             },
-            body: JSON.stringify({ message }),
+            body: JSON.stringify({ message, request_id: requestId }),
+            signal: activeRequestController.signal,
         })
-            .then((res) => {
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                return res.json();
+            .then(async (res) => {
+                let data = null;
+                try {
+                    data = await res.json();
+                } catch {
+                    data = null;
+                }
+
+                if (!res.ok) {
+                    return {
+                        __error: true,
+                        status: res.status,
+                        message: data?.message || '',
+                    };
+                }
+                return data || {};
             })
             .then((data) => {
+                clearTimeout(timeoutId);
                 showTyping(false);
+
+                if (data?.__error) {
+                    let msg = data.message || 'Xin lỗi, hệ thống đang bận. Anh/chị thử lại sau nhé!';
+                    if (!data.message && data.status === 403) {
+                        msg = 'Phiên làm việc đã hết hạn. Anh/chị tải lại trang giúp em nhé!';
+                    }
+                    addBotMessage(msg, WELCOME_SUGGESTIONS, []);
+                    return;
+                }
+
                 addBotMessage(
                     data.message || 'Em chưa hiểu ý anh/chị. Anh/chị thử lại nhé!',
                     data.suggestions || [],
                     data.product_cards || data.cards || []
                 );
             })
-            .catch(() => {
+            .catch((err) => {
+                clearTimeout(timeoutId);
                 showTyping(false);
+                if (err?.name === 'AbortError') {
+                    // Request was cancelled by timeout/navigation/new request.
+                    return;
+                }
                 addBotMessage('Xin lỗi, hệ thống đang bận. Anh/chị thử lại sau nhé! 🙏', [], []);
             })
             .finally(() => {
+                activeRequestController = null;
                 isSending = false;
                 setSendDisabled(false);
                 $('#qh-chat-input')?.focus();
@@ -270,9 +310,15 @@ const QHChat = (() => {
     }
 
     function formatMarkdown(text) {
-        return escapeHtml(text)
-            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\n/g, '<br>');
+        let html = escapeHtml(text)
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+        // Support markdown links: [label](https://...)
+        html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (match, label, url) => {
+            return `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+        });
+
+        return html.replace(/\n/g, '<br>');
     }
 
     function escapeHtml(str) {
@@ -286,6 +332,11 @@ const QHChat = (() => {
     }
 
     document.addEventListener('DOMContentLoaded', init);
+    window.addEventListener('beforeunload', () => {
+        if (activeRequestController) {
+            activeRequestController.abort();
+        }
+    });
 
     return { toggle, sendSuggestion };
 })();

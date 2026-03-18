@@ -10,7 +10,7 @@ from typing import Any
 from django.db.models import Q, Sum
 from django.utils import timezone
 
-from .models import Product, ProductDetail, ProductSpecification, ProductVariant, ProductContent, Order, OrderItem
+from .models import Brand, Product, ProductDetail, ProductSpecification, ProductVariant, ProductContent, Order, OrderItem
 from .claude_service import ClaudeService
 
 logger = logging.getLogger(__name__)
@@ -154,7 +154,7 @@ PRICE_PATTERNS_NORM = re.compile(
 )
 
 STOCK_PATTERNS = re.compile(
-    r"(còn hàng không|còn không|còn máy không|hết hàng chưa|"
+    r"(còn hàng không|còn hàng|còn không|còn máy không|hết hàng chưa|hết hàng|"
     r"có hàng không|có sẵn không|còn sẵn không|"
     r"tình trạng|stock|hàng còn không|còn k|"
     r"còn bán không|hết chưa|còn hay hết|"
@@ -163,7 +163,7 @@ STOCK_PATTERNS = re.compile(
 )
 
 STOCK_PATTERNS_NORM = re.compile(
-    r"(con hang khong|con khong|con may khong|het hang chua|"
+    r"(con hang khong|con hang|con khong|con may khong|het hang chua|het hang|"
     r"co hang khong|co san khong|con san khong|"
     r"tinh trang|stock|hang con khong|con k|"
     r"con ko|het chua|con hay het|"
@@ -374,6 +374,38 @@ PRODUCT_NAME_PATTERNS_NORM = re.compile(
     re.IGNORECASE,
 )
 
+MODEL_TYPES_PATTERNS = re.compile(
+    r"(các loại|những loại|các dòng|những dòng|"
+    r"có loại nào|có dòng nào|gồm những loại nào|"
+    r"iphone\s*\d{1,2}\s*(có)?\s*(những|các)?\s*(loại|dòng).*(nào|gì)|"
+    r"loại iphone\s*\d{1,2})",
+    re.IGNORECASE,
+)
+
+MODEL_TYPES_PATTERNS_NORM = re.compile(
+    r"(cac loai|nhung loai|cac dong|nhung dong|"
+    r"co loai nao|co dong nao|gom nhung loai nao|"
+    r"iphone\s*\d{1,2}\s*(co)?\s*(nhung|cac)?\s*(loai|dong).*(nao|gi)|"
+    r"loai iphone\s*\d{1,2})",
+    re.IGNORECASE,
+)
+
+BRAND_QUERY_PATTERNS = re.compile(
+    r"(thương hiệu|brand|liên quan tới hãng|liên quan đến hãng|"
+    r"sản phẩm hãng|máy hãng|điện thoại hãng|dòng của hãng|"
+    r"của hãng nào|theo hãng|"
+    r"hãng\s+(apple|iphone|samsung|xiaomi|oppo|vivo|realme|huawei|nokia|pixel|google))",
+    re.IGNORECASE,
+)
+
+BRAND_QUERY_PATTERNS_NORM = re.compile(
+    r"(thuong hieu|brand|lien quan toi hang|lien quan den hang|"
+    r"san pham hang|may hang|dien thoai hang|dong cua hang|"
+    r"cua hang nao|theo hang|"
+    r"hang\s+(apple|iphone|samsung|xiaomi|oppo|vivo|realme|huawei|nokia|pixel|google))",
+    re.IGNORECASE,
+)
+
 # ════════════════════════════════════════════════════════════════
 # UTILS
 # ════════════════════════════════════════════════════════════════
@@ -414,6 +446,11 @@ def _normalize_text(value: str) -> str:
     text = re.sub(r"\biphone\s*(\d{1,2})\s*pm\b", r"iphone \1 pro max", text)
     text = re.sub(r"\biphone\s*(\d{1,2})\s*promax\b", r"iphone \1 pro max", text)
 
+    # Split compact model tokens: s25ultra -> s 25 ultra, ip17promax -> ip 17 pro max
+    text = re.sub(r"([a-z])(\d)", r"\1 \2", text)
+    text = re.sub(r"(\d)([a-z])", r"\1 \2", text)
+    text = re.sub(r"\bpro\s*max\b", "pro max", text)
+
     text = re.sub(r"\bip\b", "iphone", text)
 
     text = unicodedata.normalize("NFD", text)
@@ -430,6 +467,16 @@ def _format_price(value) -> str:
         return f"{v:,}₫".replace(",", ".")
     except (TypeError, ValueError):
         return None
+
+
+def _format_from_price(min_price: str | None) -> str:
+    """Format hiển thị giá ngắn gọn cho danh sách sản phẩm."""
+    return f"từ {min_price}" if min_price else ""
+
+
+def _format_product_line(name: str, min_price: str | None) -> str:
+    price_label = _format_from_price(min_price)
+    return f"  - {name} / {price_label}" if price_label else f"  - {name}"
 
 
 def _strip_html(text: str) -> str:
@@ -560,6 +607,23 @@ def _normalize_image_path(path: str) -> str | None:
     return raw if raw.startswith("/") else f"/{raw}"
 
 
+def _extract_focus_topics(message: str) -> list[str]:
+    """Nhận diện chủ đề người dùng muốn tư vấn sâu."""
+    msg_norm = _normalize_text(message or "")
+    topics: list[str] = []
+
+    if re.search(r"\b(pin|mah|sac|sac nhanh|thoi luong)\b", msg_norm):
+        topics.append("pin")
+    if re.search(r"\b(camera|chup|quay|selfie|zoom)\b", msg_norm):
+        topics.append("camera")
+    if re.search(r"\b(chip|hieu nang|choi game|fps|benchmark)\b", msg_norm):
+        topics.append("hieu_nang")
+    if re.search(r"\b(man hinh|hz|do sang|nit|oled)\b", msg_norm):
+        topics.append("man_hinh")
+
+    return topics
+
+
 # ════════════════════════════════════════════════════════════════
 # CHATBOT SERVICE
 # ════════════════════════════════════════════════════════════════
@@ -586,6 +650,9 @@ class ChatbotService:
         if matched(LIST_PRODUCT_PATTERNS, LIST_PRODUCT_PATTERNS_NORM):
             return "list_products"
 
+        if matched(MODEL_TYPES_PATTERNS, MODEL_TYPES_PATTERNS_NORM):
+            return "model_types"
+
         if matched(COMPARE_PATTERNS, COMPARE_PATTERNS_NORM):
             return "compare"
 
@@ -603,6 +670,10 @@ class ChatbotService:
 
         if matched(VARIANT_PATTERNS, VARIANT_PATTERNS_NORM):
             return "variant"
+
+        # Brand query đặt sau stock/variant để không bắt nhầm "còn hàng ..." thành hỏi theo hãng.
+        if matched(BRAND_QUERY_PATTERNS, BRAND_QUERY_PATTERNS_NORM):
+            return "brand_query"
 
         if matched(INSTALLMENT_PATTERNS, INSTALLMENT_PATTERNS_NORM):
             return "installment"
@@ -623,6 +694,186 @@ class ChatbotService:
             return "product_mention"
 
         return "unknown"
+
+    def _extract_model_generation(self, message: str) -> str | None:
+        msg_norm = _normalize_text(message)
+        m = re.search(r"\biphone\s*(\d{1,2})\b", msg_norm)
+        if m:
+            return f"iphone {m.group(1)}"
+        return None
+
+    @staticmethod
+    def _extract_model_type_label(product_name: str) -> str:
+        n = _normalize_text(product_name)
+        if "pro max" in n:
+            return "Pro Max"
+        if re.search(r"\bpro\b", n):
+            return "Pro"
+        if re.search(r"\bplus\b", n):
+            return "Plus"
+        if re.search(r"\bmini\b", n):
+            return "Mini"
+        if re.search(r"\bair\b", n):
+            return "Air"
+        return "Thường"
+
+    def _handle_model_types(self, message: str) -> dict[str, Any]:
+        base = self._extract_model_generation(message)
+        if not base:
+            return {
+                "message": "Anh/chị muốn xem các loại của dòng nào ạ? Ví dụ: iPhone 15, iPhone 16, iPhone 17.",
+                "suggestions": ["iPhone 15", "iPhone 16", "iPhone 17"],
+            }
+
+        products = list(Product.objects.filter(is_active=True, name__icontains=base).order_by("name"))
+        base_display = base.replace("iphone", "iPhone")
+        if not products:
+            return {
+                "message": f"Hiện tại QHUN22 chưa có dữ liệu dòng {base_display}. Anh/chị muốn em gợi ý dòng khác không ạ?",
+                "suggestions": ["iPhone 15", "iPhone 16", "Tư vấn chọn máy"],
+            }
+
+        # Gom theo loại máy (Thường/Plus/Pro/Pro Max...) thay vì theo dung lượng.
+        by_type: dict[str, Product] = {}
+        for p in products:
+            t = self._extract_model_type_label(p.name)
+            if t not in by_type:
+                by_type[t] = p
+
+        order = ["Thường", "Mini", "Plus", "Pro", "Pro Max", "Air"]
+        sorted_types = [t for t in order if t in by_type] + [t for t in by_type.keys() if t not in order]
+
+        lines = [f"Hiện tại QHUN22 đang có các loại {base_display} sau:"]
+        for t in sorted_types:
+            p = by_type[t]
+            min_p, _ = _get_product_price_range(p)
+            price_label = _format_from_price(min_p)
+            if price_label:
+                lines.append(f"  - {base_display} {t}: {price_label}")
+            else:
+                lines.append(f"  - {base_display} {t}")
+
+        lines.append("\nAnh/chị muốn em kiểm tra còn hàng chi tiết loại nào ạ?")
+
+        suggestions = [by_type[t].name for t in sorted_types[:3]] + [f"Còn hàng {base_display} Pro Max"]
+        return {
+            "message": "\n".join(lines),
+            "suggestions": suggestions,
+            "product_cards": self._build_product_cards(list(by_type.values()), limit=4),
+            "source": "rule",
+        }
+
+    def _handle_series_stock_query(self, base: str) -> dict[str, Any]:
+        base_display = base.replace("iphone", "iPhone")
+        products = list(Product.objects.filter(is_active=True, name__icontains=base).order_by("name"))
+
+        if not products:
+            return {
+                "message": f"Không, hiện tại cửa hàng chưa có {base_display}.",
+                "suggestions": ["Xem sản phẩm mới", "Tư vấn chọn máy"],
+            }
+
+        base_norm = _normalize_text(base)
+        has_exact_base = any(_normalize_text(p.name) == base_norm for p in products)
+
+        if has_exact_base:
+            answer = f"Dạ hiện tại bên em có sản phẩm {base_display} ạ."
+            return {
+                "message": answer,
+                "suggestions": [f"Còn hàng {base_display}", f"Giá {base_display}", "Tư vấn chọn máy"],
+                "source": "rule",
+            }
+
+        # Không có bản thường, nhưng có các biến thể cùng dòng (Plus/Pro/Pro Max...).
+        variant_names: list[str] = []
+        for p in products:
+            label = self._extract_model_type_label(p.name)
+            variant_name = base_display if label == "Thường" else f"{base_display} {label}"
+            if variant_name not in variant_names:
+                variant_names.append(variant_name)
+
+        lines = [f"Dạ hiện tại bên em đang không có sản phẩm {base_display}."]
+        if variant_names:
+            lines.append("Tuy nhiên bên em còn:")
+            for name in variant_names[:4]:
+                lines.append(f"- {name}")
+            lines.append("Anh/chị có muốn tham khảo không ạ?")
+        else:
+            lines.append("Anh/chị muốn em gợi ý dòng gần nhất đang có sẵn không ạ?")
+
+        return {
+            "message": "\n".join(lines),
+            "suggestions": variant_names[:3] + ["Tư vấn chọn máy"],
+            "source": "rule",
+        }
+
+    def _extract_brand_name(self, message: str) -> str | None:
+        msg_norm = _normalize_text(message)
+
+        alias_map = {
+            "apple": "apple",
+            "iphone": "apple",
+            "samsung": "samsung",
+            "xiaomi": "xiaomi",
+            "redmi": "xiaomi",
+            "oppo": "oppo",
+            "vivo": "vivo",
+            "realme": "realme",
+            "huawei": "huawei",
+            "nokia": "nokia",
+            "google": "google",
+            "pixel": "google",
+        }
+
+        for alias, canonical in alias_map.items():
+            if re.search(rf"\b{re.escape(alias)}\b", msg_norm):
+                return canonical
+
+        active_brands = Brand.objects.filter(products__is_active=True).distinct()
+        for brand in active_brands:
+            name_norm = _normalize_text(brand.name)
+            if not name_norm:
+                continue
+            if re.search(rf"\b{re.escape(name_norm)}\b", msg_norm):
+                return brand.name
+
+        return None
+
+    def _handle_brand_query(self, message: str) -> dict[str, Any]:
+        brand_key = self._extract_brand_name(message)
+        if not brand_key:
+            return {
+                "message": "Anh/chị đang muốn xem sản phẩm theo hãng nào ạ? Ví dụ: Apple, Samsung, Xiaomi.",
+                "suggestions": ["Apple", "Samsung", "Xiaomi", "Tư vấn chọn máy"],
+            }
+
+        products = Product.objects.filter(is_active=True, brand__name__icontains=brand_key).order_by("name")
+        if not products.exists():
+            display_name = brand_key.upper() if len(brand_key) <= 4 else brand_key.title()
+            return {
+                "message": f"Hiện tại QHUN22 chưa có sản phẩm thuộc hãng {display_name}. Anh/chị muốn em gợi ý hãng khác không ạ?",
+                "suggestions": ["Samsung", "Xiaomi", "Tư vấn chọn máy", "Gặp nhân viên"],
+            }
+
+        product_list = list(products)
+        show = product_list[:8]
+        display_name = brand_key.upper() if len(brand_key) <= 4 else brand_key.title()
+
+        lines = [f"Hiện tại QHUN22 có {len(product_list)} sản phẩm liên quan tới hãng {display_name}:"]
+        for p in show:
+            min_p, _ = _get_product_price_range(p)
+            lines.append(_format_product_line(p.name, min_p))
+
+        if len(product_list) > len(show):
+            lines.append(f"... và {len(product_list) - len(show)} sản phẩm khác.")
+        lines.append("\nAnh/chị muốn em lọc tiếp theo tầm giá hoặc nhu cầu sử dụng không ạ?")
+
+        return {
+            "message": "\n".join(lines),
+            "suggestions": [p.name for p in product_list[:3]] + ["Tư vấn chọn máy"],
+            "product_cards": self._build_product_cards(product_list, limit=4),
+            "source": "rule",
+        }
 
     # ── Product name detection ──────────────────────────────────
     def detect_product_names(self, message: str) -> list[str]:
@@ -660,6 +911,32 @@ class ChatbotService:
         threshold = max(0.52, top_score - 0.25)
         top_matches = [name for name, score in scored if score >= threshold][:3]
         return top_matches
+
+    def _extract_compare_product_names(self, message: str) -> list[str]:
+        """Tách 2 sản phẩm trong câu so sánh theo từng vế (trước/sau vs, với, và...)."""
+        raw = (message or "").strip()
+        if not raw:
+            return []
+
+        msg_norm = _normalize_text(raw)
+        # Keep the split conservative to avoid over-splitting regular questions.
+        parts = re.split(r"\b(?:vs|versus|voi|với|va|và|so voi|so với)\b", msg_norm)
+        parts = [p.strip() for p in parts if p and p.strip()]
+
+        selected: list[str] = []
+        seen: set[str] = set()
+        for part in parts[:3]:
+            candidates = self.detect_product_names(part)
+            if not candidates:
+                continue
+            best = candidates[0]
+            if best not in seen:
+                selected.append(best)
+                seen.add(best)
+            if len(selected) >= 2:
+                break
+
+        return selected
 
     def _fuzzy_match(self, msg_lower: str, product_names) -> list[str]:
         # Tokenize into single-word tokens (previous pattern produced multi-word tokens → poor matching)
@@ -855,8 +1132,10 @@ class ChatbotService:
                 tag_parts.append("Nổi bật")
 
             subtitle = min_p or "Liên hệ"
+            if not min_p:
+                subtitle = ""
             if tag_parts:
-                subtitle = f"{subtitle} | {' • '.join(tag_parts)}"
+                subtitle = f"{subtitle} | {' • '.join(tag_parts)}" if subtitle else " • ".join(tag_parts)
             cards.append({
                 "title": product.name,
                 "image_url": image_url,
@@ -917,8 +1196,7 @@ class ChatbotService:
         lines = ["QHUN22 hiện đang kinh doanh các sản phẩm sau:"]
         for p in products:
             min_p, max_p = _get_product_price_range(p)
-            price_txt = f"từ {min_p}" if min_p else "Liên hệ"
-            lines.append(f"  - {p.name} / {price_txt}")
+            lines.append(_format_product_line(p.name, min_p))
         lines.append("\nAnh/chị muốn tìm hiểu sản phẩm nào, cứ hỏi em nhé!")
         product_list = list(products)
         return {
@@ -945,7 +1223,7 @@ class ChatbotService:
             if p.is_featured:
                 badges.append("Nổi bật")
             badge_suffix = f" ({', '.join(badges)})" if badges else ""
-            lines.append(f"  - {p.name} / từ {min_p or 'Liên hệ'}{badge_suffix}")
+            lines.append(f"{_format_product_line(p.name, min_p)}{badge_suffix}")
         lines.append("\nAnh/chị muốn em tư vấn theo nhu cầu học tập, game hay camera luôn không?")
 
         return {
@@ -1149,7 +1427,7 @@ class ChatbotService:
         lines = [title]
         for p in products:
             min_p, _ = _get_product_price_range(p)
-            lines.append(f"  - {p.name} / từ {min_p or 'Liên hệ'}")
+            lines.append(_format_product_line(p.name, min_p))
         lines.append("\nAnh/chị quan tâm mẫu nào, hỏi em thêm nhé!")
         return "\n".join(lines)
 
@@ -1249,7 +1527,7 @@ class ChatbotService:
             lines = ["Em gợi ý một số mẫu cho anh/chị:"]
             for p in featured_list:
                 min_p, _ = _get_product_price_range(p)
-                lines.append(f"  - {p.name} / từ {min_p or 'Liên hệ'}")
+                lines.append(_format_product_line(p.name, min_p))
             lines.append("\nAnh/chị quan tâm mẫu nào, hỏi em thêm nhé!")
             return {
                 "message": "\n".join(lines),
@@ -1269,24 +1547,52 @@ class ChatbotService:
 
         ai_reply = self.claude.call(compare_system, user_prompt, max_tokens=COMPARE_MAX_TOKENS)
         if ai_reply:
-            mentioned_products = self._products_mentioned_in_reply(ai_reply, products)
-            if mentioned_products:
-                return {
-                    "message": ai_reply,
-                    "suggestions": [p.name for p in products],
-                    "product_cards": self._build_product_cards(mentioned_products, limit=4),
-                }
+            ai_reply_norm = _normalize_text(ai_reply)
+            bad_markers = [
+                "khong the so sanh",
+                "xin loi",
+                "chua co thong tin",
+                "khong co thong tin",
+            ]
+            if any(marker in ai_reply_norm for marker in bad_markers):
+                logger.warning("Claude compare reply thiếu dữ liệu/không hữu ích, chuyển fallback so sánh local")
+            else:
+                mentioned_products = self._products_mentioned_in_reply(ai_reply, products)
+                if mentioned_products:
+                    return {
+                        "message": ai_reply,
+                        "suggestions": [p.name for p in products],
+                        "product_cards": self._build_product_cards(mentioned_products, limit=4),
+                    }
 
-            logger.warning("Claude compare reply không khớp cặp sản phẩm, chuyển fallback so sánh nhanh")
+                logger.warning("Claude compare reply không khớp cặp sản phẩm, chuyển fallback so sánh nhanh")
 
-        lines = ["So sánh nhanh:"]
+        lines = [f"So sánh nhanh giữa {products[0].name} và {products[1].name}:"]
         for p in products:
-            min_p, _ = _get_product_price_range(p)
-            lines.append(f"  - {p.name} / {min_p or 'Liên hệ'}")
+            min_p, max_p = _get_product_price_range(p)
+            colors = _get_product_colors(p)
+            storages = _get_product_storages(p)
+            stock_state = "Còn hàng" if p.stock > 0 else "Tạm hết hàng"
+
+            if min_p and max_p and min_p != max_p:
+                price_line = f"Giá: từ {min_p} đến {max_p}"
+            elif min_p:
+                price_line = f"Giá: {min_p}"
+            else:
+                price_line = "Giá: chưa có dữ liệu"
+
+            lines.append(f"- {p.name}")
+            lines.append(f"  {price_line}")
+            lines.append(f"  Tình trạng: {stock_state}")
+            lines.append(f"  Dung lượng: {', '.join(storages)}" if storages else "  Dung lượng: chưa có dữ liệu")
+            lines.append(f"  Màu sắc: {', '.join(colors)}" if colors else "  Màu sắc: chưa có dữ liệu")
+
+        lines.append("Anh/chị muốn em đi sâu hơn theo tiêu chí pin, camera hay hiệu năng không ạ?")
         return {
             "message": "\n".join(lines),
-            "suggestions": MENU_SUGGESTIONS,
+            "suggestions": [f"Giá {p.name}" for p in products] + ["Tư vấn chọn máy"],
             "product_cards": self._build_product_cards(products, limit=4),
+            "source": "rule_fallback",
         }
 
     def _handle_spec_with_ai(self, message: str, product: Product) -> dict[str, Any]:
@@ -1320,12 +1626,65 @@ class ChatbotService:
 
         return self._fallback_product_response(product)
 
+    def _handle_product_quick_summary(self, product: Product, message: str = "") -> dict[str, Any]:
+        min_p, max_p = _get_product_price_range(product)
+        colors = _get_product_colors(product)
+        storages = _get_product_storages(product)
+        focus_topics = _extract_focus_topics(message)
+
+        lines = [product.name]
+
+        if min_p and max_p and min_p != max_p:
+            lines.append(f"Giá tham khảo: từ {min_p} đến {max_p}.")
+        elif min_p:
+            lines.append(f"Giá tham khảo: {min_p}.")
+
+        if product.stock > 0:
+            lines.append("Hiện đang còn hàng.")
+        else:
+            lines.append("Hiện tạm hết hàng.")
+
+        if storages:
+            lines.append(f"Dung lượng: {', '.join(storages)}.")
+        if colors:
+            lines.append(f"Màu sắc: {', '.join(colors)}.")
+
+        name_norm = _normalize_text(product.name)
+        if "pro max" in name_norm:
+            lines.append("Phù hợp nếu anh/chị ưu tiên màn hình lớn, pin bền và camera đa dụng.")
+        elif re.search(r"\bpro\b", name_norm):
+            lines.append("Phù hợp nếu anh/chị ưu tiên hiệu năng mạnh và camera nâng cao.")
+        elif "plus" in name_norm:
+            lines.append("Phù hợp nếu anh/chị thích màn hình lớn, pin ổn định cho dùng lâu.")
+        elif "mini" in name_norm or re.search(r"\bse\b", name_norm):
+            lines.append("Phù hợp nếu anh/chị cần máy nhỏ gọn, dễ cầm nắm.")
+
+        if focus_topics:
+            topic_hints = {
+                "pin": "Pin: em có thể so sánh thời lượng dùng thực tế theo nhu cầu của anh/chị.",
+                "camera": "Camera: em có thể tư vấn kịch bản chụp ảnh/quay video phù hợp.",
+                "hieu_nang": "Hiệu năng: em có thể tư vấn theo game/app anh/chị đang dùng.",
+                "man_hinh": "Màn hình: em có thể gợi ý theo nhu cầu xem phim, lướt web, chơi game.",
+            }
+            for topic in focus_topics:
+                hint = topic_hints.get(topic)
+                if hint:
+                    lines.append(hint)
+
+        lines.append("Anh/chị muốn em đi sâu thêm phần pin, camera, hiệu năng hay màn hình để chốt máy nhanh hơn không ạ?")
+
+        return {
+            "message": "\n".join(lines),
+            "suggestions": [f"Giá {product.name}", f"Thông số {product.name}", f"Còn hàng {product.name}"],
+            "product_cards": self._build_product_cards([product], limit=1),
+            "source": "rule",
+        }
+
     def _fallback_product_response(self, product: Product) -> dict[str, Any]:
         min_p, _ = _get_product_price_range(product)
-        msg = (
-            f"{product.name}\n"
-            f"Giá: {min_p or 'Liên hệ'}"
-        )
+        msg = f"{product.name}"
+        if min_p:
+            msg += f"\nGiá: {min_p}"
         return {
             "message": msg,
             "suggestions": MENU_SUGGESTIONS,
@@ -1372,6 +1731,21 @@ class ChatbotService:
 
         intent = self.detect_intent(message)
 
+        # Heuristic: "có <tên máy> không" là câu hỏi tồn kho.
+        # Tuy nhiên nếu người dùng đã hỏi tư vấn rõ ràng thì giữ intent consult để trả lời sâu hơn.
+        message_norm = _normalize_text(message)
+        product_names_for_yes_no = self.detect_product_names(message)
+        explicit_consult = bool(CONSULT_PATTERNS.search(message) or CONSULT_PATTERNS_NORM.search(message_norm))
+        if intent in ("unknown", "product_mention", "consult") and product_names_for_yes_no and not explicit_consult:
+            if re.search(r"\bco\b.*\bkhong\b", message_norm):
+                intent = "stock"
+
+        # Với câu hỏi dạng "có iPhone 16 không", ưu tiên trả lời Có/Không theo dòng máy.
+        if intent == "stock" and re.search(r"\bco\b.*\bkhong\b", message_norm):
+            base = self._extract_model_generation(message)
+            if base and not re.search(r"\b(pro\s*max|pro|plus|mini|air)\b", message_norm):
+                return self._handle_series_stock_query(base)
+
         # ── Fixed responses (không gọi Claude) ──────────────────
         if intent == "order_capability":
             return self._handle_order_capability()
@@ -1397,6 +1771,12 @@ class ChatbotService:
         if intent == "list_products":
             return self._handle_list_products()
 
+        if intent == "model_types":
+            return self._handle_model_types(message)
+
+        if intent == "brand_query":
+            return self._handle_brand_query(message)
+
         # Xử lý nhanh suggestion buttons
         if message.strip() == "Gặp nhân viên":
             return self._handle_staff()
@@ -1411,9 +1791,14 @@ class ChatbotService:
 
         # ── Detect product names ────────────────────────────────
         product_names = self.detect_product_names(message)
+        brand_hint = self._extract_brand_name(message)
+
+        # Câu hỏi theo hãng (ví dụ: "có samsung không") không nên rơi vào ngữ cảnh sản phẩm cũ.
+        if not product_names and brand_hint and intent in ("product_mention", "unknown", "stock", "consult"):
+            return self._handle_brand_query(message)
 
         # Nếu đang có ngữ cảnh sản phẩm trước đó, câu follow-up không nêu tên vẫn giữ mạch hội thoại.
-        if not product_names and focused_product_name and intent in ("consult", "spec", "price", "stock", "variant", "product_mention", "unknown"):
+        if not product_names and not brand_hint and focused_product_name and intent in ("consult", "spec", "price", "stock", "variant", "product_mention", "unknown"):
             product_names = [focused_product_name]
 
         # ── Intents cần sản phẩm ────────────────────────────────
@@ -1423,17 +1808,33 @@ class ChatbotService:
                 if products.exists():
                     product = max(products, key=lambda p: len(p.name))
                     self._set_focused_product(session, product.name)
-                    return self._handle_product_with_ai(message, product)
+                    return self._handle_product_quick_summary(product, message=message)
             return self._handle_consult(message)
 
         if intent == "compare":
+            compare_names = self._extract_compare_product_names(message)
+            if len(compare_names) >= 2:
+                compare_products: list[Product] = []
+                for name in compare_names[:2]:
+                    p = Product.objects.filter(is_active=True, name=name).first()
+                    if p:
+                        compare_products.append(p)
+                if len(compare_products) >= 2:
+                    return self._handle_compare_with_ai(message, compare_products)
+
             if product_names:
-                products = Product.objects.filter(name__in=product_names, is_active=True)
-                if products.count() >= 2:
-                    return self._handle_compare_with_ai(message, list(products[:2]))
-                elif products.count() == 1:
+                # Preserve detection order instead of DB default ordering.
+                ordered_products: list[Product] = []
+                for name in product_names:
+                    p = Product.objects.filter(is_active=True, name=name).first()
+                    if p and all(existing.id != p.id for existing in ordered_products):
+                        ordered_products.append(p)
+
+                if len(ordered_products) >= 2:
+                    return self._handle_compare_with_ai(message, ordered_products[:2])
+                elif len(ordered_products) == 1:
                     # Remember base product for the next user click/answer
-                    base_name = products.first().name
+                    base_name = ordered_products[0].name
                     self._set_pending_compare_base(session, base_name)
                     self._set_focused_product(session, base_name)
                     return {
@@ -1469,5 +1870,8 @@ class ChatbotService:
         # ── AI responses (gọi Claude) ──────────────────────────
         if intent == "spec":
             return self._handle_spec_with_ai(message, product)
+
+        if intent == "product_mention":
+            return self._handle_product_quick_summary(product, message=message)
 
         return self._handle_product_with_ai(message, product)

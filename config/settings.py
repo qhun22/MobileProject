@@ -10,6 +10,8 @@ load_dotenv()
 
 # Đường dẫn gốc của dự án
 BASE_DIR = Path(__file__).resolve().parent.parent
+LOG_DIR = BASE_DIR / 'logs'
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 # Bảo mật
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-qhun22-mobile-shop-2024')
@@ -169,3 +171,83 @@ VNPAY_CONFIG = {
 BANK_ID = os.getenv('BANK_ID', 'TCB')
 BANK_ACCOUNT_NO = os.getenv('BANK_ACCOUNT_NO', '')
 BANK_ACCOUNT_NAME = os.getenv('BANK_ACCOUNT_NAME', '')
+
+# ==================== CONTACT CHANNELS ====================
+ZALO_CHAT_URL = os.getenv('ZALO_CHAT_URL', 'https://zalo.me/0327221005')
+
+
+# ==================== LOGGING ====================
+LOG_LEVEL = os.getenv('DJANGO_LOG_LEVEL', 'INFO').upper()
+CHATBOT_LOG_LEVEL = os.getenv('QH_CHATBOT_LOG_LEVEL', 'INFO').upper()
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s | %(levelname)s | %(name)s | %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+            'level': LOG_LEVEL,
+        },
+        'server_file': {
+            'class': 'logging.FileHandler',
+            'filename': str(LOG_DIR / 'server.log'),
+            'formatter': 'standard',
+            'level': LOG_LEVEL,
+            'encoding': 'utf-8',
+        },
+        'chatbot_file': {
+            'class': 'logging.FileHandler',
+            'filename': str(LOG_DIR / 'chatbot.log'),
+            'formatter': 'standard',
+            'level': CHATBOT_LOG_LEVEL,
+            'encoding': 'utf-8',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'server_file'],
+            'level': LOG_LEVEL,
+            'propagate': False,
+        },
+        'store.chatbot.api': {
+            'handlers': ['console', 'server_file', 'chatbot_file'],
+            'level': CHATBOT_LOG_LEVEL,
+            'propagate': False,
+        },
+        'store.chatbot_orchestrator': {
+            'handlers': ['console', 'server_file', 'chatbot_file'],
+            'level': CHATBOT_LOG_LEVEL,
+            'propagate': False,
+        },
+        'store.chatbot_service': {
+            'handlers': ['console', 'server_file', 'chatbot_file'],
+            'level': CHATBOT_LOG_LEVEL,
+            'propagate': False,
+        },
+        'ai.rag_pipeline': {
+            'handlers': ['console', 'server_file', 'chatbot_file'],
+            'level': CHATBOT_LOG_LEVEL,
+            'propagate': False,
+        },
+        'ai.trainer': {
+            'handlers': ['console', 'server_file', 'chatbot_file'],
+            'level': CHATBOT_LOG_LEVEL,
+            'propagate': False,
+        },
+        'ai.vector_store': {
+            'handlers': ['console', 'server_file', 'chatbot_file'],
+            'level': CHATBOT_LOG_LEVEL,
+            'propagate': False,
+        },
+    },
+    'root': {
+        'handlers': ['console', 'server_file'],
+        'level': 'WARNING',
+    },
+}

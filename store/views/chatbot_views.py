@@ -8,6 +8,7 @@ import uuid
 import random
 import time
 import traceback
+import logging
 import requests
 from decimal import Decimal
 from django.shortcuts import render, redirect
@@ -27,6 +28,9 @@ import datetime
 from store.chatbot_orchestrator import HybridChatbotOrchestrator
 
 
+logger = logging.getLogger("store.chatbot.api")
+
+
 _CHATBOT_ORCHESTRATOR = None
 
 
@@ -40,21 +44,38 @@ def _get_orchestrator() -> HybridChatbotOrchestrator:
 
 def chatbot_api(request):
     import json as _json
-    import traceback as _tb
+    started_at = time.time()
+    request_id = uuid.uuid4().hex[:12]
 
     try:
         body = _json.loads(request.body)
+        request_id = (body.get("request_id") or request_id).strip()[:64]
         action = (body.get("action") or "").strip().lower()
         message = body.get("message", "").strip()
     except Exception:
+        logger.warning("chatbot_api invalid_json request_id=%s", request_id)
         return JsonResponse({"message": "Tin nhắn không hợp lệ.", "suggestions": []}, status=400)
+
+    user_id = getattr(getattr(request, "user", None), "id", None)
+    session_key = getattr(getattr(request, "session", None), "session_key", None)
+    logger.info(
+        "chatbot_api request_id=%s action=%s user_id=%s session=%s message_len=%s",
+        request_id,
+        action or "message",
+        user_id,
+        session_key,
+        len(message or ""),
+    )
 
     if action == "reset":
         try:
             user = request.user if hasattr(request, 'user') and request.user.is_authenticated else None
             ok = _get_orchestrator().reset_conversation(getattr(request, "session", None), user=user)
-            return JsonResponse({"ok": bool(ok)})
+            latency_ms = int((time.time() - started_at) * 1000)
+            logger.info("chatbot_api reset request_id=%s ok=%s latency_ms=%s", request_id, bool(ok), latency_ms)
+            return JsonResponse({"ok": bool(ok), "request_id": request_id})
         except Exception:
+            logger.exception("chatbot_api reset_error request_id=%s", request_id)
             return JsonResponse({"ok": False}, status=200)
 
     if not message:
@@ -66,16 +87,27 @@ def chatbot_api(request):
     try:
         user = request.user if hasattr(request, 'user') and request.user.is_authenticated else None
         result = _get_orchestrator().process_message(message, user=user, session=getattr(request, "session", None))
+        latency_ms = int((time.time() - started_at) * 1000)
+        logger.info(
+            "chatbot_api response request_id=%s intent=%s source=%s engine=%s latency_ms=%s",
+            request_id,
+            result.get("intent", "unknown"),
+            result.get("source", "unknown"),
+            result.get("engine", "unknown"),
+            latency_ms,
+        )
+        result.setdefault("request_id", request_id)
         return JsonResponse(result)
     except Exception as e:
-        import logging
-        logging.getLogger(__name__).exception("Chatbot API error")
+        logger.exception("chatbot_api error request_id=%s", request_id)
         if settings.DEBUG:
             return JsonResponse({
                 "message": f"[DEBUG] Lỗi: {type(e).__name__}: {e}",
                 "suggestions": [],
+                "request_id": request_id,
             }, status=200)
         return JsonResponse({
             "message": "Xin lỗi, hệ thống đang gặp sự cố. Vui lòng thử lại sau!",
             "suggestions": ["Tư vấn chọn máy", "Gặp nhân viên"],
+            "request_id": request_id,
         }, status=200)
