@@ -118,7 +118,8 @@ class DataLoader:
         try:
             from store.models import Category
             
-            cats = Category.objects.filter(is_active=True)
+            # Category hien tai khong co truong is_active
+            cats = Category.objects.all()
             
             return [
                 {'id': c.id, 'name': c.name, 'description': c.description or ''}
@@ -134,7 +135,8 @@ class DataLoader:
         try:
             from store.models import ProductReview
             
-            reviews = ProductReview.objects.filter(is_approved=True).select_related('product')
+            # ProductReview khong co is_approved; lay tat ca review hien co
+            reviews = ProductReview.objects.select_related('product')
             
             return [
                 {
@@ -142,7 +144,7 @@ class DataLoader:
                     'product_id': r.product_id,
                     'product_name': r.product.name if r.product else '',
                     'rating': r.rating,
-                    'content': r.content or '',
+                    'content': r.comment or '',
                 }
                 for r in reviews
             ]
@@ -156,16 +158,17 @@ class DataLoader:
         try:
             from store.models import ProductContent
             
-            contents = ProductContent.objects.filter(is_active=True).select_related('product')
+            # ProductContent khong co is_active/title/content_type trong schema hien tai
+            contents = ProductContent.objects.select_related('product')
             
             return [
                 {
                     'id': c.id,
                     'product_id': c.product_id,
                     'product_name': c.product.name if c.product else '',
-                    'title': c.title or '',
-                    'content': c.content or '',
-                    'content_type': c.content_type,
+                    'title': c.product.name if c.product else '',
+                    'content': c.content_text or '',
+                    'content_type': 'product_content',
                 }
                 for c in contents
             ]

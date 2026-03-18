@@ -98,6 +98,22 @@ class VectorStore:
             return self._add_fallback(vectors, ids, metadata)
         
         vectors = vectors.astype(np.float32)
+
+        # IVF cần train trước khi add; với dữ liệu nhỏ thì hạ về FLAT để tránh lỗi train.
+        if self.index_type == "IVF" and hasattr(self._index, "is_trained") and not self._index.is_trained:
+            if len(vectors) < self.nlist:
+                logger.warning(
+                    "Dữ liệu (%s) nhỏ hơn nlist (%s), chuyển IVF -> FLAT để index ổn định",
+                    len(vectors),
+                    self.nlist,
+                )
+                if self.metric == "cosine":
+                    self._index = faiss.IndexFlatIP(self.dimension)
+                else:
+                    self._index = faiss.IndexFlatL2(self.dimension)
+                self.index_type = "FLAT"
+            else:
+                self.train(vectors)
         
         # Chuẩn hóa
         if self.metric == "cosine":
@@ -356,10 +372,26 @@ class MultiIndexVectorStore:
         """Load tat ca indices"""
         if not os.path.exists(self.base_path):
             return {}
-        
-        for name in os.listdir(self.base_path):
-            if os.path.isdir(os.path.join(self.base_path, name)):
+
+        # Index được lưu theo pattern <name>.index / <name>.meta / <name>.config.json
+        discovered: set[str] = set()
+        for filename in os.listdir(self.base_path):
+            full = os.path.join(self.base_path, filename)
+            if not os.path.isfile(full):
+                continue
+
+            if filename.endswith(".index"):
+                discovered.add(filename[:-6])
+            elif filename.endswith(".meta"):
+                discovered.add(filename[:-5])
+            elif filename.endswith(".config.json"):
+                discovered.add(filename[:-12])
+
+        for name in sorted(discovered):
+            try:
                 self.load_index(name)
+            except Exception as exc:
+                logger.warning("Load index %s thất bại: %s", name, exc)
         
         return self.indices
     

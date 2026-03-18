@@ -5,6 +5,7 @@ import json
 import logging
 import pickle
 import re
+import unicodedata
 from typing import List, Dict, Tuple, Optional, Any
 import numpy as np
 
@@ -137,6 +138,8 @@ INTENT_TRAINING_DATA = {
         "máy pin trâu", "máy dưới 10 triệu", "máy trong tầm giá",
         "máy nào性价比", "máy tốt nhất", "đáng tiền nhất",
         "tư vấn giúp", "giúp tôi chọn máy", "máy cho người dùng thường",
+        "tư vấn thêm về iphone 16 pro max", "tư vấn thêm ip16 promax", "cho mình biết thêm về iphone 16",
+        "nên lấy ip16 pro hay pro max", "nhu cầu game nên mua máy nào",
     ],
     "compare_phones": [
         "so sánh", "so sánh iphone 14 và iphone 15", "iphone hay samsung",
@@ -231,7 +234,7 @@ class IntentClassifier:
         model_type: str = "logistic",
         max_features: int = 5000,
         ngram_range: Tuple[int, int] = (1, 3),
-        min_df: int = 2,
+        min_df: int = 1,
         use_fallback: bool = True,
     ):
         """
@@ -255,6 +258,33 @@ class IntentClassifier:
         self._classifier = None
         self._is_trained = False
         self._intent_list = list(INTENTS.keys())
+
+    @staticmethod
+    def _strip_vietnamese_accents(text: str) -> str:
+        norm = unicodedata.normalize("NFD", (text or "").lower())
+        return "".join(ch for ch in norm if unicodedata.category(ch) != "Mn")
+
+    def _expand_sample(self, text: str) -> List[str]:
+        """Tạo biến thể cho 1 mẫu để tăng độ chịu lỗi teencode/không dấu."""
+        base = (text or "").strip().lower()
+        if not base:
+            return []
+
+        variants = {base}
+        accentless = self._strip_vietnamese_accents(base)
+        variants.add(accentless)
+
+        shorthand = accentless
+        shorthand = re.sub(r"\biphone\b", "ip", shorthand)
+        shorthand = re.sub(r"\bkhong\b", "ko", shorthand)
+        shorthand = re.sub(r"\bbao nhieu\b", "bn", shorthand)
+        shorthand = re.sub(r"\bdien thoai\b", "dt", shorthand)
+        variants.add(shorthand)
+
+        compact = re.sub(r"\s+", " ", shorthand).strip()
+        variants.add(compact)
+
+        return [v for v in variants if v]
     
     def _create_pipeline(self) -> Pipeline:
         """Tạo pipeline sklearn."""
@@ -272,7 +302,6 @@ class IntentClassifier:
                 max_iter=1000,
                 random_state=42,
                 solver="lbfgs",
-                multi_class="multinomial",
             )
         
         vectorizer = TfidfVectorizer(
@@ -294,10 +323,17 @@ class IntentClassifier:
         """Chuẩn bị dữ liệu train từ bộ intent có sẵn."""
         text_list = []
         label_list = []
+        seen = set()
         
         for intent, samples in INTENT_TRAINING_DATA.items():
-            text_list.extend(samples)
-            label_list.extend([intent] * len(samples))
+            for sample in samples:
+                for variant in self._expand_sample(sample):
+                    key = (intent, variant)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    text_list.append(variant)
+                    label_list.append(intent)
         
         return text_list, label_list
     
