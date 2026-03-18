@@ -28,7 +28,7 @@ function filterOtOrders(status) {
     }
     // Cập nhật nút active
     var btns = document.querySelectorAll('.qh-ot-filter-btn');
-    btns.forEach(function(b) {
+    btns.forEach(function (b) {
         if (b.getAttribute('data-filter') === status) {
             b.classList.add('active');
         } else {
@@ -61,7 +61,7 @@ function openOtDetail(code) {
     // Danh sách sản phẩm
     html += '<div style="margin-bottom: 16px;">';
     html += '<h4 style="font-size:14px;font-weight:600;color:#334155;margin:0 0 10px;">Sản phẩm</h4>';
-    o.items.forEach(function(item) {
+    o.items.forEach(function (item) {
         html += '<div style="display:flex; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid #f1f5f9;">';
         // Ảnh thumbnail
         if (item.thumbnail) {
@@ -128,7 +128,7 @@ function openOtDetail(code) {
         var cancelBtn = document.createElement('button');
         cancelBtn.className = 'qh-ot-modal-cancel-btn';
         cancelBtn.innerHTML = '<i class="ri-close-circle-line"></i> Hủy đơn hàng';
-        cancelBtn.onclick = function() { cancelOtOrder(o.order_code, cancelBtn, o.payment_method); };
+        cancelBtn.onclick = function () { cancelOtOrder(o.order_code, cancelBtn, o.payment_method); };
         footer.appendChild(cancelBtn);
     }
 }
@@ -161,7 +161,7 @@ function showOtConfirm(message, callback) {
     document.getElementById('otConfirmText').textContent = message;
     document.getElementById('otConfirmModal').classList.add('show');
     _otConfirmCallback = callback;
-    document.getElementById('otConfirmBtn').onclick = function() {
+    document.getElementById('otConfirmBtn').onclick = function () {
         closeOtConfirm();
         if (_otConfirmCallback) _otConfirmCallback();
     };
@@ -216,7 +216,7 @@ function otInfoRow(label, value) {
  * @returns {string} HTML của badge
  */
 function otPayBadge(key, display) {
-    var cls = {cod: 'pending', vietqr: 'processing', vnpay: 'shipped'};
+    var cls = { cod: 'pending', vietqr: 'processing', vnpay: 'shipped' };
     return '<span class="qh-ot-badge ' + (cls[key] || '') + '">' + escOtHtml(display) + '</span>';
 }
 
@@ -244,7 +244,7 @@ function cancelOtOrder(orderCode, btn, paymentMethod) {
     if (paymentMethod === 'cod') {
         QHConfirm.show(
             'Bạn có chắc muốn hủy đơn hàng ' + orderCode + '?',
-            function() {
+            function () {
                 doCancelOtOrder(orderCode, btn);
             }
         );
@@ -308,32 +308,32 @@ function doCancelOtOrder(orderCode, btn, refundInfo) {
         },
         body: JSON.stringify(bodyData)
     })
-    .then(function(response) { return response.json(); })
-    .then(function(data) {
-        if (data.success) {
-            closeOtDetail();
-            if (window.QHToast) {
-                setTimeout(function() {
-                    if (refundInfo) {
-                        QHToast.show('Đã xác nhận hoàn tiền. Đơn hàng sẽ sớm được hoàn tiền.', 'success');
-                    } else {
-                        QHToast.show(data.message || 'Đã hủy đơn hàng thành công!', 'success');
-                    }
-                }, 120);
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            if (data.success) {
+                closeOtDetail();
+                if (window.QHToast) {
+                    setTimeout(function () {
+                        if (refundInfo) {
+                            QHToast.show('Đã xác nhận hoàn tiền. Đơn hàng sẽ sớm được hoàn tiền.', 'success');
+                        } else {
+                            QHToast.show(data.message || 'Đã hủy đơn hàng thành công!', 'success');
+                        }
+                    }, 120);
+                }
+                setTimeout(function () {
+                    location.reload();
+                }, 1100);
+            } else {
+                QHToast.show(data.message || 'Có lỗi xảy ra', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="ri-close-circle-line"></i> Hủy đơn hàng';
             }
-            setTimeout(function() {
-                location.reload();
-            }, 1100);
-        } else {
-            QHToast.show(data.message || 'Có lỗi xảy ra', 'error');
+        })
+        .catch(function (err) {
+            console.error(err);
+            QHToast.show('Có lỗi xảy ra khi hủy đơn', 'error');
             btn.disabled = false;
             btn.innerHTML = '<i class="ri-close-circle-line"></i> Hủy đơn hàng';
-        }
-    })
-    .catch(function(err) {
-        console.error(err);
-        QHToast.show('Có lỗi xảy ra khi hủy đơn', 'error');
-        btn.disabled = false;
-        btn.innerHTML = '<i class="ri-close-circle-line"></i> Hủy đơn hàng';
-    });
+        });
 }

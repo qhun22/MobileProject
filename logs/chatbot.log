@@ -1,0 +1,59 @@
+2026-03-18 23:20:32,939 | INFO | ai.vector_store | Đã tạo index: IVF, metric: cosine
+2026-03-18 23:20:32,940 | WARNING | ai.vector_store | Dữ liệu (22) nhỏ hơn nlist (100), chuyển IVF -> FLAT để index ổn định
+2026-03-18 23:20:32,940 | INFO | ai.vector_store | Đã thêm 22 vectors
+2026-03-18 23:20:32,941 | INFO | ai.vector_store | Saved to data/vector_store\products
+2026-03-18 23:20:32,941 | INFO | ai.vector_store | Đã tạo index: IVF, metric: cosine
+2026-03-18 23:20:32,942 | WARNING | ai.vector_store | Dữ liệu (10) nhỏ hơn nlist (100), chuyển IVF -> FLAT để index ổn định
+2026-03-18 23:20:32,942 | INFO | ai.vector_store | Đã thêm 10 vectors
+2026-03-18 23:20:32,943 | INFO | ai.vector_store | Saved to data/vector_store\brands
+2026-03-18 23:20:32,944 | INFO | ai.vector_store | Đã tạo index: IVF, metric: cosine
+2026-03-18 23:20:32,944 | WARNING | ai.vector_store | Dữ liệu (4) nhỏ hơn nlist (100), chuyển IVF -> FLAT để index ổn định
+2026-03-18 23:20:32,944 | INFO | ai.vector_store | Đã thêm 4 vectors
+2026-03-18 23:20:32,946 | INFO | ai.vector_store | Saved to data/vector_store\content
+2026-03-18 23:20:42,427 | INFO | store.chatbot.api | chatbot_api request_id=01a1716400be action=reset user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=0
+2026-03-18 23:20:42,432 | INFO | store.chatbot.api | chatbot_api reset request_id=01a1716400be ok=True latency_ms=8
+2026-03-18 23:20:57,383 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773850857379_ss9rzp action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=15
+2026-03-18 23:20:57,389 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773850857379_ss9rzp intent=unknown source=rule engine=django_local latency_ms=8
+2026-03-18 23:21:00,361 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773850860355_n7zitk action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=14
+2026-03-18 23:21:00,369 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773850860355_n7zitk intent=unknown source=rule engine=django_local latency_ms=12
+2026-03-18 23:21:28,716 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773850888711_9otclf action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=63
+2026-03-18 23:21:32,313 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773850888711_9otclf intent=unknown source=local engine=django_local latency_ms=3600
+2026-03-18 23:22:44,504 | INFO | store.chatbot.api | chatbot_api request_id=test123 action=message user_id=None session=None message_len=26
+2026-03-18 23:22:44,515 | INFO | store.chatbot.api | chatbot_api response request_id=test123 intent=unknown source=rule engine=django_local latency_ms=10
+2026-03-18 23:24:39,139 | WARNING | store.chatbot.api | chatbot_api invalid_json request_id=768d6cd8841f
+2026-03-18 23:24:39,141 | INFO | store.chatbot.api | chatbot_api request_id=long501 action=message user_id=None session=None message_len=501
+2026-03-18 23:24:39,142 | INFO | store.chatbot.api | chatbot_api request_id=reset-case action=reset user_id=None session=None message_len=0
+2026-03-18 23:24:39,149 | INFO | store.chatbot.api | chatbot_api reset request_id=reset-case ok=True latency_ms=6
+2026-03-18 23:27:25,070 | INFO | store.chatbot.api | chatbot_api request_id=ae6e12579cb3 action=reset user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=0
+2026-03-18 23:27:25,073 | INFO | store.chatbot.api | chatbot_api reset request_id=ae6e12579cb3 ok=True latency_ms=5
+2026-03-18 23:27:38,822 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773851258818_nlnz9l action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=24
+2026-03-18 23:27:38,829 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773851258818_nlnz9l intent=unknown source=rule engine=django_local latency_ms=9
+2026-03-18 23:27:52,116 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773851272111_qg3egj action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=55
+2026-03-18 23:27:52,126 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773851272111_qg3egj intent=unknown source=local engine=django_local latency_ms=12
+2026-03-18 23:30:52,563 | INFO | store.chatbot.api | chatbot_api request_id=2cd63cb72660 action=reset user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=0
+2026-03-18 23:30:52,566 | INFO | store.chatbot.api | chatbot_api reset request_id=2cd63cb72660 ok=True latency_ms=7
+2026-03-18 23:31:02,228 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773851462224_cy9tot action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=24
+2026-03-18 23:31:02,236 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773851462224_cy9tot intent=unknown source=rule engine=django_local latency_ms=10
+2026-03-18 23:31:17,456 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773851477451_h1u9hl action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=50
+2026-03-18 23:31:17,467 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773851477451_h1u9hl intent=unknown source=rule engine=django_local latency_ms=14
+2026-03-18 23:31:52,306 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773851512303_1w9vlh action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=98
+2026-03-18 23:31:57,248 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773851512303_1w9vlh intent=unknown source=local engine=django_local latency_ms=4943
+2026-03-18 23:32:51,071 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773851571066_10kpcn action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=20
+2026-03-18 23:32:51,082 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773851571066_10kpcn intent=unknown source=rule engine=django_local latency_ms=13
+2026-03-18 23:37:10,768 | INFO | store.chatbot.api | chatbot_api request_id=e773ceda9a3a action=reset user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=0
+2026-03-18 23:37:10,774 | INFO | store.chatbot.api | chatbot_api reset request_id=e773ceda9a3a ok=True latency_ms=24
+2026-03-18 23:37:30,242 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773851850237_m1wl0l action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=34
+2026-03-18 23:37:30,263 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773851850237_m1wl0l intent=unknown source=rule engine=django_local latency_ms=24
+2026-03-18 23:37:52,079 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773851872074_ht9uvc action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=76
+2026-03-18 23:37:52,106 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773851872074_ht9uvc intent=unknown source=rule engine=django_local latency_ms=30
+2026-03-18 23:38:13,682 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773851893676_4dcuyp action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=61
+2026-03-18 23:38:19,036 | INFO | ai.rag_pipeline | Detected intent: compare_phones (confidence: 0.22)
+2026-03-18 23:38:20,906 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773851893676_4dcuyp intent=compare_phones source=claude engine=ai_pipeline latency_ms=7228
+2026-03-18 23:43:16,167 | INFO | store.chatbot.api | chatbot_api request_id=qh_1773852196162_uf9ot4 action=message user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=61
+2026-03-18 23:43:22,055 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1773852196162_uf9ot4 intent=unknown source=local engine=django_local latency_ms=5891
+2026-03-18 23:46:34,954 | INFO | ai.rag_pipeline | Detected intent: stock_query (confidence: 0.20)
+2026-03-18 23:46:34,961 | WARNING | store.chatbot_orchestrator | AI thiếu context sản phẩm (stock_query), fallback local
+2026-03-18 23:46:34,991 | INFO | ai.rag_pipeline | Detected intent: stock_query (confidence: 0.20)
+2026-03-18 23:46:34,996 | WARNING | store.chatbot_orchestrator | AI thiếu context sản phẩm (stock_query), fallback local
+2026-03-19 00:09:14,307 | INFO | store.chatbot.api | chatbot_api request_id=beea6ffb67f2 action=reset user_id=36 session=r1qk4itekfiktwvfr25xwov0qjsea1bc message_len=0
+2026-03-19 00:09:14,312 | INFO | store.chatbot.api | chatbot_api reset request_id=beea6ffb67f2 ok=True latency_ms=8

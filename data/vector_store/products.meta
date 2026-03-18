@@ -1,0 +1,178 @@
+[
+  {
+    "id": "product_50",
+    "index": 0,
+    "type": "product",
+    "name": "Vivo Y19S",
+    "brand": "VIVO",
+    "price": 0
+  },
+  {
+    "id": "product_49",
+    "index": 1,
+    "type": "product",
+    "name": "RedMagic 10S Pro",
+    "brand": "RED MAGIC",
+    "price": 0
+  },
+  {
+    "id": "product_48",
+    "index": 2,
+    "type": "product",
+    "name": "RedMagic 11 Pro",
+    "brand": "RED MAGIC",
+    "price": 0
+  },
+  {
+    "id": "product_47",
+    "index": 3,
+    "type": "product",
+    "name": "Realme 13+ 5G",
+    "brand": "REALME",
+    "price": 0
+  },
+  {
+    "id": "product_46",
+    "index": 4,
+    "type": "product",
+    "name": "OPPO Reno15 5G",
+    "brand": "OPPO",
+    "price": 0
+  },
+  {
+    "id": "product_45",
+    "index": 5,
+    "type": "product",
+    "name": "Honor 400 5G",
+    "brand": "HONOR",
+    "price": 0
+  },
+  {
+    "id": "product_44",
+    "index": 6,
+    "type": "product",
+    "name": "Benco S1 Pro",
+    "brand": "BENCO",
+    "price": 0
+  },
+  {
+    "id": "product_43",
+    "index": 7,
+    "type": "product",
+    "name": "Xiaomi 15T 5G",
+    "brand": "XIAOMI",
+    "price": 0
+  },
+  {
+    "id": "product_42",
+    "index": 8,
+    "type": "product",
+    "name": "Xiaomi 14T Pro",
+    "brand": "XIAOMI",
+    "price": 0
+  },
+  {
+    "id": "product_41",
+    "index": 9,
+    "type": "product",
+    "name": "Tecno Camon 30",
+    "brand": "TECNO",
+    "price": 0
+  },
+  {
+    "id": "product_40",
+    "index": 10,
+    "type": "product",
+    "name": "Samsung Galaxy S26",
+    "brand": "SAMSUNG",
+    "price": 0
+  },
+  {
+    "id": "product_39",
+    "index": 11,
+    "type": "product",
+    "name": "Samsung Galaxy S26 Ultra",
+    "brand": "SAMSUNG",
+    "price": 0
+  },
+  {
+    "id": "product_38",
+    "index": 12,
+    "type": "product",
+    "name": "iPhone 16 Plus",
+    "brand": "APPLE",
+    "price": 0
+  },
+  {
+    "id": "product_37",
+    "index": 13,
+    "type": "product",
+    "name": "iPhone 13",
+    "brand": "APPLE",
+    "price": 0
+  },
+  {
+    "id": "product_36",
+    "index": 14,
+    "type": "product",
+    "name": "iPhone 14",
+    "brand": "APPLE",
+    "price": 0
+  },
+  {
+    "id": "product_35",
+    "index": 15,
+    "type": "product",
+    "name": "iPhone 14 Pro Max",
+    "brand": "APPLE",
+    "price": 0
+  },
+  {
+    "id": "product_34",
+    "index": 16,
+    "type": "product",
+    "name": "iPhone 15",
+    "brand": "APPLE",
+    "price": 0
+  },
+  {
+    "id": "product_33",
+    "index": 17,
+    "type": "product",
+    "name": "iPhone 16 Pro Max",
+    "brand": "APPLE",
+    "price": 0
+  },
+  {
+    "id": "product_32",
+    "index": 18,
+    "type": "product",
+    "name": "Samsung Galaxy S25 Ultra",
+    "brand": "SAMSUNG",
+    "price": 29040000.0
+  },
+  {
+    "id": "product_31",
+    "index": 19,
+    "type": "product",
+    "name": "iPhone 17",
+    "brand": "APPLE",
+    "price": 2500000.0
+  },
+  {
+    "id": "product_30",
+    "index": 20,
+    "type": "product",
+    "name": "iPhone Air",
+    "brand": "APPLE",
+    "price": 25590000.0
+  },
+  {
+    "id": "product_29",
+    "index": 21,
+    "type": "product",
+    "name": "iPhone 17 Pro Max",
+    "brand": "APPLE",
+    "price": 34190000.0
+  }
+]

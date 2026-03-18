@@ -1,0 +1,7 @@
+{
+  "dimension": 384,
+  "index_type": "FLAT",
+  "metric": "cosine",
+  "nlist": 100,
+  "nprobe": 10
+}

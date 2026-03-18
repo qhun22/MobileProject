@@ -1,0 +1,30 @@
+[
+  {
+    "id": "content_6",
+    "index": 0,
+    "type": "content",
+    "title": "Samsung Galaxy S25 Ultra",
+    "product_name": "Samsung Galaxy S25 Ultra"
+  },
+  {
+    "id": "content_5",
+    "index": 1,
+    "type": "content",
+    "title": "iPhone 17",
+    "product_name": "iPhone 17"
+  },
+  {
+    "id": "content_4",
+    "index": 2,
+    "type": "content",
+    "title": "iPhone Air",
+    "product_name": "iPhone Air"
+  },
+  {
+    "id": "content_3",
+    "index": 3,
+    "type": "content",
+    "title": "iPhone 17 Pro Max",
+    "product_name": "iPhone 17 Pro Max"
+  }
+]

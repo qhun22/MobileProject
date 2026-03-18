@@ -1,0 +1,62 @@
+[
+  {
+    "id": "brand_25",
+    "index": 0,
+    "type": "brand",
+    "name": "APPLE"
+  },
+  {
+    "id": "brand_39",
+    "index": 1,
+    "type": "brand",
+    "name": "BENCO"
+  },
+  {
+    "id": "brand_36",
+    "index": 2,
+    "type": "brand",
+    "name": "HONOR"
+  },
+  {
+    "id": "brand_27",
+    "index": 3,
+    "type": "brand",
+    "name": "OPPO"
+  },
+  {
+    "id": "brand_35",
+    "index": 4,
+    "type": "brand",
+    "name": "REALME"
+  },
+  {
+    "id": "brand_37",
+    "index": 5,
+    "type": "brand",
+    "name": "RED MAGIC"
+  },
+  {
+    "id": "brand_26",
+    "index": 6,
+    "type": "brand",
+    "name": "SAMSUNG"
+  },
+  {
+    "id": "brand_38",
+    "index": 7,
+    "type": "brand",
+    "name": "TECNO"
+  },
+  {
+    "id": "brand_34",
+    "index": 8,
+    "type": "brand",
+    "name": "VIVO"
+  },
+  {
+    "id": "brand_28",
+    "index": 9,
+    "type": "brand",
+    "name": "XIAOMI"
+  }
+]
