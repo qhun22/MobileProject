@@ -171,7 +171,7 @@ def login_view(request):
         else:
             messages.error(request, 'Tên đăng nhập hoặc mật khẩu không đúng!')
     
-    return render(request, 'store/login.html')
+    return render(request, 'store/auth.html', {'initial_mode': 'login'})
 
 
 
@@ -320,12 +320,12 @@ def register_view(request):
         # Kiểm tra các trường không rỗng
         if not fullname or not email or not phone or not password or not confirm_password or not otp_input:
             messages.error(request, 'Vui lòng điền đầy đủ thông tin!')
-            return render(request, 'store/register.html')
+            return render(request, 'store/auth.html', {'initial_mode': 'register'})
         
         # Kiểm tra mật khẩu khớp
         if password != confirm_password:
             messages.error(request, 'Mật khẩu không khớp!')
-            return render(request, 'store/register.html')
+            return render(request, 'store/auth.html', {'initial_mode': 'register'})
         
         # Kiểm tra OTP
         session_otp = request.session.get('otp')
@@ -336,13 +336,13 @@ def register_view(request):
         # Kiểm tra OTP hết hạn
         if not session_otp or session_email != email or session_otp != otp_input or int(time.time()) > (session_created_at + session_expire):
             messages.error(request, 'OTP không hợp lệ hoặc đã hết hạn!')
-            return render(request, 'store/register.html')
+            return render(request, 'store/auth.html', {'initial_mode': 'register'})
         
         # Kiểm tra email đã tồn tại chưa
         from store.models import CustomUser
         if CustomUser.objects.filter(email=email).exists():
             messages.error(request, 'Email đã được sử dụng!')
-            return render(request, 'store/register.html')
+            return render(request, 'store/auth.html', {'initial_mode': 'register'})
         
         # Tạo user mới với email và phone
         user = CustomUser.objects.create_user(
@@ -363,7 +363,7 @@ def register_view(request):
         messages.success(request, 'Đăng ký thành công! Vui lòng đăng nhập.')
         return redirect('store:login')
     
-    return render(request, 'store/register.html')
+    return render(request, 'store/auth.html', {'initial_mode': 'register'})
 
 
 
@@ -375,7 +375,7 @@ def forgot_password_view(request):
     if request.user.is_authenticated:
         return redirect('store:home')
     
-    return render(request, 'store/forgot_password.html')
+    return render(request, 'store/auth.html', {'initial_mode': 'forgot'})
 
 
 

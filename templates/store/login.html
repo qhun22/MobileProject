@@ -8,20 +8,18 @@
 {% endblock %}
 
 {% block content %}
-{% comment %} Khoảng cách chiều cao với header {% endcomment %}
 <div class="qh-login-page" style="padding: 10px 0;">
     
     <div class="qh-auth-box">
         <h2 class="qh-auth-box-title">ĐĂNG NHẬP</h2>
         
-        <!-- Thông báo sẽ hiển thị qua JavaScript Toast -->
         {% if messages %}
             {% for message in messages %}
                 <div class="qh-toast-message" data-type="{% if message.tags == 'error' %}error{% else %}success{% endif %}" data-message="{{ message|escapejs }}" style="display: none;"></div>
             {% endfor %}
         {% endif %}
         
-        <form method="POST" action="{% url 'store:login' %}">
+        <form method="POST" action="{% url 'store:login' %}" id="loginForm" novalidate>
             {% csrf_token %}
             
             <div class="qh-form-group">
@@ -54,7 +52,6 @@
             </button>
         </form>
         
-        <!-- Đăng nhập Google -->
         <div class="qh-divider">
             <span>hoặc</span>
         </div>

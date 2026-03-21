@@ -1,16 +1,9 @@
-/**
- * QHUN22 Mobile - Forgot Password JavaScript
- * Xử lý chức năng quên mật khẩu
- */
-
-// Các URL endpoint
 const FORGOT_PASSWORD_URLS = {
     sendOtp: '/send-otp-forgot-password/',
     verifyOtp: '/verify-otp-forgot-password/',
     resetPassword: '/reset-password/'
 };
 
-// Ẩn/hiện mật khẩu
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
     if (input.type === 'password') {
@@ -20,7 +13,6 @@ function togglePassword(inputId) {
     }
 }
 
-// Lấy CSRF token
 function getCsrfToken() {
     const name = 'csrftoken';
     let cookieValue = null;
@@ -37,14 +29,12 @@ function getCsrfToken() {
     return cookieValue;
 }
 
-// Hiển thị thông báo toast
 function showToast(message, type = 'success') {
     if (window.QHToast) {
         window.QHToast.show(message, type);
     }
 }
 
-// Các phần tử DOM
 const emailInput = document.getElementById('email');
 const otpBtn = document.getElementById('otpBtn');
 const otpMessage = document.getElementById('otpMessage');
@@ -53,7 +43,6 @@ const resetPasswordForm = document.getElementById('resetPasswordForm');
 
 let countdownInterval;
 
-// Khởi tạo khi DOM đã sẵn sàng
 document.addEventListener('DOMContentLoaded', function () {
     if (emailInput && otpBtn) {
         initEmailStep();
@@ -66,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Bước 1: Xác thực email và gửi OTP
 function initEmailStep() {
     emailInput.addEventListener('input', function () {
         const email = this.value.trim();
@@ -110,7 +98,6 @@ function initEmailStep() {
     });
 }
 
-// Hiển thị Bước 2
 function showStep2(email) {
     document.getElementById('step1-form').classList.add('qh-hidden');
     document.getElementById('step2-form').classList.remove('qh-hidden');
@@ -129,13 +116,17 @@ function showStep2(email) {
     startCountdown();
 }
 
-// Bước 2: Xác thực OTP
 function initOtpStep() {
     otpForm.addEventListener('submit', function (e) {
         e.preventDefault();
 
+        const otp = document.getElementById('otp').value.trim();
+        if (!otp) {
+            showToast('Vui lòng nhập mã OTP!', 'error');
+            return;
+        }
+
         const email = document.getElementById('hiddenEmail').value;
-        const otp = document.getElementById('otp').value;
 
         fetch(FORGOT_PASSWORD_URLS.verifyOtp, {
             method: 'POST',
@@ -158,7 +149,6 @@ function initOtpStep() {
             });
     });
 
-    // Nút gửi lại OTP
     const resendBtn = document.getElementById('resendOtpBtn');
     if (resendBtn) {
         resendBtn.addEventListener('click', function () {
@@ -194,9 +184,8 @@ function initOtpStep() {
     }
 }
 
-// Đếm ngược thời gian
 function startCountdown() {
-    let timeLeft = 300; // 5 minutes
+    let timeLeft = 300;
     const countdownEl = document.getElementById('countdown');
     const resendBtn = document.getElementById('resendOtpBtn');
 
@@ -230,7 +219,6 @@ function startCountdown() {
     }, 1000);
 }
 
-// Hiển thị Bước 3
 function showStep3(email) {
     document.getElementById('step2-form').classList.add('qh-hidden');
     document.getElementById('step3-form').classList.remove('qh-hidden');
@@ -245,7 +233,6 @@ function showStep3(email) {
     }
 }
 
-// Bước 3: Đặt lại mật khẩu
 function initResetPasswordStep() {
     resetPasswordForm.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -254,7 +241,15 @@ function initResetPasswordStep() {
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
 
-        // Xác thực mật khẩu
+        if (!newPassword) {
+            showToast('Vui lòng nhập mật khẩu mới!', 'error');
+            return;
+        }
+        if (!confirmPassword) {
+            showToast('Vui lòng nhập lại mật khẩu!', 'error');
+            return;
+        }
+
         if (newPassword.length < 6) {
             showToast('Mật khẩu phải có ít nhất 6 ký tự!', 'error');
             return;

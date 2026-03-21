@@ -13,14 +13,13 @@
     <div class="qh-auth-box">
         <h2 class="qh-auth-box-title">ĐĂNG KÝ</h2>
 
-        <!-- Thông báo sẽ hiển thị qua JavaScript Toast -->
         {% if messages %}
             {% for message in messages %}
                 <div class="qh-toast-message" data-type="{% if message.tags == 'error' %}error{% else %}success{% endif %}" data-message="{{ message|escapejs }}" style="display: none;"></div>
             {% endfor %}
         {% endif %}
 
-        <form method="POST" action="{% url 'store:register' %}" id="regForm">
+        <form method="POST" action="{% url 'store:register' %}" id="regForm" novalidate>
             {% csrf_token %}
 
             <div class="qh-form-group">
@@ -36,7 +35,6 @@
                 </div>
             </div>
 
-            <!-- Thông báo OTP -->
             <div id="otpMessage" class="qh-otp-message" style="display: none;"></div>
 
             <div class="qh-form-group">
@@ -70,18 +68,8 @@
     </div>
 </div>
 
-<!-- JS đăng ký ngoài -->
 <script src="{% static 'js/register.js' %}?v=3"></script>
 
-<!-- Chuyển Django Messages thành Toast -->
-{# ========================================================================= #}
-{# NOTE: JS KHÔNG THỂ TÁCH RA FILE RIÊNG vì sử dụng Django template tags #}
-{# - {% if messages %} - Block từ Django #}
-{# - {% for message in messages %} - Loop từ Django #}
-{# - {{ message.tags|escapejs }} - Biến từ Django #}
-{# - {{ message|escapejs }} - Biến từ Django #}
-{# Nếu tách ra file .js thuần, các template tags này sẽ không được xử lý #}
-{# ========================================================================= #}
 {% if messages %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
