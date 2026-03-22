@@ -54,27 +54,23 @@ def send_otp_view(request):
     """
     if request.method == 'POST':
         email = request.POST.get('email')
-        
+
         if not email:
             return JsonResponse({'status': 'error', 'message': 'Thiếu email'})
-        
+
         # Kiểm tra email đã tồn tại chưa
         from store.models import CustomUser
         if CustomUser.objects.filter(email=email).exists():
             return JsonResponse({'status': 'error', 'message': 'Email đã tồn tại trong hệ thống! Vui lòng sử dụng email khác.'})
-        
+
         # Tạo OTP 5 chữ số
         otp = str(random.randint(10000, 99999))
-        
+
         # Lưu vào session
         request.session['otp'] = otp
         request.session['otp_email'] = email
-        request.session['otp_created_at'] = int(time.time())  # Thời điểm tạo OTP
-        request.session['otp_expire'] = 300  # 5 phút (để tính toán sau)
-        
-        # Gửi email qua SendGrid
-        api_key = os.getenv('SENDGRID_API_KEY', '')
-        from_email = os.getenv('SENDGRID_FROM_EMAIL', 'noreply@qhun22.com')
+        request.session['otp_created_at'] = int(time.time())
+        request.session['otp_expire'] = 300  # 5 phút
 
         html_body = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f5f5f5;">
@@ -87,38 +83,26 @@ def send_otp_view(request):
         </div>
         """
 
-        data = {
-            "personalizations": [{
-                "to": [{"email": email}],
-                "subject": "Xác minh OTP - QHUN22"
-            }],
-            "from": {"email": from_email},
-            "content": [{
-                "type": "text/html",
-                "value": html_body
-            }]
-        }
-        
         try:
-            response = requests.post(
-                "https://api.sendgrid.com/v3/mail/send",
-                json=data,
-                headers={
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json"
-                },
-                timeout=10
+            from django.core.mail import send_mail
+            from django.conf import settings as django_settings
+
+            send_mail(
+                subject='Xác minh OTP - QHUN22',
+                message=f'Mã OTP của bạn là: {otp}\nMã có hiệu lực trong 5 phút.',
+                from_email=django_settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                html_message=html_body,
+                fail_silently=False,
             )
-            
-            if response.status_code in [200, 201, 202]:
-                return JsonResponse({'status': 'success', 'message': 'OTP_SENT'})
-            else:
-                return JsonResponse({'status': 'error', 'message': f'Gửi email thất bại: {response.status_code}'})
-                
+            return JsonResponse({'status': 'success', 'message': 'OTP_SENT'})
+
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)})
-    
-            return JsonResponse({'status': 'error', 'message': 'Yêu cầu không hợp lệ'})
+            import logging
+            logging.getLogger(__name__).error(f'send_otp_view error: {e}')
+            return JsonResponse({'status': 'error', 'message': f'Gửi email thất bại: {str(e)}'})
+
+    return JsonResponse({'status': 'error', 'message': 'Yêu cầu không hợp lệ'})
 
 
 
