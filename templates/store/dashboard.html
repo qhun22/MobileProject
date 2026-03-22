@@ -87,6 +87,7 @@
     .da-export-btn:hover { background: #dbeafe; }
     .da-row { display: grid; gap: 10px; margin-bottom: 10px; }
     .da-c5 { grid-template-columns: repeat(5, 1fr); }
+    .da-c4 { grid-template-columns: repeat(4, 1fr); }
     .da-c3 { grid-template-columns: repeat(3, 1fr); }
     .da-c2 { grid-template-columns: repeat(2, 1fr); }
     .da-stat {
@@ -134,7 +135,7 @@
     .da-btn {
         display: inline-flex; align-items: center; gap: 5px;
         cursor: pointer; border: none; font-family: 'Signika', sans-serif;
-        font-weight: 500; border-radius: 6px; transition: all 0.15s;
+        font-weight: 500; border-radius: 0px; transition: all 0.15s;
         text-decoration: none; white-space: nowrap;
     }
     .da-btn-md { padding: 8px 14px; font-size: 13px; }
@@ -159,28 +160,79 @@
     .da-table-empty td { padding: 36px !important; text-align: center; color: #94a3b8; font-size: 13px; }
     .da-pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 18px; flex-wrap: wrap; }
     .da-page-link {
-        padding: 6px 12px; background: #f1f5f9; color: #334155;
-        border-radius: 6px; text-decoration: none; font-size: 12px;
-        font-family: 'Signika', sans-serif; transition: background 0.15s;
+        min-width: 38px;
+        height: 38px;
+        padding: 0 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8fafc;
+        color: #334155;
+        border: 1px solid #dbe2ea;
+        border-radius: 999px;
+        text-decoration: none;
+        font-size: 12px;
+        font-family: 'Signika', sans-serif;
+        font-weight: 600;
+        transition: all 0.15s;
     }
-    .da-page-link:hover { background: #e2e8f0; }
-    .da-page-link.active { background: #3b82f6; color: #fff; pointer-events: none; }
+    .da-page-link:hover { background: #eef2f7; border-color: #cbd5e1; }
+    .da-page-link.active { background: #6366f1; border-color: #6366f1; color: #fff; pointer-events: none; }
+
+    .da-card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:18px; }
+    .da-media-card { background:#fff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(15,23,42,0.05); }
+    .da-media-hero { position:relative; background:#f8fafc; border-bottom:1px solid #e2e8f0; }
+    .da-media-hero img { width:100%; height:100%; object-fit:cover; display:block; }
+    .da-media-body { padding:14px 15px; }
+    .da-media-title { font-size:15px; font-weight:700; color:#1e293b; margin:0 0 6px; }
+    .da-media-sub { font-size:12px; color:#94a3b8; margin:0; }
+    .da-media-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    .da-badge { display:inline-flex; align-items:center; justify-content:center; min-width:84px; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; }
+    .da-badge-success { background:#dcfce7; color:#166534; }
+    .da-badge-muted { background:#e2e8f0; color:#475569; }
+    .da-badge-warn { background:#fef3c7; color:#92400e; }
+    .da-thumb-box { width:66px; height:66px; border-radius:10px; border:1px solid #e2e8f0; background:#f8fafc; display:inline-flex; align-items:center; justify-content:center; overflow:hidden; }
+    .da-thumb-box img { width:100%; height:100%; object-fit:cover; }
+    .da-input-mini { width:88px; padding:8px 10px; border:1px solid #dbe2ea; border-radius:10px; font-size:13px; text-align:center; font-family:'Signika', sans-serif; color:#1e293b; background:#fff; }
+    .da-inline-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 
     /* ======== ORDER TABS ======== */
     .da-order-tabs { display: flex; background: #fff; border-radius: 7px; border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 16px; }
-    .da-order-tab { flex: 1; padding: 11px 4px; border: none; background: transparent; font-size: 12.5px; font-weight: 500; color: #64748b; cursor: pointer; font-family: 'Signika', sans-serif; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+    .da-order-tab { flex: 1 1 0; min-width: 0; display: flex; justify-content: center; align-items: center; text-align: center; padding: 11px 8px; border: none; background: transparent; font-size: 12.5px; font-weight: 500; color: #64748b; cursor: pointer; font-family: 'Signika', sans-serif; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
     .da-order-tab:hover { background: #f8fafc; color: #334155; }
     .da-order-tab.active { color: #3b82f6; font-weight: 600; border-bottom-color: #3b82f6; background: #eff6ff; }
     .da-order-tab.active:hover { background: #dbeafe; color: #1d4ed8; }
-    .da-order-tab.refund-tab { background: #fef3c7; color: #92400e; border-bottom-color: #f59e0b; font-weight: 600; }
-    .da-order-tab.refund-tab:hover { background: #fde68a; color: #92400e; }
-    .da-order-tab.refund-tab.active { background: #fde68a; color: #92400e; }
+    .da-order-tab.refund-tab { background: transparent; color: #64748b; border-bottom-color: transparent; font-weight: 500; }
+    .da-order-tab.refund-tab:hover { background: #f8fafc; color: #334155; }
+    .da-order-tab.refund-tab.active { background: #eff6ff; color: #1d4ed8; border-bottom-color: #3b82f6; font-weight: 600; }
+    .da-tab-badge { display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px; padding:0 5px; margin-left:8px; border-radius:999px; background:#ef4444; color:#fff; font-size:10px; font-weight:700; line-height:1; flex-shrink:0; }
+    .da-tab-badge.is-hidden { display:none; }
     .da-btn-success { background: #22c55e; color: #fff; }
     .da-btn-success:hover { background: #16a34a; }
 
     /* ======== LEGACY COMPATIBILITY ======== */
     .qh-content-title { font-size: 20px; font-weight: 600; color: #1e293b; }
     .qh-dashboard { }
+
+    /* ======== PRODUCT DETAIL TABS ======== */
+    .pd-tab {
+        padding: 14px 16px; font-size: 13px; font-weight: 500; color: #475569;
+        cursor: pointer; border-left: 3px solid transparent;
+        transition: all 0.15s; white-space: nowrap;
+    }
+    .pd-tab:hover { background: #eff6ff; color: #1e293b; }
+    .pd-tab.active { background: #eff6ff; border-left-color: #3b82f6; color: #1d4ed8; font-weight: 600; }
+
+    .variant-group { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(59,130,246,0.08); }
+    .variant-group .vg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; align-items: start; }
+    .variant-group .vg-field { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; box-sizing: border-box; font-family: 'Signika', sans-serif; background: #fff; color: #334155; }
+    .variant-group .vg-field:focus { border-color: #3b82f6; outline: none; }
+    .variant-group .vg-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 500; color: #334155; }
+    .variant-group .vg-colors { border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 60px; }
+    .variant-group .vg-color-item { padding: 10px 12px; border: 1px solid #93c5fd; border-radius: 6px; font-size: 14px; background: #eff6ff; color: #1e40af; font-family: 'Signika', sans-serif; }
+    .variant-group .vg-footer { padding: 10px 12px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; background: #fafafa; }
+    .variant-group .vg-delete { padding: 8px 16px; background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: 'Signika', sans-serif; font-weight: 500; }
+    .variant-group .vg-delete:hover { background: #fecaca; border-color: #dc2626; }
 
     /* ======== RESPONSIVE ======== */
     @media (max-width: 1200px) { .da-c5 { grid-template-columns: repeat(3, 1fr); } }
@@ -216,11 +268,8 @@
     <a class="da-nav-item{% if request.GET.section == 'qr-approval' %} active{% endif %}" onclick="window.location.href='?section=qr-approval'" data-section="qr-approval">VIETQR</a>
     <a class="da-nav-item{% if request.GET.section == 'coupons' %} active{% endif %}" onclick="window.location.href='?section=coupons'" data-section="coupons">VOUCHER</a>
     <a class="da-nav-item{% if request.GET.section == 'brands' %} active{% endif %}" onclick="window.location.href='?section=brands'" data-section="brands">QUẢN LÝ HÃNG</a>
-    <a class="da-nav-item{% if request.GET.section == 'products' %} active{% endif %}" onclick="window.location.href='?section=products'" data-section="products">QUẢN LÝ SẢN PHẨM</a>
-    <a class="da-nav-item{% if request.GET.section == 'sku' %} active{% endif %}" onclick="window.location.href='?section=sku'" data-section="sku">QUẢN LÝ SKU</a>
+    <a class="da-nav-item{% if request.GET.section == 'products' or request.GET.section == 'product-detail' %} active{% endif %}" onclick="window.location.href='?section=products'" data-section="products">QUẢN LÝ SẢN PHẨM</a>
     <a class="da-nav-item{% if request.GET.section == 'banner-images' %} active{% endif %}" onclick="window.location.href='?section=banner-images'" data-section="banner-images">ẢNH BANNER</a>
-    <a class="da-nav-item{% if request.GET.section == 'product-images' %} active{% endif %}" onclick="window.location.href='?section=product-images'" data-section="product-images">ẢNH SẢN PHẨM</a>
-    <a class="da-nav-item{% if request.GET.section == 'product-content' %} active{% endif %}" onclick="window.location.href='?section=product-content'" data-section="product-content">THÔNG TIN SẢN PHẨM</a>
     <a class="da-nav-item{% if request.GET.section == 'reviews' %} active{% endif %}" onclick="window.location.href='?section=reviews'" data-section="reviews">ĐÁNH GIÁ SẢN PHẨM</a>
     <a class="da-nav-item{% if request.GET.section == 'blog-posts' %} active{% endif %}" onclick="window.location.href='?section=blog-posts'" data-section="blog-posts">BLOG SẢN PHẨM</a>
     <a class="da-nav-item{% if request.GET.section == 'hot-sale' %} active{% endif %}" onclick="window.location.href='?section=hot-sale'" data-section="hot-sale">HOT SALE</a>
@@ -321,17 +370,64 @@
         </div>
         <!-- Phần người dùng -->
         <div id="users-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">QUẢN LÝ NGƯỜI DÙNG</span>
+            <div class="da-group-hd">
+                <span class="da-group-title">NGƯỜI DÙNG</span>
                 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                    <div style="position:relative;">
-                        <input type="text" id="userSearchInput" placeholder="Tìm theo email, họ tên..." value="{{ request.GET.user_search|default:'' }}" onkeyup="searchUsers(event)" onkeydown="if(event.key==='Enter')searchUsers(event)" style="width:230px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <div class="da-search-wrap">
+                        <input type="text" id="userSearchInput" class="da-search-input" placeholder="Tìm email, họ tên, số điện thoại..." value="{{ request.GET.user_search|default:'' }}" oninput="queueUserSearch()" onkeydown="handleUserSearchKeydown(event)" style="width:270px;">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
                     <button onclick="resetUserSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
                     <button type="button" onclick="openAddUserModal()" class="da-btn da-btn-md da-btn-primary">+ Thêm người dùng</button>
                 </div>
             </div>
+
+            <div class="da-row da-c5">
+                <div class="da-stat">
+                    <div class="da-stat-label">Tổng người dùng hệ thống</div>
+                    <div class="da-stat-val">{{ total_users|default:0 }}</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Toàn bộ tài khoản đã đăng ký</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Tài khoản thường</div>
+                    <div class="da-stat-val">{{ regular_users|default:0 }}</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Đăng ký trực tiếp bằng email</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Tài khoản OAuth</div>
+                    <div class="da-stat-val">{{ oauth_users|default:0 }}</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Nguồn đăng nhập mạng xã hội</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Quản trị viên</div>
+                    <div class="da-stat-val">{{ admin_users|default:0 }}</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Tài khoản có quyền quản trị</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Kết quả hiển thị</div>
+                    <div class="da-stat-val">{{ filtered_users_count|default:0 }}</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">{% if request.GET.user_search %}Đang lọc theo từ khóa{% else %}Số bản ghi hiện tại{% endif %}</div>
+                </div>
+            </div>
+
+            <div class="da-group-title">DANH SÁCH NGƯỜI DÙNG</div>
+            <div class="da-toolbar" style="margin-bottom:10px;">
+                <div class="da-toolbar-left" style="font-size:12px;color:#64748b;">
+                    {% if request.GET.user_search %}
+                    <span>Đang tìm với từ khóa <strong style="color:#1e293b;">"{{ request.GET.user_search }}"</strong>. Hệ thống tự tìm khi bạn đang gõ.</span>
+                    {% else %}
+                    <span>Nhập email, họ tên hoặc số điện thoại để hệ thống lọc trực tiếp.</span>
+                    {% endif %}
+                </div>
+                <div style="font-size:12px;color:#94a3b8;">
+                    {% if users_paginated.paginator.count %}
+                    Hiển thị {{ users_paginated.start_index }}-{{ users_paginated.end_index }} / {{ users_paginated.paginator.count }} người dùng
+                    {% else %}
+                    0 người dùng
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="da-table-wrap">
                 <table class="da-table">
                     <thead>
@@ -339,6 +435,8 @@
                             <th>STT</th>
                             <th>Email</th>
                             <th>Họ tên</th>
+                            <th>SĐT</th>
+                            <th>Nguồn</th>
                             <th>Ngày đăng ký</th>
                             <th>Hành động</th>
                         </tr>
@@ -347,18 +445,41 @@
                         {% for user in users_paginated %}
                         <tr>
                             <td>{{ forloop.counter0|add:users_paginated.start_index }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.last_name|default:"" }} {{ user.first_name|default:"" }}</td>
+                            <td>
+                                <div style="display:flex;flex-direction:column;gap:3px;min-width:0;">
+                                    <span style="font-weight:600;color:#1e293b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:260px;">{{ user.email }}</span>
+                                    {% if user.is_superuser %}
+                                    <span style="font-size:11px;color:#dc2626;">Quyền quản trị</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                {% if user.last_name or user.first_name %}
+                                <span style="font-weight:500;color:#334155;">{{ user.last_name|default:"" }} {{ user.first_name|default:"" }}</span>
+                                {% else %}
+                                <span style="color:#94a3b8;">Chưa cập nhật</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.phone|default:"-" }}</td>
+                            <td>
+                                {% if user.is_superuser %}
+                                <span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;background:#fee2e2;color:#b91c1c;font-size:11px;font-weight:600;">Admin</span>
+                                {% elif user.is_oauth_user %}
+                                <span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:600;">OAuth</span>
+                                {% else %}
+                                <span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#475569;font-size:11px;font-weight:600;">Thường</span>
+                                {% endif %}
+                            </td>
                             <td>{{ user.date_joined|date:"d/m/Y" }}</td>
                             <td>
-                                <div style="display:flex;gap:5px;">
+                                <div style="display:flex;gap:5px;flex-wrap:wrap;">
                                     <button type="button" onclick="openEditUserModal('{{ user.id }}'); return false;" class="da-btn da-btn-sm da-btn-edit">Sửa</button>
                                     <button onclick="deleteUser('{{ user.id }}', '{{ user.email }}')" class="da-btn da-btn-sm da-btn-del">Xóa</button>
                                 </div>
                             </td>
                         </tr>
                         {% empty %}
-                        <tr class="da-table-empty"><td colspan="5">Chưa có người dùng nào.</td></tr>
+                        <tr class="da-table-empty"><td colspan="7">Không tìm thấy người dùng phù hợp.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -366,7 +487,7 @@
             {% if users_paginated.has_other_pages %}
             <div class="da-pagination">
                 {% if users_paginated.has_previous %}
-                <a class="da-page-link" href="?section=users&amp;user_page={{ users_paginated.previous_page_number }}{% if request.GET.user_search %}&amp;user_search={{ request.GET.user_search|urlencode }}{% endif %}">&laquo; Trước</a>
+                <a class="da-page-link" href="?section=users&amp;user_page={{ users_paginated.previous_page_number }}{% if request.GET.user_search %}&amp;user_search={{ request.GET.user_search|urlencode }}{% endif %}"><span aria-hidden="true">&#x2039;</span></a>
                 {% endif %}
                 {% for num in users_paginated.paginator.page_range %}
                     {% if users_paginated.number == num %}
@@ -376,24 +497,33 @@
                     {% endif %}
                 {% endfor %}
                 {% if users_paginated.has_next %}
-                <a class="da-page-link" href="?section=users&amp;user_page={{ users_paginated.next_page_number }}{% if request.GET.user_search %}&amp;user_search={{ request.GET.user_search|urlencode }}{% endif %}">Sau &raquo;</a>
+                <a class="da-page-link" href="?section=users&amp;user_page={{ users_paginated.next_page_number }}{% if request.GET.user_search %}&amp;user_search={{ request.GET.user_search|urlencode }}{% endif %}"><span aria-hidden="true">&#x203A;</span></a>
                 {% endif %}
             </div>
             {% endif %}
         </div>
-        
         <!-- Phần hãng sản phẩm -->
         <div id="brands-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Hãng sản phẩm</span>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <div style="position:relative;">
-                        <input type="text" id="brandSearchInput" placeholder="Tìm kiếm hãng..." value="{{ request.GET.brand_search|default:'' }}" onkeyup="searchBrands(event)" onkeydown="if(event.key==='Enter')searchBrands(event)" style="width:220px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="da-group-hd">
+                <div class="da-group-title">QUẢN LÝ HÃNG</div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <div class="da-search-wrap">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" id="brandSearchInput" class="da-search-input" placeholder="Tìm tên hãng..." value="{{ request.GET.brand_search|default:'' }}" oninput="queueBrandSearch()" onkeydown="handleBrandSearchKeydown(event)">
                     </div>
                     <button onclick="resetBrandSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
                     <button type="button" onclick="openAddBrandModal(); return false;" class="da-btn da-btn-md da-btn-primary">+ Thêm hãng</button>
                 </div>
+            </div>
+            <div class="da-row da-c4">
+                <div class="da-stat"><div class="da-stat-label">Tổng số hãng</div><div class="da-stat-val">{{ brand_total_count }}</div><div style="font-size:11px;color:#94a3b8;">Hãng đang hoạt động trong hệ thống</div></div>
+                <div class="da-stat"><div class="da-stat-label">Có sản phẩm</div><div class="da-stat-val">{{ brands_with_products_count }}</div><div style="font-size:11px;color:#94a3b8;">Đã được gắn ít nhất 1 sản phẩm</div></div>
+                <div class="da-stat"><div class="da-stat-label">Chưa có sản phẩm</div><div class="da-stat-val">{{ brands_without_products_count }}</div><div style="font-size:11px;color:#94a3b8;">Cần bổ sung liên kết sản phẩm</div></div>
+                <div class="da-stat"><div class="da-stat-label">Kết quả hiển thị</div><div class="da-stat-val">{{ brand_filtered_count }}</div><div style="font-size:11px;color:#94a3b8;">Số hãng theo bộ lọc hiện tại</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0 14px;color:#94a3b8;font-size:12px;flex-wrap:wrap;">
+                <div>Lọc trực tiếp theo tên hãng để tìm nhanh dữ liệu quản lý.</div>
+                <div>Bộ lọc: {{ brand_filtered_count }}/{{ brand_total_count }} hãng</div>
             </div>
             <div class="da-table-wrap">
                 <table class="da-table">
@@ -410,7 +540,7 @@
                         {% for brand in brands_paginated %}
                         <tr>
                             <td>{{ forloop.counter0|add:brands_paginated.start_index }}</td>
-                            <td style="font-weight:500;">{{ brand.name }}</td>
+                            <td style="font-weight:600;color:#1e293b;">{{ brand.name }}</td>
                             <td>{{ brand.product_count }}</td>
                             <td>{{ brand.created_at|date:"d/m/Y" }}</td>
                             <td>
@@ -420,7 +550,7 @@
                         </tr>
                         {% empty %}
                         <tr class="da-table-empty">
-                            <td colspan="5">Chưa có hãng nào.</td>
+                            <td colspan="5">Chưa có hãng nào phù hợp.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -429,7 +559,7 @@
             {% if brands_paginated.has_other_pages %}
             <div class="da-pagination">
                 {% if brands_paginated.has_previous %}
-                <a href="?section=brands&amp;brand_page={{ brands_paginated.previous_page_number }}{% if request.GET.brand_search %}&amp;brand_search={{ request.GET.brand_search|urlencode }}{% endif %}" class="da-page-link">&laquo; Trước</a>
+                <a href="?section=brands&amp;brand_page={{ brands_paginated.previous_page_number }}{% if request.GET.brand_search %}&amp;brand_search={{ request.GET.brand_search|urlencode }}{% endif %}" class="da-page-link"><span aria-hidden="true">&#x2039;</span></a>
                 {% endif %}
                 {% for num in brands_paginated.paginator.page_range %}
                     {% if brands_paginated.number == num %}
@@ -439,23 +569,34 @@
                     {% endif %}
                 {% endfor %}
                 {% if brands_paginated.has_next %}
-                <a href="?section=brands&amp;brand_page={{ brands_paginated.next_page_number }}{% if request.GET.brand_search %}&amp;brand_search={{ request.GET.brand_search|urlencode }}{% endif %}" class="da-page-link">Sau &raquo;</a>
+                <a href="?section=brands&amp;brand_page={{ brands_paginated.next_page_number }}{% if request.GET.brand_search %}&amp;brand_search={{ request.GET.brand_search|urlencode }}{% endif %}" class="da-page-link"><span aria-hidden="true">&#x203A;</span></a>
                 {% endif %}
             </div>
             {% endif %}
         </div>
-        
+
         <div id="products-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Treo sản phẩm</span>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <div style="position:relative;">
-                        <input type="text" id="productSearchInput" placeholder="Tìm kiếm sản phẩm..." value="{{ request.GET.product_search|default:'' }}" onkeydown="if(event.key==='Enter')searchProducts(event)" style="width:240px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="da-group-hd">
+                <div class="da-group-title">QUẢN LÝ SẢN PHẨM</div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <div class="da-search-wrap">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" id="productSearchInput" class="da-search-input" placeholder="Tìm sản phẩm..." value="{{ request.GET.product_search|default:'' }}" oninput="queueProductSearch()" onkeydown="handleProductSearchKeydown(event)">
                     </div>
                     <button onclick="resetProductSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
                     <button type="button" onclick="openAddProductModal(); return false;" class="da-btn da-btn-md da-btn-primary">+ Thêm sản phẩm</button>
                 </div>
+            </div>
+            <div class="da-row da-c5">
+                <div class="da-stat"><div class="da-stat-label">Tổng sản phẩm</div><div class="da-stat-val">{{ total_products }}</div><div style="font-size:11px;color:#94a3b8;">Toàn bộ sản phẩm đang quản lý</div></div>
+                <div class="da-stat"><div class="da-stat-label">Đang bán</div><div class="da-stat-val">{{ active_products }}</div><div style="font-size:11px;color:#94a3b8;">Sản phẩm còn tồn kho để bán</div></div>
+                <div class="da-stat"><div class="da-stat-label">Hết hàng</div><div class="da-stat-val">{{ out_of_stock_products }}</div><div style="font-size:11px;color:#94a3b8;">Cần nhập thêm hàng vào kho</div></div>
+                <div class="da-stat"><div class="da-stat-label">Đang giảm giá</div><div class="da-stat-val">{{ discounted_products_count }}</div><div style="font-size:11px;color:#94a3b8;">Có cấu hình phần trăm giảm giá</div></div>
+                <div class="da-stat"><div class="da-stat-label">Kết quả hiển thị</div><div class="da-stat-val">{{ product_filtered_count }}</div><div style="font-size:11px;color:#94a3b8;">Số sản phẩm theo bộ lọc hiện tại</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0 14px;color:#94a3b8;font-size:12px;flex-wrap:wrap;">
+                <div>Tìm theo tên sản phẩm để đi tới đúng bản ghi cần chỉnh sửa nhanh hơn.</div>
+                <div>Bộ lọc: {{ product_filtered_count }}/{{ total_products }} sản phẩm</div>
             </div>
             <div class="da-table-wrap">
                 <table class="da-table">
@@ -493,14 +634,14 @@
                             <td style="padding:10px 14px;text-align:right;font-size:13px;color:#dc2626;font-weight:600;">{% if product.detail.discounted_price %}{{ product.detail.discounted_price|format_price }}đ{% else %}-{% endif %}</td>
                             <td style="padding:10px 14px;text-align:center;">
                                 <div style="display:flex;gap:5px;justify-content:center;">
-                                    <button type="button" onclick="openProductDetailModal('{{ product.id }}', '{{ product.name|escapejs }}'); return false;" class="da-btn da-btn-sm da-btn-info">Chi tiết</button>
+                                    <button type="button" onclick="openProductDetailSection('{{ product.id }}', '{{ product.name|escapejs }}'); return false;" class="da-btn da-btn-sm da-btn-info">Chi tiết</button>
                                     <button type="button" onclick="openEditProductModal('{{ product.id }}', '{% if product.brand %}{{ product.brand.id }}{% endif %}', '{{ product.name|escapejs }}', '{% if product.image %}{{ product.image.url }}{% endif %}'); return false;" class="da-btn da-btn-sm" style="background:#fef3c7;color:#b45309;">Sửa</button>
                                     <button onclick="deleteProduct('{{ product.id }}', '{{ product.name|escapejs }}')" class="da-btn da-btn-sm da-btn-del">Xóa</button>
                                 </div>
                             </td>
                         </tr>
                         {% empty %}
-                        <tr class="da-table-empty"><td colspan="9">Chưa có sản phẩm nào</td></tr>
+                        <tr class="da-table-empty"><td colspan="9">Chưa có sản phẩm phù hợp.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -508,7 +649,7 @@
             {% if products_paginated.has_other_pages %}
             <div class="da-pagination">
                 {% if products_paginated.has_previous %}
-                <a href="?section=products&amp;product_page={{ products_paginated.previous_page_number }}{% if request.GET.product_search %}&amp;product_search={{ request.GET.product_search|urlencode }}{% endif %}" class="da-page-link">&laquo; Trước</a>
+                <a href="?section=products&amp;product_page={{ products_paginated.previous_page_number }}{% if request.GET.product_search %}&amp;product_search={{ request.GET.product_search|urlencode }}{% endif %}" class="da-page-link"><span aria-hidden="true">&#x2039;</span></a>
                 {% endif %}
                 {% for num in products_paginated.paginator.page_range %}
                     {% if products_paginated.number == num %}
@@ -518,10 +659,234 @@
                     {% endif %}
                 {% endfor %}
                 {% if products_paginated.has_next %}
-                <a href="?section=products&amp;product_page={{ products_paginated.next_page_number }}{% if request.GET.product_search %}&amp;product_search={{ request.GET.product_search|urlencode }}{% endif %}" class="da-page-link">Sau &raquo;</a>
+                <a href="?section=products&amp;product_page={{ products_paginated.next_page_number }}{% if request.GET.product_search %}&amp;product_search={{ request.GET.product_search|urlencode }}{% endif %}" class="da-page-link"><span aria-hidden="true">&#x203A;</span></a>
                 {% endif %}
             </div>
             {% endif %}
+        </div>
+
+        <!-- ==================== CHI TIẾT SẢN PHẨM (Unified) ==================== -->
+        <div id="product-detail-section" style="display: none;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                <button type="button" onclick="backToProductList()" class="da-btn da-btn-md da-btn-ghost" style="gap:4px;">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    Quay lại
+                </button>
+                <span id="pdSectionTitle" style="font-size:16px;font-weight:700;color:#1e293b;"></span>
+            </div>
+            <div style="display:flex;gap:0;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;background:#fff;min-height:520px;">
+                <!-- LEFT TABS -->
+                <div style="width:170px;background:#f8fafc;border-right:1px solid #e2e8f0;flex-shrink:0;">
+                    <div class="pd-tab active" data-pd-tab="detail" onclick="switchPdTab('detail')">Chi tiết sản phẩm</div>
+                    <div class="pd-tab" data-pd-tab="sku" onclick="switchPdTab('sku')">SKU</div>
+                    <div class="pd-tab" data-pd-tab="folder" onclick="switchPdTab('folder')">Thư mục</div>
+                    <div class="pd-tab" data-pd-tab="color-image" onclick="switchPdTab('color-image')">Màu - Ảnh sản phẩm</div>
+                    <div class="pd-tab" data-pd-tab="capacity" onclick="switchPdTab('capacity')">Dung lượng</div>
+                    <div class="pd-tab" data-pd-tab="info" onclick="switchPdTab('info')">Thông tin sản phẩm</div>
+                </div>
+                <!-- RIGHT CONTENT -->
+                <div style="flex:1;padding:20px 24px;overflow-y:auto;max-height:calc(100vh - 200px);scrollbar-width:thin;scrollbar-color:#c1c1c1 #f8fafc;">
+
+                    <!-- TAB: Chi tiết sản phẩm -->
+                    <div id="pdPanel-detail" class="pd-panel">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                            <div>
+                                <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:#334155;">Tên sản phẩm</label>
+                                <div id="pdDetailName" style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;color:#1e293b;min-height:18px;"></div>
+                            </div>
+                            <div>
+                                <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:#334155;">Số lượng trong kho</label>
+                                <input type="number" id="pdDetailStock" placeholder="0" min="0" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;font-family:'Signika',sans-serif;box-sizing:border-box;">
+                            </div>
+                        </div>
+                        <!-- Thông số kỹ thuật -->
+                        <div style="margin-bottom:20px;padding:16px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+                            <label style="display:block;margin-bottom:10px;font-size:13px;font-weight:600;color:#334155;">Thông số kỹ thuật</label>
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                                <input type="file" id="pdSpecFileInput" accept=".json" style="display:none;" onchange="handlePdSpecFileChange(event)">
+                                <button type="button" onclick="document.getElementById('pdSpecFileInput').click()" class="da-btn da-btn-md da-btn-ghost">Chọn file</button>
+                                <button type="button" onclick="uploadPdSpec()" class="da-btn da-btn-md da-btn-success">Tải lên</button>
+                                <button type="button" onclick="deletePdSpec()" class="da-btn da-btn-md da-btn-del">Xóa file</button>
+                                <span id="pdSpecFileName" style="font-size:12px;color:#64748b;"></span>
+                            </div>
+                            <div id="pdSpecStatus" style="margin-top:8px;font-size:11px;color:#9ca3af;">Bạn chưa tải file JSON nào.</div>
+                        </div>
+                        <!-- YouTube ID -->
+                        <div style="margin-bottom:20px;padding:16px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+                            <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:#334155;">ID YouTube</label>
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <input type="text" id="pdYoutubeId" placeholder="Nhập ID" style="flex:1;padding:10px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;font-family:'Signika',sans-serif;box-sizing:border-box;">
+                                <button type="button" onclick="savePdYoutubeId()" class="da-btn da-btn-md" style="background:#dc2626;color:#fff;">Lưu ID</button>
+                            </div>
+                            <div id="pdYoutubeStatus" style="margin-top:6px;font-size:11px;color:#9ca3af;">Chưa có video YouTube.</div>
+                        </div>
+                        <!-- Save -->
+                        <button type="button" onclick="savePdDetail()" class="da-btn da-btn-md da-btn-primary" style="margin-top:8px;">Lưu chi tiết</button>
+                    </div>
+
+                    <!-- TAB: SKU -->
+                    <div id="pdPanel-sku" class="pd-panel" style="display:none;">
+                        <span style="font-size:15px;font-weight:700;color:#1e293b;display:block;margin-bottom:14px;">Thêm SKU</span>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:500;color:#334155;">Nhập SKU</label>
+                            <input type="text" id="pdSkuInput" placeholder="Nhập SKU" style="width:100%;max-width:300px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;font-family:'Signika',sans-serif;box-sizing:border-box;" onkeydown="if(event.key==='Enter'){event.preventDefault();savePdSku();}">
+                        </div>
+                        <button type="button" onclick="savePdSku()" class="da-btn da-btn-md da-btn-primary" style="margin-bottom:20px;">Lưu</button>
+                        <div style="margin-bottom:12px;">
+                            <button type="button" id="pdSkuToggleBtn" onclick="togglePdSkuHistory()" class="da-btn da-btn-md da-btn-primary" style="display:flex;align-items:center;gap:6px;">
+                                <svg id="pdSkuToggleIcon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transition:transform 0.2s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <span id="pdSkuToggleText">Xem danh sách đã thêm</span>
+                            </button>
+                        </div>
+                        <div id="pdSkuHistory" style="display:none;">
+                            <div style="font-size:13px;font-weight:600;color:#475569;margin-bottom:8px;">Danh sách SKU của sản phẩm</div>
+                            <div class="da-table-wrap">
+                                <table class="da-table">
+                                    <thead><tr><th>STT</th><th>SKU</th><th>Ngày thêm</th><th>Hành động</th></tr></thead>
+                                    <tbody id="pdSkuTableBody"><tr class="da-table-empty"><td colspan="4">Chưa có SKU nào.</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB: Thư mục -->
+                    <div id="pdPanel-folder" class="pd-panel" style="display:none;">
+                        <span style="font-size:15px;font-weight:700;color:#1e293b;display:block;margin-bottom:14px;">Thêm thư mục</span>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:500;color:#334155;">Nhập tên thư mục</label>
+                            <input type="text" id="pdFolderNameInput" placeholder="Nhập tên thư mục" style="width:100%;max-width:300px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;font-family:'Signika',sans-serif;box-sizing:border-box;" onkeydown="if(event.key==='Enter'){event.preventDefault();savePdFolder();}">
+                        </div>
+                        <button type="button" onclick="savePdFolder()" class="da-btn da-btn-md da-btn-primary" style="margin-bottom:20px;">Lưu</button>
+                        <div style="margin-bottom:12px;">
+                            <button type="button" id="pdFolderToggleBtn" onclick="togglePdFolderHistory()" class="da-btn da-btn-md da-btn-primary" style="display:flex;align-items:center;gap:6px;">
+                                <svg id="pdFolderToggleIcon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transition:transform 0.2s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <span id="pdFolderToggleText">Xem danh sách đã thêm</span>
+                            </button>
+                        </div>
+                        <div id="pdFolderHistory" style="display:none;">
+                            <div style="font-size:13px;font-weight:600;color:#475569;margin-bottom:8px;">Thư mục đã tạo</div>
+                            <div class="da-table-wrap">
+                                <table class="da-table">
+                                    <thead><tr><th>STT</th><th>Tên thư mục</th><th>Hành động</th></tr></thead>
+                                    <tbody id="pdFolderTableBody"><tr class="da-table-empty"><td colspan="3">Chưa có thư mục nào.</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB: Màu - Ảnh sản phẩm -->
+                    <div id="pdPanel-color-image" class="pd-panel" style="display:none;">
+                        <span style="font-size:15px;font-weight:700;color:#1e293b;display:block;margin-bottom:14px;">Thêm màu - ảnh</span>
+                        <div style="margin-bottom:12px;">
+                            <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:500;color:#334155;">Chọn thư mục</label>
+                            <select id="pdColorFolderSelect" style="width:100%;max-width:300px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;font-family:'Signika',sans-serif;box-sizing:border-box;">
+                                <option value="">-- Chọn thư mục --</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:500;color:#334155;">Chọn SKU</label>
+                            <select id="pdColorSkuSelect" style="width:100%;max-width:300px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;font-family:'Signika',sans-serif;box-sizing:border-box;">
+                                <option value="">-- Chọn SKU --</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:500;color:#334155;">Nhập tên màu sắc</label>
+                            <input type="text" id="pdColorNameInput" placeholder="Nhập tên màu sắc" style="width:100%;max-width:300px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;font-family:'Signika',sans-serif;box-sizing:border-box;">
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+                            <input type="file" id="pdColorImageFile" accept="image/*" style="display:none;" onchange="handlePdColorImageFile(event)">
+                            <button type="button" onclick="document.getElementById('pdColorImageFile').click()" class="da-btn da-btn-md da-btn-ghost">Upload ảnh</button>
+                            <button type="button" onclick="uploadPdColorImage()" class="da-btn da-btn-md da-btn-success">Tải lên</button>
+                            <span id="pdColorImageFileName" style="font-size:12px;color:#64748b;"></span>
+                        </div>
+                        <button type="button" onclick="savePdColorImage()" class="da-btn da-btn-md da-btn-primary" style="margin-bottom:20px;">Lưu</button>
+                        <div id="pdColorImagePreviewGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-bottom:16px;"></div>
+                        <div style="margin-bottom:12px;">
+                            <button type="button" id="pdColorImageToggleBtn" onclick="togglePdColorImageHistory()" class="da-btn da-btn-md da-btn-primary" style="display:flex;align-items:center;gap:6px;">
+                                <svg id="pdColorImageToggleIcon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transition:transform 0.2s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <span id="pdColorImageToggleText">Xem danh sách đã thêm</span>
+                            </button>
+                        </div>
+                        <div id="pdColorImageHistory" style="display:none;">
+                            <div style="font-size:13px;font-weight:600;color:#475569;margin-bottom:8px;">Ảnh sản phẩm (màu – SKU)</div>
+                            <div class="da-table-wrap">
+                                <table class="da-table">
+                                    <thead><tr><th>STT</th><th>Thư mục</th><th>Màu</th><th>SKU</th><th>Hành động</th></tr></thead>
+                                    <tbody id="pdColorImageTableBody"><tr class="da-table-empty"><td colspan="5">Chưa có ảnh nào.</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB: Dung lượng -->
+                    <div id="pdPanel-capacity" class="pd-panel" style="display:none;">
+                        <span style="font-size:15px;font-weight:700;color:#1e293b;display:block;margin-bottom:14px;">Thêm dung lượng</span>
+                        <div style="padding:16px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:16px;">
+                            <h4 style="margin:0 0 14px;font-size:14px;font-weight:600;color:#334155;">Dung lượng &amp; màu sản phẩm</h4>
+                            <style>
+                                #pdPanel-capacity .pdc-field { width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;box-sizing:border-box;font-family:'Signika',sans-serif; }
+                                #pdPanel-capacity .pdc-label { display:block;margin-bottom:6px;font-size:13px;font-weight:500;color:#334155; }
+                                #pdPanel-capacity .pdc-color-options { display:flex;flex-direction:column;gap:10px;max-height:200px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:10px;background:#fff; }
+                                #pdPanel-capacity .pdc-color-option { padding:10px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;font-family:'Signika',sans-serif;cursor:pointer;background:#fff;color:#334155;transition:background 0.2s,border-color 0.2s; }
+                                #pdPanel-capacity .pdc-color-option:hover { border-color:#cbd5e1;background:#f8fafc; }
+                                #pdPanel-capacity .pdc-color-option.selected { border-color:#3b82f6;background:#eff6ff;color:#1e40af; }
+                            </style>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                                <div>
+                                    <label class="pdc-label">Giá gốc</label>
+                                    <input type="number" id="pdCapBasePrice" placeholder="0" min="0" oninput="calculatePdCapPrice()" class="pdc-field">
+                                </div>
+                                <div>
+                                    <label class="pdc-label">Giá sau giảm</label>
+                                    <input type="text" id="pdCapFinalPrice" disabled class="pdc-field" style="background:#f8fafc;color:#dc2626;font-weight:600;">
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+                                <div>
+                                    <label class="pdc-label">Chọn màu</label>
+                                    <div id="pdCapColorOptions" class="pdc-color-options"><span style="font-size:13px;color:#94a3b8;">Chưa có màu (SKU) nào.</span></div>
+                                    <div id="pdCapSelectedLabels" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:11px;color:#64748b;">Chưa chọn màu nào.</div>
+                                </div>
+                                <div style="display:flex;flex-direction:column;gap:16px;">
+                                    <div>
+                                        <label class="pdc-label">Dung lượng</label>
+                                        <input type="text" id="pdCapStorage" placeholder="Nhập dung lượng" class="pdc-field">
+                                    </div>
+                                    <div>
+                                        <label class="pdc-label">% Giảm giá</label>
+                                        <input type="number" id="pdCapDiscount" placeholder="0" value="0" min="0" max="100" oninput="calculatePdCapPrice()" class="pdc-field">
+                                    </div>
+                                    <button type="button" onclick="addPdCapVariant()" class="da-btn da-btn-md da-btn-success" style="width:100%;">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Toggle danh sách đã thêm -->
+                        <div style="margin-bottom:12px;">
+                            <button type="button" id="pdCapToggleBtn" onclick="togglePdCapList()" class="da-btn da-btn-md da-btn-primary" style="display:flex;align-items:center;gap:6px;">
+                                <svg id="pdCapToggleIcon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transition:transform 0.2s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <span id="pdCapToggleText">Xem danh sách đã thêm</span>
+                            </button>
+                        </div>
+                        <div id="pdCapVariantsList" style="display:none;padding:16px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+                            <h4 style="margin:0 0 14px;font-size:14px;font-weight:600;color:#334155;">Danh sách đã thêm</h4>
+                            <div style="max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#c1c1c1 #f8fafc;">
+                                <div id="pdCapVariantsContainer"></div>
+                            </div>
+                        </div>
+                        <button type="button" onclick="savePdAllVariants()" class="da-btn da-btn-md da-btn-primary" style="margin-top:16px;">Lưu tất cả</button>
+                    </div>
+
+                    <!-- TAB: Thông tin sản phẩm -->
+                    <div id="pdPanel-info" class="pd-panel" style="display:none;">
+                        <span style="font-size:15px;font-weight:700;color:#1e293b;display:block;margin-bottom:14px;">Thông tin sản phẩm</span>
+                        <div id="pdInfoContent" style="margin-bottom:16px;">
+                            <div id="pdInfoEditor" style="min-height:300px;border:1px solid #e2e8f0;border-radius:0 0 8px 8px;"></div>
+                        </div>
+                        <button type="button" onclick="savePdInfo()" class="da-btn da-btn-md da-btn-primary">Lưu nội dung</button>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
 <!-- Modal thêm hãng -->
@@ -571,69 +936,7 @@
     </div>
 </div>
 
-        <!-- Phần ảnh sản phẩm -->
-        <div id="product-images-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Ảnh sản phẩm</span>
-                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                    <div style="position:relative;">
-                        <input type="text" id="imageFolderSearchInput" placeholder="Tìm thư mục ảnh..." onkeydown="if(event.key==='Enter')searchImageFolders()" style="width:220px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </div>
-                    <button type="button" onclick="resetImageFolderSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
-                    <button type="button" onclick="openAddImageFolderModal(); return false;" class="da-btn da-btn-md" style="background:#0f172a;color:#e5e7eb;">+ Thêm thư mục</button>
-                    <button type="button" onclick="openAddColorImageModal(); return false;" class="da-btn da-btn-md da-btn-primary">+ Thêm màu - Ảnh</button>
-                </div>
-            </div>
-            <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;align-items:start;">
-                <!-- Left: Ảnh SP theo màu - SKU -->
-                <div>
-                    <div style="padding:6px 2px 8px;font-size:13px;font-weight:600;color:#475569;">Ảnh sản phẩm (màu – SKU)</div>
-                    <div class="da-table-wrap">
-                        <table class="da-table">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Thư mục ảnh</th>
-                                    <th>Màu sản phẩm</th>
-                                    <th>SKU</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody id="imageFolderTableBody">
-                                <tr class="da-table-empty">
-                                    <td colspan="5">Chưa có màu ảnh nào.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="imageFolderPagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:12px;padding:8px;"></div>
-                </div>
-                <!-- Right: Thư mục đã tạo -->
-                <div>
-                    <div style="padding:6px 2px 8px;font-size:13px;font-weight:600;color:#475569;">Thư mục đã tạo</div>
-                    <div class="da-table-wrap">
-                        <table class="da-table">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Tên thư mục</th>
-                                    <th>Hãng</th>
-                                    <th>Sản phẩm</th>
-                                    <th>Xóa</th>
-                                </tr>
-                            </thead>
-                            <tbody id="imageFolderDirBody">
-                                <tr class="da-table-empty">
-                                    <td colspan="5">Chưa có thư mục nào.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="imageFolderDirPagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:12px;padding:8px;"></div>
-                </div>
-            </div>
-        </div>
+        <!-- (product-images-section removed - merged into product-detail-section) -->
         
         <!-- Modal: Thêm thư mục chứa ảnh -->
         <div id="addImageFolderModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
@@ -733,111 +1036,60 @@
             </div>
         </div>
 
-        <!-- Phần SKU -->
-        <div id="sku-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Quản lý SKU</span>
-                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                    <div style="position:relative;">
-                        <input type="text" id="skuSearchInput" placeholder="Tìm theo SKU..." onkeydown="if(event.key==='Enter')searchSku()" style="width:200px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </div>
-                    <select id="skuBrandFilter" onchange="filterSkuByBrand()" style="padding:8px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#334155;background:#fff;cursor:pointer;outline:none;">
-                        <option value="">Tất cả hãng</option>
-                        {% for brand in brands %}
-                        <option value="{{ brand.id }}">{{ brand.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button onclick="resetSkuSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
-                    <button type="button" onclick="openAddSkuModal()" class="da-btn da-btn-md da-btn-primary">+ Thêm SKU</button>
-                </div>
-            </div>
-            <div class="da-table-wrap">
-                <table class="da-table">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>SKU</th>
-                            <th>Sản phẩm</th>
-                            <th>Hãng</th>
-                            <th>Ngày thêm</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody id="skuTableBody">
-                        <tr class="da-table-empty">
-                            <td colspan="6">Chưa có SKU nào.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div id="skuPagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:20px;padding:16px;"></div>
-        </div>
+        <!-- (sku-section removed - merged into product-detail-section) -->
 
         <!-- Phần ảnh Banner -->
         <div id="banner-images-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Ảnh banner</span>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <div style="position:relative;">
-                        <input type="text" id="bannerSearchInput" placeholder="Nhập ID banner..." onkeydown="if(event.key==='Enter')searchBanners()" style="width:180px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="da-group-hd">
+                <div class="da-group-title">ẢNH BANNER</div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <div class="da-search-wrap">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" id="bannerSearchInput" class="da-search-input" placeholder="Nhập ID banner..." oninput="searchBanners()" onkeydown="if(event.key==='Enter')searchBanners()">
                     </div>
                     <button onclick="resetBannerSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
                     <button type="button" onclick="openAddBannerModal()" class="da-btn da-btn-md da-btn-primary">+ Thêm ảnh banner</button>
                 </div>
             </div>
-
-            <!-- Lưới Banner -->
+            <div class="da-row da-c4">
+                <div class="da-stat"><div class="da-stat-label">Tổng ảnh banner</div><div id="bannerStatTotal" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Số file banner đang quản lý</div></div>
+                <div class="da-stat"><div class="da-stat-label">ID banner</div><div id="bannerStatSlots" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Số nhóm banner theo ID</div></div>
+                <div class="da-stat"><div class="da-stat-label">Kết quả hiển thị</div><div id="bannerStatVisible" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Số banner theo bộ lọc hiện tại</div></div>
+                <div class="da-stat"><div class="da-stat-label">Trang hiện tại</div><div id="bannerStatPage" class="da-stat-val">1/1</div><div style="font-size:11px;color:#94a3b8;">Theo phân trang grid banner</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0 14px;color:#94a3b8;font-size:12px;flex-wrap:wrap;">
+                <div>Tìm nhanh theo ID banner để thay ảnh, kiểm tra và dọn dữ liệu cũ.</div>
+                <div id="bannerToolbarMeta">Đang tải dữ liệu...</div>
+            </div>
             <div id="bannerGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
                 <!-- Các banner sẽ được hiển thị bởi JS -->
             </div>
-            <div id="bannersPagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:20px;padding:16px;"></div>
+            <div id="bannersPagination" class="da-pagination"></div>
         </div>
 
-        <!-- Phần nội dung sản phẩm -->
-        <div id="product-content-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Nội dung sản phẩm</span>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <div style="position:relative;">
-                        <input type="text" id="productContentSearchInput" placeholder="Tìm kiếm nội dung..." onkeydown="if(event.key==='Enter')searchProductContent()" style="width:220px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </div>
-                    <button onclick="resetProductContentSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
-                    <button type="button" onclick="openAddProductContentModal()" class="da-btn da-btn-md da-btn-primary">+ Thêm nội dung</button>
-                </div>
-            </div>
-            <div id="productContentTableContainer" class="da-table-wrap">
-                <table class="da-table">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Hãng</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Ngày</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productContentTableBody">
-                    </tbody>
-                </table>
-            </div>
-            <div id="productContentPagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:20px;padding:16px;"></div>
-            <div id="productContentGrid" style="display:none;"></div>
-        </div>
+        <!-- (product-content-section removed - merged into product-detail-section) -->
 
         <!-- ==================== Phần quản lý đánh giá ==================== -->
         <div id="reviews-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Quản lý đánh giá sản phẩm</span>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <div style="position:relative;">
-                        <input type="text" id="reviewSearchInput" placeholder="Tìm theo sản phẩm hoặc người dùng..." onkeydown="if(event.key==='Enter')searchReviews()" style="width:280px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="da-group-hd">
+                <div class="da-group-title">ĐÁNH GIÁ SẢN PHẨM</div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <div class="da-search-wrap">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" id="reviewSearchInput" class="da-search-input" placeholder="Tìm theo sản phẩm hoặc người dùng..." oninput="searchReviews()" onkeydown="if(event.key==='Enter')searchReviews()">
                     </div>
                     <button onclick="resetReviewSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
                 </div>
+            </div>
+            <div class="da-row da-c4">
+                <div class="da-stat"><div class="da-stat-label">Tổng đánh giá</div><div id="reviewStatTotal" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Tổng bản ghi theo API hiện tại</div></div>
+                <div class="da-stat"><div class="da-stat-label">Kết quả trang này</div><div id="reviewStatVisible" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Số review đang hiển thị</div></div>
+                <div class="da-stat"><div class="da-stat-label">Có ảnh đính kèm</div><div id="reviewStatImages" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Review có ít nhất 1 ảnh</div></div>
+                <div class="da-stat"><div class="da-stat-label">Điểm trung bình</div><div id="reviewStatAvg" class="da-stat-val">0.0</div><div style="font-size:11px;color:#94a3b8;">Tính trên tập review đang hiển thị</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0 14px;color:#94a3b8;font-size:12px;flex-wrap:wrap;">
+                <div>Lọc đánh giá theo tên sản phẩm hoặc thông tin người dùng để xử lý nhanh.</div>
+                <div id="reviewToolbarMeta">Đang tải dữ liệu...</div>
             </div>
             <div id="reviewsTableContainer" class="da-table-wrap">
                 <table class="da-table">
@@ -857,22 +1109,39 @@
                     </tbody>
                 </table>
             </div>
-            <div id="reviewsPagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:20px;padding:16px;"></div>
+            <div id="reviewsPagination" class="da-pagination"></div>
         </div>
+
 
         <!-- ==================== Phần quản lý Blog Sản Phẩm ==================== -->
         <div id="blog-posts-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Quản lý Blog Sản Phẩm</span>
-                <div style="display:flex;gap:8px;align-items:center;">
+            <div class="da-group-hd">
+                <div class="da-group-title">BLOG SẢN PHẨM</div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <div class="da-search-wrap">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" id="blogSearchInput" class="da-search-input" placeholder="Tìm tiêu đề hoặc tóm tắt blog..." oninput="searchBlogPosts()">
+                    </div>
+                    <button onclick="resetBlogSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
                     <button type="button" onclick="openAddBlogModal()" class="da-btn da-btn-md da-btn-primary">+ Thêm bài viết</button>
                 </div>
             </div>
-            <div id="blogGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+            <div class="da-row da-c4">
+                <div class="da-stat"><div class="da-stat-label">Tổng bài viết</div><div id="blogStatTotal" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Tổng blog sản phẩm đang quản lý</div></div>
+                <div class="da-stat"><div class="da-stat-label">Đang hiển thị</div><div id="blogStatActive" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Bài viết đang bật công khai</div></div>
+                <div class="da-stat"><div class="da-stat-label">Đang ẩn</div><div id="blogStatHidden" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Bài viết tạm ẩn khỏi giao diện</div></div>
+                <div class="da-stat"><div class="da-stat-label">Kết quả hiển thị</div><div id="blogStatVisible" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Số blog theo bộ lọc hiện tại</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0 14px;color:#94a3b8;font-size:12px;flex-wrap:wrap;">
+                <div>Lọc theo tiêu đề hoặc tóm tắt để chỉnh sửa nhanh bài viết sản phẩm.</div>
+                <div id="blogToolbarMeta">Đang tải dữ liệu...</div>
+            </div>
+            <div id="blogGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
                 <!-- Các bài blog sẽ được hiển thị bởi JS -->
             </div>
-            <div id="blogPagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:20px;padding:16px;"></div>
+            <div id="blogPagination" class="da-pagination"></div>
         </div>
+
 
         <!-- Modal thêm/cập nhật Blog -->
         <div id="addBlogModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
@@ -918,31 +1187,48 @@
 
         <!-- ==================== Phần quản lý Hot Sale ==================== -->
         <div id="hot-sale-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Quản lý Hot Sale</span>
-                <div style="display:flex;gap:8px;align-items:center;">
+            <div class="da-group-hd">
+                <div class="da-group-title">HOT SALE</div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <div class="da-search-wrap">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" id="hotSaleTableSearchInput" class="da-search-input" placeholder="Tìm theo tên sản phẩm hot sale..." oninput="searchHotSaleTable()">
+                    </div>
+                    <button onclick="resetHotSaleTableSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
+                    <button type="button" onclick="hotSaleAutoTopDiscount()" class="da-btn da-btn-md da-btn-ghost" title="Tự động thêm sản phẩm có % giảm cao nhất">Tự động</button>
                     <button type="button" onclick="openAddHotSaleModal()" class="da-btn da-btn-md da-btn-primary">+ Thêm sản phẩm</button>
                 </div>
             </div>
-            <div style="overflow-x:auto;margin-top:20px;">
-                <table style="width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.07);border:1px solid #e2e8f0;">
+            <div class="da-row da-c4">
+                <div class="da-stat"><div class="da-stat-label">Tổng mục hot sale</div><div id="hotSaleStatTotal" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Số sản phẩm trong danh sách hot sale</div></div>
+                <div class="da-stat"><div class="da-stat-label">Đang hiển thị</div><div id="hotSaleStatActive" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Mục đang bật trên giao diện</div></div>
+                <div class="da-stat"><div class="da-stat-label">Đang ẩn</div><div id="hotSaleStatHidden" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Mục đã tắt tạm thời</div></div>
+                <div class="da-stat"><div class="da-stat-label">Kết quả hiển thị</div><div id="hotSaleStatVisible" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Số mục theo bộ lọc hiện tại</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0 14px;color:#94a3b8;font-size:12px;flex-wrap:wrap;">
+                <div>Lọc nhanh theo tên sản phẩm hot sale để chỉnh thứ tự và trạng thái hiển thị.</div>
+                <div id="hotSaleToolbarMeta">Đang tải dữ liệu...</div>
+            </div>
+            <div class="da-table-wrap">
+                <table class="da-table">
                     <thead>
-                        <tr style="background:#f8fafc;border-bottom:1px solid #e2e8f0;">
-                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">STT</th>
-                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">Ảnh</th>
-                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;">Tên sản phẩm</th>
-                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">Thứ tự</th>
-                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">Trạng thái</th>
-                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">Hành động</th>
+                        <tr>
+                            <th>STT</th>
+                            <th>Ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Thứ tự</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody id="hotSaleTableBody">
-                        <tr><td colspan="6" style="padding:40px;text-align:center;color:#94a3b8;font-size:14px;">Đang tải...</td></tr>
+                        <tr class="da-table-empty"><td colspan="6">Đang tải...</td></tr>
                     </tbody>
                 </table>
             </div>
-            <div id="hotSalePagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:20px;padding:16px;"></div>
+            <div id="hotSalePagination" class="da-pagination"></div>
         </div>
+
 
         <!-- Modal thêm sản phẩm Hot Sale -->
         <div id="addHotSaleModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
@@ -987,12 +1273,12 @@
 
         <!-- ==================== Phần duyệt thanh toán QR ==================== -->
         <div id="qr-approval-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Duyệt đơn hàng (VietQR)</span>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <div style="position:relative;">
-                        <input type="text" id="qrSearchInput" placeholder="Tìm nội dung CK..." oninput="searchQrList()" style="width:200px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="da-group-hd">
+                <span class="da-group-title">VIETQR</span>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                    <div class="da-search-wrap">
+                        <input type="text" id="qrSearchInput" class="da-search-input" placeholder="Tìm nội dung CK..." oninput="searchQrList()" style="width:220px;">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
                     <button onclick="resetQrSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
                     <button type="button" onclick="loadQrApprovalList()" class="da-btn da-btn-md da-btn-primary">
@@ -1001,9 +1287,43 @@
                     </button>
                 </div>
             </div>
+            <div class="da-row da-c5">
+                <div class="da-stat">
+                    <div class="da-stat-label">Tổng giao dịch đang tải</div>
+                    <div class="da-stat-val" id="qrStatTotal">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Theo tab VietQR hiện tại</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Chờ duyệt</div>
+                    <div class="da-stat-val" id="qrStatPending">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">QR đang chờ admin xử lý</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Đã duyệt</div>
+                    <div class="da-stat-val" id="qrStatApproved">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Thanh toán đã xác nhận</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Đã hủy</div>
+                    <div class="da-stat-val" id="qrStatCancelled">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">QR bị hủy hoặc hết hạn</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Kết quả hiển thị</div>
+                    <div class="da-stat-val" id="qrStatVisible">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Số dòng sau khi tìm kiếm</div>
+                </div>
+            </div>
             <div class="da-order-tabs" style="margin-bottom:12px;">
                 <button id="qrTab_pending" class="da-order-tab active" onclick="switchQrTab('pending')">Chờ duyệt</button>
                 <button id="qrTab_history" class="da-order-tab" onclick="switchQrTab('history')">Lịch sử</button>
+            </div>
+            <div class="da-group-title">DANH SÁCH VIETQR</div>
+            <div class="da-toolbar" style="margin-bottom:10px;">
+                <div class="da-toolbar-left" style="font-size:12px;color:#64748b;">
+                    <span>Danh sách tự làm mới mỗi 30 giây. QR quá 15 phút chưa duyệt sẽ tự động bị xóa.</span>
+                </div>
+                <div id="qrToolbarMeta" style="font-size:12px;color:#94a3b8;">Đang tải dữ liệu...</div>
             </div>
             <div class="da-table-wrap">
                 <table class="da-table">
@@ -1024,12 +1344,7 @@
                 </table>
             </div>
             <div id="qrApprovalPagination" class="da-pagination"></div>
-            <p style="margin-top:12px;font-size:12px;color:#94a3b8;font-style:italic;font-family:'Signika',sans-serif;">
-                * QR quá 15 phút chưa được duyệt sẽ tự động bị xoá khỏi hệ thống.
-                Danh sách tự làm mới mỗi 30 giây.
-            </p>
         </div>
-
         <!-- Modal chi tiết QR -->
         <div id="qrDetailModal" onclick="closeQrDetailModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
             <div onclick="event.stopPropagation()" style="background: white; border-radius: 12px; width: 480px; max-width: 94%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;">
@@ -1073,18 +1388,45 @@
 
         <!-- ==================== Phần quản lý đơn hàng (Admin) ==================== -->
         <div id="admin-orders-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Đơn hàng</span>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <div style="position:relative;">
-                        <input type="text" id="orderSearchInput" placeholder="Tìm mã đơn hàng..." oninput="searchAdminOrders()" style="width:200px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="da-group-hd">
+                <span class="da-group-title">ĐƠN HÀNG</span>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                    <div class="da-search-wrap">
+                        <input type="text" id="orderSearchInput" class="da-search-input" placeholder="Tìm mã đơn hàng..." oninput="searchAdminOrders()" style="width:220px;">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
                     <button onclick="resetOrderSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
                     <button type="button" onclick="loadAdminOrders()" class="da-btn da-btn-md da-btn-primary">
                         <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                         Làm mới
                     </button>
+                </div>
+            </div>
+            <div class="da-row da-c5">
+                <div class="da-stat">
+                    <div class="da-stat-label">Tổng đơn hàng</div>
+                    <div class="da-stat-val" id="adminOrderStatTotal">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Tất cả đơn đang quản lý</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Chờ thanh toán / đã đặt</div>
+                    <div class="da-stat-val" id="adminOrderStatOpen">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Gồm chờ TT và đã đặt hàng</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Đang xử lý / giao</div>
+                    <div class="da-stat-val" id="adminOrderStatInFlight">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Đơn đang vận hành</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Đã giao / tất toán</div>
+                    <div class="da-stat-val" id="adminOrderStatDone">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Đơn hoàn tất thành công</div>
+                </div>
+                <div class="da-stat">
+                    <div class="da-stat-label">Kết quả hiển thị</div>
+                    <div class="da-stat-val" id="adminOrderStatVisible">0</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Số đơn theo bộ lọc hiện tại</div>
                 </div>
             </div>
             <div class="da-order-tabs">
@@ -1095,7 +1437,14 @@
                 <button type="button" data-filter="shipped" onclick="filterAdminOrders('shipped')" class="da-order-tab">Đang giao</button>
                 <button type="button" data-filter="delivered" onclick="filterAdminOrders('delivered')" class="da-order-tab">Đã giao</button>
                 <button type="button" data-filter="cancelled" onclick="filterAdminOrders('cancelled')" class="da-order-tab">Hủy đơn</button>
-                <button type="button" data-filter="refund" onclick="filterAdminOrders('refund')" class="da-order-tab refund-tab">Hoàn tiền</button>
+                <button type="button" data-filter="refund" onclick="filterAdminOrders('refund')" class="da-order-tab refund-tab">Hoàn tiền<span id="adminTabBadgeRefund" class="da-tab-badge is-hidden">0</span></button>
+            </div>
+            <div class="da-group-title">DANH SÁCH ĐƠN HÀNG</div>
+            <div class="da-toolbar" style="margin-bottom:10px;">
+                <div class="da-toolbar-left" style="font-size:12px;color:#64748b;">
+                    <span>Lọc theo trạng thái ở tab phía trên hoặc tìm trực tiếp theo mã đơn hàng.</span>
+                </div>
+                <div id="adminOrdersToolbarMeta" style="font-size:12px;color:#94a3b8;">Đang tải dữ liệu...</div>
             </div>
             <div class="da-table-wrap">
                 <table class="da-table">
@@ -1120,15 +1469,14 @@
             </div>
             <div id="adminOrdersPagination" class="da-pagination"></div>
         </div>
-
         <!-- ==================== Phần mã giảm giá ==================== -->
         <div id="coupons-section" style="display: none;">
-            <div class="da-toolbar">
-                <span style="font-size:15px;font-weight:700;color:#1e293b;">Mã giảm giá</span>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <div style="position:relative;">
-                        <input type="text" id="couponSearchInput" placeholder="Tìm mã giảm giá..." oninput="searchCoupons()" style="width:200px;padding:8px 12px 8px 34px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:'Signika',sans-serif;color:#1e293b;outline:none;">
-                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="da-group-hd">
+                <div class="da-group-title">VOUCHER</div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <div class="da-search-wrap">
+                        <svg class="da-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" id="couponSearchInput" class="da-search-input" placeholder="Tìm mã giảm giá..." oninput="searchCoupons()">
                     </div>
                     <button onclick="resetCouponSearch()" class="da-btn da-btn-md da-btn-ghost">Reset</button>
                     <button type="button" onclick="loadCouponList()" class="da-btn da-btn-md da-btn-ghost">
@@ -1140,6 +1488,17 @@
                         Thêm mã
                     </button>
                 </div>
+            </div>
+            <div class="da-row da-c5">
+                <div class="da-stat"><div class="da-stat-label">Tổng mã voucher</div><div id="couponStatTotal" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Toàn bộ mã đang tải từ hệ thống</div></div>
+                <div class="da-stat"><div class="da-stat-label">Còn sử dụng</div><div id="couponStatValid" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Voucher đang hợp lệ để dùng</div></div>
+                <div class="da-stat"><div class="da-stat-label">Đã hết hạn</div><div id="couponStatExpired" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Không còn hiệu lực áp dụng</div></div>
+                <div class="da-stat"><div class="da-stat-label">Voucher cá nhân</div><div id="couponStatPrivate" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Giới hạn cho 1 email cụ thể</div></div>
+                <div class="da-stat"><div class="da-stat-label">Kết quả hiển thị</div><div id="couponStatVisible" class="da-stat-val">0</div><div style="font-size:11px;color:#94a3b8;">Số mã theo bộ lọc hiện tại</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0 14px;color:#94a3b8;font-size:12px;flex-wrap:wrap;">
+                <div>Lọc nhanh theo mã hoặc tên chương trình để tìm đúng voucher cần xử lý.</div>
+                <div id="couponToolbarMeta">Đang tải dữ liệu...</div>
             </div>
             <div class="da-table-wrap">
                 <table class="da-table">
@@ -1165,6 +1524,7 @@
             </div>
             <div id="couponsPagination" class="da-pagination"></div>
         </div>
+
 
         <!-- Modal thêm/sửa mã giảm giá -->
         <div id="couponModal" onclick="closeCouponModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
@@ -1625,138 +1985,9 @@
 <script src="{% static 'js/dashboard.js' %}"></script>
 <script src="{% static 'js/product.js' %}"></script>
 <script src="{% static 'js/product_detail.js' %}"></script>
+<script src="{% static 'js/product_detail_section.js' %}"></script>
 
-<!-- Modal chi tiết sản phẩm -->
-<div id="productDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-    <div id="productDetailModalBox" style="background: white; border-radius: 12px; width: 700px; max-width: 95%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;">
-        <!-- Tiêu đề cố định -->
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid #e2e8f0; flex-shrink: 0;">
-            <h3 style="font-size: 18px; font-weight: 600; font-family: 'Signika', sans-serif; margin: 0;">Chi tiết sản phẩm</h3>
-            <button type="button" onclick="closeProductDetailModal()" style="padding: 8px 16px; background: #f1f5f9; color: #334155; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: 'Signika', sans-serif;">Đóng</button>
-        </div>
-        <!-- Scrollable Content (chỉ phần giữa cuộn) -->
-        <div style="padding: 20px 24px; overflow-y: auto; flex: 1; min-height: 0; scrollbar-width: thin; scrollbar-color: #c1c1c1 #f8fafc;">
-            
-            <!-- Tên sản phẩm | Số lượng còn trong kho -->
-            <div style="margin-bottom: 24px; padding: 16px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;">
-                <div>
-                    <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 600; color: #1e293b;">Tên sản phẩm</h4>
-                    <p id="detailProductName" style="margin: 0; font-size: 16px; color: #1e293b; font-weight: 400;"></p>
-                </div>
-                <div>
-                    <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 600; color: #1e293b;">Số lượng còn trong kho</h4>
-                    <input type="number" id="detailStock" placeholder="0" min="0" style="width: 100%; max-width: 140px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; box-sizing: border-box; font-family: 'Signika', sans-serif; background: #fff;">
-                </div>
-            </div>
-            
-            <!-- Thông số kỹ thuật sản phẩm -->
-            <div style="margin-bottom: 24px; padding: 16px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
-                <h4 style="margin: 0 0 14px; font-size: 16px; font-weight: 600; color: #1e293b;">Thông số kỹ thuật</h4>
-                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                    <input type="file" id="specJsonFileInput" accept=".json" style="display: none;" onchange="handleSpecFileChange(event)">
-                    <button type="button" onclick="document.getElementById('specJsonFileInput').click()" style="padding: 8px 14px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'Signika', sans-serif; font-weight: 500; transition: all 0.2s;">Chọn file JSON</button>
-                    <button type="button" onclick="uploadSpecification()" style="padding: 8px 14px; background: #22c55e; border: 2px solid #A9CCF0; color: white; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'Signika', sans-serif; font-weight: 500; transition: all 0.2s;">Tải file lên</button>
-                    <button type="button" onclick="deleteSpecification()" style="padding: 8px 14px; background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'Signika', sans-serif; font-weight: 500; transition: all 0.2s;">Xóa file JSON</button>
-                    <span id="specFileName" style="font-size: 12px; color: #64748b; font-family: 'Signika', sans-serif;"></span>
-                </div>
-                <div id="specStatusLabel" style="margin-top: 8px; font-size: 11px; color: #9ca3af;">Bạn chưa tải file JSON nào.</div>
-                <!-- ID Video YouTube -->
-                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #e2e8f0;">
-                    <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 500; color: #334155;">Nhập ID YouTube</label>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <input type="text" id="youtubeIdInput" placeholder="Ví dụ: dQw4w9WgXcQ" style="flex: 1; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; font-family: 'Signika', sans-serif; box-sizing: border-box;">
-                        <button type="button" onclick="saveYoutubeId()" style="padding: 8px 14px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'Signika', sans-serif; font-weight: 500; transition: all 0.2s; white-space: nowrap;">Lưu YouTube</button>
-                    </div>
-                    <div id="youtubeStatusLabel" style="margin-top: 6px; font-size: 11px; color: #9ca3af;">Chưa có video YouTube.</div>
-                </div>
-            </div>
-            
-            <!-- Dung lượng & màu: layout theo ảnh - hàng 1: Giá gốc | Giá sau giảm; hàng 2: Chọn màu | Dung lượng, % Giảm, Thêm -->
-            <div style="margin-bottom: 24px; padding: 16px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
-                <h4 style="margin: 0 0 14px; font-size: 16px; font-weight: 600; color: #334155;">Dung lượng &amp; màu sản phẩm</h4>
-                <style>
-                    #productDetailModalBox .variant-form-field { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; box-sizing: border-box; font-family: 'Signika', sans-serif; }
-                    #productDetailModalBox .variant-form-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 500; color: #334155; }
-                    #productDetailModalBox .variant-color-options { display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; background: #fff; }
-                    #productDetailModalBox .variant-color-option { padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; font-family: 'Signika', sans-serif; cursor: pointer; background: #fff; color: #334155; transition: background 0.2s, border-color 0.2s; }
-                    #productDetailModalBox .variant-color-option:hover { border-color: #cbd5e1; background: #f8fafc; }
-                    #productDetailModalBox .variant-color-option.selected { border-color: #3b82f6; background: #eff6ff; color: #1e40af; }
-                </style>
-                <!-- Hàng 1: Giá gốc | Giá sau giảm (chia đều) -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-                    <div>
-                        <label class="variant-form-label">Giá gốc</label>
-                        <input type="number" id="variantSimpleBasePrice" placeholder="0" min="0" oninput="calculateVariantSimplePrice()" class="variant-form-field" style="width: 100%;">
-                    </div>
-                    <div>
-                        <label class="variant-form-label">Giá sau giảm</label>
-                        <input type="text" id="variantSimpleFinalPrice" disabled class="variant-form-field" style="width: 100%; background: #f8fafc; color: #dc2626; font-weight: 600;">
-                    </div>
-                </div>
-                <!-- Hàng 2: Chọn màu (trái) | Dung lượng, % Giảm, Thêm (phải) -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start;">
-                    <div>
-                        <label class="variant-form-label">Chọn màu</label>
-                        <div id="variantSimpleColorOptions" class="variant-color-options">
-                            <!-- JS render danh sách SKU - Màu -->
-                        </div>
-                        <div id="variantSimpleSelectedLabels" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; font-size: 11px; color: #64748b;">
-                            Chưa chọn màu nào.
-                        </div>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 16px;">
-                        <div>
-                            <label class="variant-form-label">Dung lượng</label>
-                            <input type="text" id="variantSimpleStorage" placeholder="Nhập dung lượng" class="variant-form-field" style="width: 100%;">
-                        </div>
-                        <div>
-                            <label class="variant-form-label">% Giảm giá</label>
-                            <input type="number" id="variantSimpleDiscountPercent" placeholder="0" value="0" min="0" max="100" oninput="calculateVariantSimplePrice()" class="variant-form-field" style="width: 100%;">
-                        </div>
-                        <div>
-                            <button type="button" onclick="addVariantSimple()" style="width: 100%; padding: 9px 16px; background: #16a34a; color: white; border: 2px solid #A9CCF0; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: 'Signika', sans-serif; font-weight: 500;">Thêm</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Nút toggle danh sách đã thêm -->
-            <div style="margin-bottom: 12px;">
-                <button type="button" id="toggleVariantsListBtn" onclick="toggleVariantsList()" style="padding: 9px 16px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: 'Signika', sans-serif; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                    <svg id="toggleVariantsIcon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transition: transform 0.2s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    <span id="toggleVariantsText">Xem danh sách đã thêm</span>
-                </button>
-            </div>
-            
-            <!-- Danh sách đã thêm (mặc định ẩn) -->
-            <div id="variantsListBox" style="display: none; margin-bottom: 24px; padding: 16px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
-                <h4 style="margin: 0 0 14px; font-size: 16px; font-weight: 600; color: #334155;">Danh sách đã thêm</h4>
-                <style>
-                    .variant-group { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(59,130,246,0.08); }
-                    .variant-group .vg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; align-items: start; }
-                    .variant-group .vg-field { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; box-sizing: border-box; font-family: 'Signika', sans-serif; background: #fff; color: #334155; }
-                    .variant-group .vg-field:focus { border-color: #3b82f6; outline: none; }
-                    .variant-group .vg-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 500; color: #334155; }
-                    .variant-group .vg-colors { border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 60px; }
-                    .variant-group .vg-color-item { padding: 10px 12px; border: 1px solid #93c5fd; border-radius: 6px; font-size: 14px; background: #eff6ff; color: #1e40af; font-family: 'Signika', sans-serif; }
-                    .variant-group .vg-footer { padding: 10px 12px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; background: #fafafa; }
-                    .variant-group .vg-delete { padding: 8px 16px; background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: 'Signika', sans-serif; font-weight: 500; }
-                    .variant-group .vg-delete:hover { background: #fecaca; border-color: #dc2626; }
-                </style>
-                <!-- Danh sách biến thể: gộp theo dung lượng, mỗi block = 1 dung lượng + nhiều màu -->
-                <div style="margin-top: 12px; max-height: 320px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #c1c1c1 #f8fafc;">
-                    <div id="variantsList">
-                        <!-- renderVariants sẽ gộp theo storage và render từng block -->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Sticky Footer: Lưu tất cả (luôn hiện, không bị khuất khi cuộn) -->
-        <div style="flex-shrink: 0; padding: 16px 24px; border-top: 1px solid #e2e8f0; background: #fff;">
-            <button type="button" onclick="saveProductDetail()" style="padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-family: 'Signika', sans-serif; font-weight: 500;">Lưu tất cả</button>
-        </div>
-    </div>
-</div>
+<!-- (productDetailModal removed - replaced by product-detail-section) -->
 
 <!-- Modal thêm SKU -->
 <div id="addSkuModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
@@ -1986,3 +2217,11 @@ function loadBestSellersData() {
 </main>
 </body>
 </html>
+
+
+
+
+
+
+
+

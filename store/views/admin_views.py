@@ -41,7 +41,8 @@ def dashboard_view(request):
     
     # Lấy danh sách tất cả người dùng
     from store.models import CustomUser, SiteVisit
-    users = CustomUser.objects.all().order_by('-date_joined')
+    all_users = CustomUser.objects.all()
+    users = all_users.order_by('-date_joined')
     
     # Search users
     user_search = request.GET.get('user_search', '')
@@ -49,7 +50,8 @@ def dashboard_view(request):
         users = users.filter(
             models.Q(email__icontains=user_search) | 
             models.Q(last_name__icontains=user_search) |
-            models.Q(first_name__icontains=user_search)
+            models.Q(first_name__icontains=user_search) |
+            models.Q(phone__icontains=user_search)
         )
     
     # Phân trang người dùng (15 người dùng/trang)
@@ -63,8 +65,10 @@ def dashboard_view(request):
         users_paginated = user_paginator.page(user_paginator.num_pages)
     
     # Thống kê
-    regular_users = users.filter(is_oauth_user=False, is_superuser=False).count()
-    oauth_users = users.filter(is_oauth_user=True).count()
+    regular_users = all_users.filter(is_oauth_user=False, is_superuser=False).count()
+    oauth_users = all_users.filter(is_oauth_user=True).count()
+    admin_users = all_users.filter(is_superuser=True).count()
+    filtered_users_count = users.count()
     
     # Tổng lượt truy cập trang chủ
     total_visits = SiteVisit.objects.count()
@@ -79,10 +83,16 @@ def dashboard_view(request):
     brands_all_active = Brand.objects.filter(is_active=True).order_by('name')
     
     # Danh sách hãng cho bảng (có phân trang)
-    all_brands = Brand.objects.filter(is_active=True).annotate(product_count=Count('products')).order_by('name')
+    all_brands_base = Brand.objects.filter(is_active=True).annotate(product_count=Count('products')).order_by('name')
+    all_brands = all_brands_base
     brand_search = request.GET.get('brand_search', '')
     if brand_search:
         all_brands = all_brands.filter(name__icontains=brand_search)
+
+    brand_total_count = all_brands_base.count()
+    brands_with_products_count = all_brands_base.filter(product_count__gt=0).count()
+    brands_without_products_count = all_brands_base.filter(product_count=0).count()
+    brand_filtered_count = all_brands.count()
     
     brand_page = request.GET.get('brand_page', 1)
     brand_paginator = Paginator(all_brands, 15)
@@ -95,10 +105,14 @@ def dashboard_view(request):
     
     # Danh sách sản phẩm (Product)
     from store.models import Product
-    all_products = Product.objects.select_related('brand', 'detail').all().order_by('-created_at')
+    all_products_base = Product.objects.select_related('brand', 'detail').all().order_by('-created_at')
+    all_products = all_products_base
     product_search = request.GET.get('product_search', '')
     if product_search:
         all_products = all_products.filter(name__icontains=product_search)
+
+    discounted_products_count = sum(1 for product in all_products_base if getattr(getattr(product, 'detail', None), 'summary_discount_percent', 0) > 0)
+    product_filtered_count = all_products.count()
     
     product_page = request.GET.get('product_page', 1)
     product_paginator = Paginator(all_products, 15)
@@ -182,9 +196,11 @@ def dashboard_view(request):
     
     context = {
         'users_paginated': users_paginated,
-        'total_users': users.count(),
+        'total_users': all_users.count(),
         'regular_users': regular_users,
         'oauth_users': oauth_users,
+        'admin_users': admin_users,
+        'filtered_users_count': filtered_users_count,
         'total_visits': total_visits,
         'low_stock_products_count': low_stock_products_count,
         'revenue_today': revenue_today,
@@ -196,7 +212,13 @@ def dashboard_view(request):
         # nếu cần hiển thị 8 hãng cho thống kê/box, dùng biến riêng
         'brands_for_stats': brands_for_stats,
         'brands_paginated': brands_paginated,
+        'brand_total_count': brand_total_count,
+        'brands_with_products_count': brands_with_products_count,
+        'brands_without_products_count': brands_without_products_count,
+        'brand_filtered_count': brand_filtered_count,
         'products_paginated': products_paginated,
+        'product_filtered_count': product_filtered_count,
+        'discounted_products_count': discounted_products_count,
         'products': all_products[:50],  # For SKU dropdown
         # Order stats
         'orders_today': orders_today_count,
@@ -1611,6 +1633,36 @@ def image_folder_create(request):
 @login_required
 @require_http_methods(["POST"])
 @csrf_exempt
+def image_folder_rename(request):
+    """Đổi tên thư mục ảnh"""
+    if not request.user.is_superuser:
+        return JsonResponse({'success': False, 'message': 'Không có quyền!'}, status=403)
+
+    from store.models import ImageFolder
+
+    folder_id = request.POST.get('folder_id', '').strip()
+    new_name = request.POST.get('name', '').strip()
+    if not folder_id or not new_name:
+        return JsonResponse({'success': False, 'message': 'Thiếu folder_id hoặc tên mới!'}, status=400)
+
+    try:
+        folder = ImageFolder.objects.get(id=folder_id)
+        # Check duplicate name within same brand+product
+        if ImageFolder.objects.filter(name=new_name, brand=folder.brand, product=folder.product).exclude(id=folder.id).exists():
+            return JsonResponse({'success': False, 'message': f'Thư mục "{new_name}" đã tồn tại!'})
+        folder.name = new_name
+        folder.slug = ''  # reset slug to auto-generate
+        folder.save()
+        return JsonResponse({'success': True, 'message': f'Đã đổi tên thành "{new_name}"!'})
+    except ImageFolder.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Thư mục không tồn tại!'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+
+@login_required
+@require_http_methods(["POST"])
+@csrf_exempt
 def image_folder_delete(request):
     """Xóa thư mục ảnh (và toàn bộ FolderColorImage bên trong)"""
     if not request.user.is_superuser:
@@ -3002,3 +3054,5 @@ def review_delete(request):
         'success': True,
         'message': f'Đã xóa đánh giá của {user_email} cho sản phẩm {product_name}'
     })
+
+

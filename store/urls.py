@@ -73,6 +73,7 @@ urlpatterns = [
     path('product-images/folders/list/', views.image_folder_list, name='image_folder_list'),
     path('product-images/folders/create/', views.image_folder_create, name='image_folder_create'),
     path('product-images/folders/delete/', views.image_folder_delete, name='image_folder_delete'),
+    path('product-images/folders/rename/', views.image_folder_rename, name='image_folder_rename'),
     path('product-images/color/list/', views.folder_color_image_list, name='folder_color_image_list'),
     path('product-images/color/upload/', views.folder_color_image_upload, name='folder_color_image_upload'),
     path('product-images/color/delete/', views.folder_color_image_delete, name='folder_color_image_delete'),
@@ -96,6 +97,7 @@ urlpatterns = [
     path('hot-sale/add/', views.hotsale_add, name='hotsale_add'),
     path('hot-sale/update/', views.hotsale_update, name='hotsale_update'),
     path('hot-sale/delete/', views.hotsale_delete, name='hotsale_delete'),
+    path('hot-sale/auto-top-discount/', views.hotsale_auto_top_discount, name='hotsale_auto_top_discount'),
     # Product Content Management
     path('product-content/list/', views.product_content_list, name='product_content_list'),
     path('product-content/add/', views.product_content_add, name='product_content_add'),

@@ -101,6 +101,58 @@ def hotsale_update(request):
 
 @staff_member_required
 @require_http_methods(["POST"])
+def hotsale_auto_top_discount(request):
+    """Tự động thêm top sản phẩm có % giảm giá cao nhất vào Hot Sale"""
+    from store.models import HotSaleProduct, Product, ProductVariant
+    from django.db.models import Max
+
+    limit = 10
+    try:
+        limit = int(request.POST.get('limit', 10))
+        limit = max(1, min(limit, 50))
+    except (ValueError, TypeError):
+        pass
+
+    # Lấy các product_id đã có trong hotsale
+    existing_ids = set(HotSaleProduct.objects.values_list('product_id', flat=True))
+
+    # Lấy max discount_percent từ ProductVariant theo từng Product
+    top_products = (
+        ProductVariant.objects
+        .filter(discount_percent__gt=0, detail__product__is_active=True)
+        .exclude(detail__product_id__in=existing_ids)
+        .values('detail__product_id')
+        .annotate(max_discount=Max('discount_percent'))
+        .order_by('-max_discount')[:limit]
+    )
+
+    added = []
+    for idx, row in enumerate(top_products):
+        product_id = row['detail__product_id']
+        max_discount = row['max_discount']
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            continue
+        entry = HotSaleProduct.objects.create(
+            product=product,
+            sort_order=idx,
+            is_active=True,
+        )
+        added.append({'id': entry.id, 'name': product.name, 'discount_percent': max_discount})
+
+    if not added:
+        return JsonResponse({'success': False, 'message': 'Không có sản phẩm nào phù hợp (chưa trong Hot Sale và có % giảm giá > 0)'})
+
+    return JsonResponse({
+        'success': True,
+        'message': f'Đã thêm {len(added)} sản phẩm vào Hot Sale!',
+        'added': added,
+    })
+
+
+@staff_member_required
+@require_http_methods(["POST"])
 def hotsale_delete(request):
     """Xóa một entry khỏi danh sách Hot Sale (không xóa Product)"""
     from store.models import HotSaleProduct

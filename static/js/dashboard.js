@@ -241,14 +241,14 @@ function _renderSdmPagination(totalPages, currentPage, total) {
     var aS = 'padding:5px 10px;border:1px solid #3b82f6;background:#3b82f6;color:#fff;border-radius:5px;font-size:12px;font-family:\'Signika\',sans-serif;';
     var html = '<span style="font-size:12px;color:#64748b;margin-right:8px;">Tổng: ' + total + ' mục</span>';
     if (totalPages <= 1) { pagEl.innerHTML = html; return; }
-    if (currentPage > 1) html += '<button style="' + bS + '" onclick="_sdmGoPage(' + (currentPage - 1) + ')">‹</button>';
+    if (currentPage > 1) html += '<button style="' + bS + '" onclick="_sdmGoPage(' + (currentPage - 1) + ')"><span aria-hidden="true">&#x2039;</span></button>';
     var s = Math.max(1, currentPage - 2), e = Math.min(totalPages, currentPage + 2);
     if (s > 1) { html += '<button style="' + bS + '" onclick="_sdmGoPage(1)">1</button>'; if (s > 2) html += '<span style="color:#94a3b8;padding:0 4px;">…</span>'; }
     for (var i = s; i <= e; i++) {
         html += '<button style="' + (i === currentPage ? aS : bS) + '"' + (i !== currentPage ? ' onclick="_sdmGoPage(' + i + ')"' : '') + '>' + i + '</button>';
     }
     if (e < totalPages) { if (e < totalPages - 1) html += '<span style="color:#94a3b8;padding:0 4px;">…</span>'; html += '<button style="' + bS + '" onclick="_sdmGoPage(' + totalPages + ')">' + totalPages + '</button>'; }
-    if (currentPage < totalPages) html += '<button style="' + bS + '" onclick="_sdmGoPage(' + (currentPage + 1) + ')">›</button>';
+    if (currentPage < totalPages) html += '<button style="' + bS + '" onclick="_sdmGoPage(' + (currentPage + 1) + ')"><span aria-hidden="true">&#x203A;</span></button>';
     html += '<span style="font-size:12px;color:#64748b;margin-left:8px;">Trang ' + currentPage + '/' + totalPages + '</span>';
     pagEl.innerHTML = html;
 }
@@ -372,37 +372,152 @@ function doDeleteUser(id) {
 }
 
 // Tìm kiếm hãng - phía máy chủ
-function searchBrands(event) {
-    if (event && event.key !== 'Enter') return;
-    const searchTerm = document.getElementById('brandSearchInput').value.trim();
+var _brandSearchTimer = null;
+
+function handleBrandSearchKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        clearTimeout(_brandSearchTimer);
+        searchBrands();
+    }
+}
+
+function queueBrandSearch() {
+    clearTimeout(_brandSearchTimer);
+    _brandSearchTimer = setTimeout(function () {
+        searchBrands();
+    }, 350);
+}
+
+function searchBrands() {
+    const input = document.getElementById('brandSearchInput');
+    const searchTerm = input ? input.value.trim() : '';
+    const params = new URLSearchParams(window.location.search);
+    params.set('section', 'brands');
+    params.delete('brand_page');
 
     if (searchTerm) {
-        window.location.href = '?section=brands&brand_search=' + encodeURIComponent(searchTerm);
+        params.set('brand_search', searchTerm);
     } else {
-        window.location.href = '?section=brands';
+        params.delete('brand_search');
+    }
+
+    const nextUrl = '?' + params.toString();
+    if (nextUrl !== (window.location.search || '?section=stats')) {
+        window.location.href = nextUrl;
     }
 }
 
 function resetBrandSearch() {
-    window.location.href = '?section=brands';
+    clearTimeout(_brandSearchTimer);
+    const input = document.getElementById('brandSearchInput');
+    if (input) input.value = '';
+    const params = new URLSearchParams(window.location.search);
+    params.set('section', 'brands');
+    params.delete('brand_search');
+    params.delete('brand_page');
+    window.location.href = '?' + params.toString();
 }
 
 // Tìm kiếm người dùng - phía máy chủ
+var _userSearchTimer = null;
+
+function handleUserSearchKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        clearTimeout(_userSearchTimer);
+        searchUsers();
+    }
+}
+
+function queueUserSearch() {
+    clearTimeout(_userSearchTimer);
+    _userSearchTimer = setTimeout(function () {
+        searchUsers();
+    }, 350);
+}
+
 function searchUsers(event) {
-    if (event && event.key !== 'Enter') return;
-    const searchTerm = document.getElementById('userSearchInput').value.trim();
+    if (event && event.key && event.key !== 'Enter') return;
+
+    const input = document.getElementById('userSearchInput');
+    const searchTerm = input ? input.value.trim() : '';
+    const params = new URLSearchParams(window.location.search);
+    params.set('section', 'users');
+    params.delete('user_page');
 
     if (searchTerm) {
-        window.location.href = '?section=users&user_search=' + encodeURIComponent(searchTerm);
+        params.set('user_search', searchTerm);
     } else {
-        window.location.href = '?section=users';
+        params.delete('user_search');
+    }
+
+    const nextQuery = params.toString();
+    const nextUrl = nextQuery ? ('?' + nextQuery) : '?section=users';
+    const currentUrl = window.location.search || '?section=stats';
+
+    if (nextUrl !== currentUrl) {
+        window.location.href = nextUrl;
     }
 }
 
 function resetUserSearch() {
-    window.location.href = '?section=users';
+    clearTimeout(_userSearchTimer);
+    const input = document.getElementById('userSearchInput');
+    if (input) input.value = '';
+    const params = new URLSearchParams(window.location.search);
+    params.set('section', 'users');
+    params.delete('user_search');
+    params.delete('user_page');
+    window.location.href = '?' + params.toString();
 }
 
+var _productSearchTimer = null;
+
+function handleProductSearchKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        clearTimeout(_productSearchTimer);
+        searchProducts();
+    }
+}
+
+function queueProductSearch() {
+    clearTimeout(_productSearchTimer);
+    _productSearchTimer = setTimeout(function () {
+        searchProducts();
+    }, 350);
+}
+
+function searchProducts() {
+    const input = document.getElementById('productSearchInput');
+    const searchTerm = input ? input.value.trim() : '';
+    const params = new URLSearchParams(window.location.search);
+    params.set('section', 'products');
+    params.delete('product_page');
+
+    if (searchTerm) {
+        params.set('product_search', searchTerm);
+    } else {
+        params.delete('product_search');
+    }
+
+    const nextUrl = '?' + params.toString();
+    if (nextUrl !== (window.location.search || '?section=stats')) {
+        window.location.href = nextUrl;
+    }
+}
+
+function resetProductSearch() {
+    clearTimeout(_productSearchTimer);
+    const input = document.getElementById('productSearchInput');
+    if (input) input.value = '';
+    const params = new URLSearchParams(window.location.search);
+    params.set('section', 'products');
+    params.delete('product_search');
+    params.delete('product_page');
+    window.location.href = '?' + params.toString();
+}
 // Xóa hãng
 function deleteBrand(id, name) {
     const message = 'Bạn có chắc muốn xóa hãng "' + name + '"?';
@@ -468,11 +583,11 @@ function showSidebarPage(page) {
         return;
     }
     paginationEl.style.display = 'flex';
-    let html = '<button type="button" class="qh-sidebar-prev" ' + (page <= 1 ? 'disabled' : '') + '>Trước</button>';
+    let html = '<button type="button" class="qh-sidebar-prev" ' + (page <= 1 ? 'disabled' : '') + '><span aria-hidden="true">&#x2039;</span></button>';
     for (let p = 1; p <= totalPages; p++) {
         html += '<button type="button" class="qh-sidebar-page' + (p === page ? ' active-page' : '') + '" data-page="' + p + '">' + p + '</button>';
     }
-    html += '<button type="button" class="qh-sidebar-next" ' + (page >= totalPages ? 'disabled' : '') + '>Sau</button>';
+    html += '<button type="button" class="qh-sidebar-next" ' + (page >= totalPages ? 'disabled' : '') + '><span aria-hidden="true">&#x203A;</span></button>';
     paginationEl.innerHTML = html;
 
     paginationEl.querySelector('.qh-sidebar-prev').onclick = () => showSidebarPage(page - 1);
@@ -614,6 +729,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const bannerImagesSection = document.getElementById('banner-images-section');
     const productContentSection = document.getElementById('product-content-section');
     const reviewsSection = document.getElementById('reviews-section');
+    const productDetailSection = document.getElementById('product-detail-section');
     const blogPostsSection = document.getElementById('blog-posts-section');
     const hotSaleSection = document.getElementById('hot-sale-section');
     const qrApprovalSection = document.getElementById('qr-approval-section');
@@ -651,6 +767,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (couponsSection) {
         couponsSection.style.display = (currentSection === 'coupons') ? 'block' : 'none';
+    }
+    if (productDetailSection) {
+        productDetailSection.style.display = (currentSection === 'product-detail') ? 'block' : 'none';
     }
 
     // Load SKU list if on SKU section (hoặc khi vào phần Ảnh sản phẩm để dùng dropdown SKU)
@@ -2081,62 +2200,57 @@ function loadBannerRows() {
         });
 }
 
+function _updateBannerSummary(allList, visibleList, currentPage, totalPages) {
+    allList = allList || [];
+    visibleList = visibleList || [];
+    currentPage = currentPage || 1;
+    totalPages = totalPages || 1;
+    var uniqueSlots = new Set(allList.map(function (item) { return item.banner_id; })).size;
+    var meta = document.getElementById('bannerToolbarMeta');
+    if (document.getElementById('bannerStatTotal')) document.getElementById('bannerStatTotal').textContent = allList.length;
+    if (document.getElementById('bannerStatSlots')) document.getElementById('bannerStatSlots').textContent = uniqueSlots;
+    if (document.getElementById('bannerStatVisible')) document.getElementById('bannerStatVisible').textContent = visibleList.length;
+    if (document.getElementById('bannerStatPage')) document.getElementById('bannerStatPage').textContent = currentPage + '/' + totalPages;
+    if (meta) meta.textContent = 'Bộ lọc hiện tại: ' + visibleList.length + '/' + allList.length + ' banner';
+}
+
 function renderBannerGrid() {
     const banners = _bannerData;
     const grid = document.getElementById('bannerGrid');
     if (!grid) return;
 
-    // Phân trang
     var totalPages = Math.ceil(banners.length / _bannerPerPage);
     if (_bannerPage > totalPages) _bannerPage = totalPages || 1;
     var startIdx = (_bannerPage - 1) * _bannerPerPage;
     var paged = banners.slice(startIdx, startIdx + _bannerPerPage);
 
+    _updateBannerSummary(allBannerRows, banners, _bannerPage, totalPages || 1);
     if (!paged || paged.length === 0) {
-        grid.innerHTML = `
-            <div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; color: #64748b; font-size: 15px; font-family: 'Signika', sans-serif;">
-                Chưa có banner nào.
-            </div>
-        `;
+        grid.innerHTML = '<div style="grid-column:1/-1;padding:52px 20px;text-align:center;color:#94a3b8;font-size:14px;">Chưa có banner nào phù hợp.</div>';
         return;
     }
 
-    // Sắp xếp banner theo ID
     const sortedBanners = [...paged].sort((a, b) => (a.banner_id || 0) - (b.banner_id || 0));
-
     let html = '';
     sortedBanners.forEach((banner) => {
         html += `
-            <div style="position: relative; background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; transition: all 0.3s ease;">
-                <div style="position: relative; aspect-ratio: 3/1; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); overflow: hidden;" class="banner-image-container">
-                    <img src="${banner.image_url}" alt="Banner ${banner.banner_id}" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
-                    <div class="banner-hover-overlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; gap: 10px; opacity: 0; transition: opacity 0.3s;">
-                        <button type="button" onclick="quickReplaceBanner(${banner.banner_id})" style="padding: 10px 20px; background: linear-gradient(135deg, #A9CCF0 0%, #8BB8E0 100%); color: #333333; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: 'Signika', sans-serif; font-weight: 600; box-shadow: 0 2px 8px rgba(169, 204, 240, 0.5);">Tải ảnh mới</button>
-                        <button type="button" onclick="deleteBannerItem(${banner.id})" style="padding: 10px 20px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: 'Signika', sans-serif; font-weight: 600; box-shadow: 0 2px 8px rgba(239,68,68,0.4);">Xóa</button>
-                    </div>
+            <div class="da-media-card">
+                <div class="da-media-hero" style="aspect-ratio:3/1;">
+                    <img src="${banner.image_url}" alt="Banner ${banner.banner_id}" style="object-fit:contain;padding:12px;">
+                    <div style="position:absolute;top:12px;left:12px;" class="da-badge da-badge-warn">Banner ${banner.banner_id}</div>
                 </div>
-                <div style="position: absolute; top: 10px; right: 10px; text-align: center; padding: 6px 14px; font-size: 14px; font-weight: 700; color: white; font-family: 'Signika', sans-serif; background: linear-gradient(135deg, #A9CCF0 0%, #8BB8E0 100%); border-radius: 8px; box-shadow: 0 2px 8px rgba(169, 204, 240, 0.5);">
-                    Banner ${banner.banner_id}
+                <div class="da-media-body">
+                    <p class="da-media-title">Ảnh banner #${banner.id}</p>
+                    <p class="da-media-sub">ID banner ${banner.banner_id} • File đang dùng trên giao diện</p>
+                    <div class="da-media-actions">
+                        <button type="button" onclick="quickReplaceBanner(${banner.banner_id})" class="da-btn da-btn-sm da-btn-info">Tải ảnh mới</button>
+                        <button type="button" onclick="deleteBannerItem(${banner.id})" class="da-btn da-btn-sm da-btn-del">Xóa</button>
+                    </div>
                 </div>
             </div>
         `;
     });
     grid.innerHTML = html;
-
-    // Thêm sự kiện hover
-    document.querySelectorAll('.banner-image-container').forEach(container => {
-        container.addEventListener('mouseenter', function () {
-            this.querySelector('.banner-hover-overlay').style.display = 'flex';
-            this.querySelector('.banner-hover-overlay').style.opacity = '1';
-        });
-        container.addEventListener('mouseleave', function () {
-            this.querySelector('.banner-hover-overlay').style.display = 'none';
-            this.querySelector('.banner-hover-overlay').style.opacity = '0';
-        });
-    });
-
-    // Hiển thị phân trang
-    var totalPages = Math.ceil(banners.length / _bannerPerPage);
     _renderPagination('banners', totalPages, _bannerPage);
 }
 
@@ -3383,6 +3497,22 @@ function resetQrSearch() {
     _renderQrTable();
 }
 
+function _updateQrSummary(allList, visibleList) {
+    allList = allList || [];
+    visibleList = visibleList || [];
+    var pending = allList.filter(function (item) { return item.status === 'pending'; }).length;
+    var approved = allList.filter(function (item) { return item.status === 'approved'; }).length;
+    var cancelled = allList.filter(function (item) { return item.status === 'cancelled'; }).length;
+    var meta = document.getElementById('qrToolbarMeta');
+    var tabLabel = _qrFilter === 'history' ? 'Lịch sử' : 'Chờ duyệt';
+    if (document.getElementById('qrStatTotal')) document.getElementById('qrStatTotal').textContent = allList.length;
+    if (document.getElementById('qrStatPending')) document.getElementById('qrStatPending').textContent = pending;
+    if (document.getElementById('qrStatApproved')) document.getElementById('qrStatApproved').textContent = approved;
+    if (document.getElementById('qrStatCancelled')) document.getElementById('qrStatCancelled').textContent = cancelled;
+    if (document.getElementById('qrStatVisible')) document.getElementById('qrStatVisible').textContent = visibleList.length;
+    if (meta) meta.textContent = 'Tab ' + tabLabel + ': ' + visibleList.length + '/' + allList.length + ' giao dịch';
+}
+
 function searchCoupons() {
     var input = document.getElementById('couponSearchInput');
     _couponSearch = input ? input.value.trim() : '';
@@ -3396,6 +3526,21 @@ function resetCouponSearch() {
     _couponSearch = '';
     _couponPage = 1;
     _renderCouponList();
+}
+
+function _updateCouponSummary(allList, visibleList) {
+    allList = allList || [];
+    visibleList = visibleList || [];
+    var valid = allList.filter(function (c) { return !!c.is_valid; }).length;
+    var expired = allList.length - valid;
+    var privateCoupons = allList.filter(function (c) { return c.target_type === 'single'; }).length;
+    var meta = document.getElementById('couponToolbarMeta');
+    if (document.getElementById('couponStatTotal')) document.getElementById('couponStatTotal').textContent = allList.length;
+    if (document.getElementById('couponStatValid')) document.getElementById('couponStatValid').textContent = valid;
+    if (document.getElementById('couponStatExpired')) document.getElementById('couponStatExpired').textContent = expired;
+    if (document.getElementById('couponStatPrivate')) document.getElementById('couponStatPrivate').textContent = privateCoupons;
+    if (document.getElementById('couponStatVisible')) document.getElementById('couponStatVisible').textContent = visibleList.length;
+    if (meta) meta.textContent = 'Bộ lọc hiện tại: ' + visibleList.length + '/' + allList.length + ' mã voucher';
 }
 
 function switchQrTab(tab) {
@@ -3443,6 +3588,7 @@ function _renderQrTable() {
         var s = _qrSearch.toLowerCase();
         list = _qrData.filter(function (item) { return (item.transfer_code || '').toLowerCase().includes(s); });
     }
+    _updateQrSummary(_qrData, list);
     if (list.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" style="padding:40px 16px;text-align:center;color:#94a3b8;font-size:14px;">' + emptyMsg + '</td></tr>';
         var pEl = document.getElementById('qrApprovalPagination');
@@ -3643,6 +3789,7 @@ function _renderAdminOrdersTable() {
         filtered = filtered.filter(function (o) { return (o.order_code || '').toLowerCase().includes(s); });
     }
 
+    _updateAdminOrdersSummary(_adminOrdersData, filtered);
     if (filtered.length === 0) {
         tbody.innerHTML = '<tr><td colspan="10" style="padding: 40px 16px; text-align: center; color: #94a3b8; font-size: 14px;">Không có đơn hàng nào</td></tr>';
         var _pEl = document.getElementById('adminOrdersPagination');
@@ -3650,7 +3797,6 @@ function _renderAdminOrdersTable() {
         return;
     }
 
-    // Phân trang
     var totalItems = filtered.length;
     var totalPages = Math.ceil(totalItems / _adminOrdersPerPage);
     if (_adminOrdersPage > totalPages) _adminOrdersPage = totalPages || 1;
@@ -3718,6 +3864,49 @@ function resetOrderSearch() {
     _adminOrdersSearch = '';
     _adminOrdersPage = 1;
     _renderAdminOrdersTable();
+}
+
+function _updateAdminOrdersSummary(allList, visibleList) {
+    allList = allList || [];
+    visibleList = visibleList || [];
+    var awaitingCount = allList.filter(function (o) { return o.status === 'awaiting_payment'; }).length;
+    var pendingCount = allList.filter(function (o) { return o.status === 'pending'; }).length;
+    var processingCount = allList.filter(function (o) { return o.status === 'processing'; }).length;
+    var shippedCount = allList.filter(function (o) { return o.status === 'shipped'; }).length;
+    var refundCount = allList.filter(function (o) {
+        return o.status === 'cancelled' &&
+            (o.payment_method === 'vietqr' || o.payment_method === 'vnpay') &&
+            o.refund_status === 'pending';
+    }).length;
+    var openCount = awaitingCount + pendingCount;
+    var inFlightCount = processingCount + shippedCount;
+    var doneCount = allList.filter(function (o) { return o.status === 'delivered' || (o.status === 'cancelled' && o.refund_status === 'completed'); }).length;
+    var meta = document.getElementById('adminOrdersToolbarMeta');
+    var filterLabelMap = {
+        all: 'Tất cả',
+        awaiting_payment: 'Chờ TT',
+        pending: 'Đã đặt',
+        processing: 'Xử lý',
+        shipped: 'Đang giao',
+        delivered: 'Đã giao',
+        cancelled: 'Hủy đơn',
+        refund: 'Hoàn tiền'
+    };
+    if (document.getElementById('adminOrderStatTotal')) document.getElementById('adminOrderStatTotal').textContent = allList.length;
+    if (document.getElementById('adminOrderStatOpen')) document.getElementById('adminOrderStatOpen').textContent = openCount;
+    if (document.getElementById('adminOrderStatInFlight')) document.getElementById('adminOrderStatInFlight').textContent = inFlightCount;
+    if (document.getElementById('adminOrderStatDone')) document.getElementById('adminOrderStatDone').textContent = doneCount;
+    if (document.getElementById('adminOrderStatVisible')) document.getElementById('adminOrderStatVisible').textContent = visibleList.length;
+    _setAdminTabBadge('adminTabBadgeRefund', refundCount);
+    if (meta) meta.textContent = 'Bộ lọc ' + (filterLabelMap[_adminOrdersFilter] || 'Tất cả') + ': ' + visibleList.length + '/' + allList.length + ' đơn';
+}
+
+function _setAdminTabBadge(id, count) {
+    var badge = document.getElementById(id);
+    if (!badge) return;
+    badge.textContent = count;
+    if (count > 0) badge.classList.remove('is-hidden');
+    else badge.classList.add('is-hidden');
 }
 
 function openAdminOrderDetail(id) {
@@ -3801,7 +3990,7 @@ function openAdminOrderDetail(id) {
                     refundStatusColor = '#10b981';
                 } else if (o.refund_status === 'pending') {
                     refundStatusText = 'Chờ hoàn tiền';
-                    refundStatusColor = '#f59e0b';
+                    refundStatusColor = '#ff0000';
                 } else {
                     refundStatusText = 'Chưa yêu cầu';
                     refundStatusColor = '#94a3b8';
@@ -3909,31 +4098,31 @@ function _renderPagination(section, totalPages, currentPage) {
     var html = '';
     // Nút Trước
     if (currentPage > 1) {
-        html += '<button type="button" onclick="_goToPage(\'' + section + '\', ' + (currentPage - 1) + ')" style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; border-radius: 6px; cursor: pointer; font-size: 13px;">‹ Trước</button>';
+        html += '<button type="button" onclick="_goToPage(\'' + section + '\', ' + (currentPage - 1) + ')" style="min-width:38px;height:38px;padding:0 12px;border:1px solid #dbe2ea;background:#f8fafc;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;color:#334155;display:inline-flex;align-items:center;justify-content:center;"><span aria-hidden="true">&#x2039;</span></button>';
     }
 
     // Số trang
     var startPage = Math.max(1, currentPage - 2);
     var endPage = Math.min(totalPages, currentPage + 2);
     if (startPage > 1) {
-        html += '<button type="button" onclick="_goToPage(\'' + section + '\', 1)" style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; border-radius: 6px; cursor: pointer; font-size: 13px;">1</button>';
+        html += '<button type="button" onclick="_goToPage(\'' + section + '\', 1)" style="min-width:38px;height:38px;padding:0 12px;border:1px solid #dbe2ea;background:#f8fafc;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;color:#334155;">1</button>';
         if (startPage > 2) html += '<span style="color: #94a3b8;">...</span>';
     }
     for (var i = startPage; i <= endPage; i++) {
         if (i === currentPage) {
-            html += '<button type="button" style="padding: 6px 12px; border: 1px solid #3b82f6; background: #3b82f6; color: white; border-radius: 6px; font-size: 13px;">' + i + '</button>';
+            html += '<button type="button" style="min-width:38px;height:38px;padding:0 12px;border:1px solid #6366f1;background:#6366f1;color:white;border-radius:999px;font-size:13px;font-weight:600;">' + i + '</button>';
         } else {
-            html += '<button type="button" onclick="_goToPage(\'' + section + '\', ' + i + ')" style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; border-radius: 6px; cursor: pointer; font-size: 13px;">' + i + '</button>';
+            html += '<button type="button" onclick="_goToPage(\'' + section + '\', ' + i + ')" style="min-width:38px;height:38px;padding:0 12px;border:1px solid #dbe2ea;background:#f8fafc;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;color:#334155;">' + i + '</button>';
         }
     }
     if (endPage < totalPages) {
         if (endPage < totalPages - 1) html += '<span style="color: #94a3b8;">...</span>';
-        html += '<button type="button" onclick="_goToPage(\'' + section + '\', ' + totalPages + ')" style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; border-radius: 6px; cursor: pointer; font-size: 13px;">' + totalPages + '</button>';
+        html += '<button type="button" onclick="_goToPage(\'' + section + '\', ' + totalPages + ')" style="min-width:38px;height:38px;padding:0 12px;border:1px solid #dbe2ea;background:#f8fafc;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;color:#334155;">' + totalPages + '</button>';
     }
 
     // Nút Sau
     if (currentPage < totalPages) {
-        html += '<button type="button" onclick="_goToPage(\'' + section + '\', ' + (currentPage + 1) + ')" style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; border-radius: 6px; cursor: pointer; font-size: 13px;">Sau ›</button>';
+        html += '<button type="button" onclick="_goToPage(\'' + section + '\', ' + (currentPage + 1) + ')" style="min-width:38px;height:38px;padding:0 12px;border:1px solid #dbe2ea;background:#f8fafc;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;color:#334155;display:inline-flex;align-items:center;justify-content:center;"><span aria-hidden="true">&#x203A;</span></button>';
     }
 
     html += '<span style="color: #64748b; font-size: 13px; margin-left: 8px;">Trang ' + currentPage + '/' + totalPages + '</span>';
@@ -3950,6 +4139,19 @@ function _goToPage(section, page) {
         case 'coupons':
             _couponPage = page;
             _renderCouponList();
+            break;
+        case 'reviews':
+            loadReviews(page);
+            break;
+        case 'blog':
+            _blogPage = page;
+            renderBlogGrid();
+            renderBlogPagination();
+            break;
+        case 'hotSale':
+            _hotSalePage = page;
+            renderHotSaleTable();
+            renderHotSalePagination();
             break;
         case 'qrApproval':
             _qrPage = page;
@@ -4003,11 +4205,11 @@ function _infoRow(label, value) {
 function _getStatusBadge(status, display, refundStatus) {
     // Nếu đơn hủy có yêu cầu hoàn tiền đang chờ → hiển thị "Hoàn tiền"
     if (status === 'cancelled' && refundStatus === 'pending') {
-        return '<span style="display:inline-block; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; background:#fef3c7; color:#92400e;">Hoàn tiền</span>';
+        return '<span style="display:inline-flex; justify-content:center; align-items:center; min-width:112px; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; background:#fef3c7; color:#92400e;">Hoàn tiền</span>';
     }
     // Nếu đơn hủy đã hoàn tiền xong → hiển thị "Đã tất toán"
     if (status === 'cancelled' && refundStatus === 'completed') {
-        return '<span style="display:inline-block; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; background:#d1fae5; color:#065f46;">Đã tất toán</span>';
+        return '<span style="display:inline-flex; justify-content:center; align-items:center; min-width:112px; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; background:#d1fae5; color:#065f46;">Đã tất toán</span>';
     }
     var colors = {
         'awaiting_payment': { bg: '#fef9c3', text: '#854d0e' },
@@ -4018,7 +4220,7 @@ function _getStatusBadge(status, display, refundStatus) {
         'cancelled': { bg: '#fee2e2', text: '#991b1b' }
     };
     var c = colors[status] || { bg: '#f1f5f9', text: '#334155' };
-    return '<span style="display:inline-block; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; background:' + c.bg + '; color:' + c.text + ';">' + _escHtml(display) + '</span>';
+    return '<span style="display:inline-flex; justify-content:center; align-items:center; min-width:112px; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; background:' + c.bg + '; color:' + c.text + ';">' + _escHtml(display) + '</span>';
 }
 
 function _getPaymentBadge(key, display) {
@@ -4028,7 +4230,7 @@ function _getPaymentBadge(key, display) {
         'vnpay': { bg: '#e0e7ff', text: '#3730a3' }
     };
     var c = colors[key] || { bg: '#f1f5f9', text: '#334155' };
-    return '<span style="display:inline-block; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; background:' + c.bg + '; color:' + c.text + ';">' + _escHtml(display) + '</span>';
+    return '<span style="display:inline-flex; justify-content:center; align-items:center; min-width:112px; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; background:' + c.bg + '; color:' + c.text + ';">' + _escHtml(display) + '</span>';
 }
 
 // ==================== Quản lý mã giảm giá ====================
@@ -4093,8 +4295,9 @@ function _renderCouponList() {
         var s = _couponSearch.toLowerCase();
         list = _couponData.filter(function (c) { return (c.code || '').toLowerCase().includes(s) || (c.name || '').toLowerCase().includes(s); });
     }
+    _updateCouponSummary(_couponData, list);
     if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="11" style="padding:40px 16px;text-align:center;color:#94a3b8;font-size:14px;">Chưa có mã giảm giá nào</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" style="padding:40px 16px;text-align:center;color:#94a3b8;font-size:14px;">Không có voucher phù hợp với bộ lọc hiện tại</td></tr>';
         var pEl = document.getElementById('couponsPagination');
         if (pEl) pEl.innerHTML = '';
         return;
@@ -4314,6 +4517,7 @@ var _reviewData = [];
 var _reviewPage = 1;
 var _reviewSearch = '';
 var _reviewTotalPages = 1;
+var _reviewTotalCount = 0;
 
 function loadReviews(page) {
     var container = document.getElementById('reviewsTableContainer');
@@ -4328,65 +4532,66 @@ function loadReviews(page) {
     fetch('/reviews/list/?page=' + page + '&search=' + encodeURIComponent(search), {
         headers: { 'X-CSRFToken': window.csrfToken }
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (!data.success) {
-            tbody.innerHTML = '<tr><td colspan="8" style="padding:40px 16px;text-align:center;color:#ef4444;font-size:14px;">Lỗi: ' + (data.message || 'Không thể tải') + '</td></tr>';
-            return;
-        }
-        _reviewData = data.reviews || [];
-        _reviewPage = data.current_page;
-        _reviewTotalPages = data.total_pages;
-        _renderReviews();
-        _renderReviewPagination();
-    })
-    .catch(function() {
-        tbody.innerHTML = '<tr><td colspan="8" style="padding:40px 16px;text-align:center;color:#ef4444;font-size:14px;">Lỗi kết nối</td></tr>';
-    });
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (!data.success) {
+                tbody.innerHTML = '<tr><td colspan="8" style="padding:40px 16px;text-align:center;color:#ef4444;font-size:14px;">Lỗi: ' + (data.message || 'Không thể tải') + '</td></tr>';
+                return;
+            }
+            _reviewData = data.reviews || [];
+            _reviewPage = data.current_page;
+            _reviewTotalPages = data.total_pages;
+            _reviewTotalCount = data.total || 0;
+            _renderReviews();
+            _renderReviewPagination();
+        })
+        .catch(function () {
+            tbody.innerHTML = '<tr><td colspan="8" style="padding:40px 16px;text-align:center;color:#ef4444;font-size:14px;">Lỗi kết nối</td></tr>';
+        });
+}
+
+function _updateReviewSummary() {
+    var imageCount = _reviewData.filter(function (r) { return r.images && r.images.length > 0; }).length;
+    var avg = _reviewData.length ? (_reviewData.reduce(function (sum, r) { return sum + (r.rating || 0); }, 0) / _reviewData.length) : 0;
+    var meta = document.getElementById('reviewToolbarMeta');
+    if (document.getElementById('reviewStatTotal')) document.getElementById('reviewStatTotal').textContent = _reviewTotalCount;
+    if (document.getElementById('reviewStatVisible')) document.getElementById('reviewStatVisible').textContent = _reviewData.length;
+    if (document.getElementById('reviewStatImages')) document.getElementById('reviewStatImages').textContent = imageCount;
+    if (document.getElementById('reviewStatAvg')) document.getElementById('reviewStatAvg').textContent = avg.toFixed(1);
+    if (meta) meta.textContent = 'Trang ' + _reviewPage + '/' + _reviewTotalPages + ' - hiển thị ' + _reviewData.length + '/' + _reviewTotalCount + ' đánh giá';
 }
 
 function _renderReviews() {
     var tbody = document.getElementById('reviewsTableBody');
     if (!tbody) return;
+    _updateReviewSummary();
 
     if (_reviewData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="padding:40px 16px;text-align:center;color:#94a3b8;font-size:14px;">Chưa có đánh giá nào</td></tr>';
+        tbody.innerHTML = '<tr class="da-table-empty"><td colspan="8">Chưa có đánh giá nào</td></tr>';
         return;
     }
 
     var html = '';
-    _reviewData.forEach(function(r) {
-        // Stars
+    _reviewData.forEach(function (r) {
         var stars = '';
         for (var i = 1; i <= 5; i++) {
             stars += '<svg style="width:14px;height:14px;fill:' + (i <= r.rating ? '#f59e0b' : '#e2e8f0') + ';" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>';
         }
-
-        // Images
-        var imagesHtml = '';
-        if (r.images && r.images.length > 0) {
-            imagesHtml = '<span style="color:#64748b;font-size:12px;">' + r.images.length + ' ảnh</span>';
-        } else {
-            imagesHtml = '<span style="color:#94a3b8;font-size:12px;">-</span>';
-        }
-
-        // Comment (truncate)
+        var imagesHtml = r.images && r.images.length > 0
+            ? '<span class="da-badge da-badge-warn" style="min-width:72px;">' + r.images.length + ' ảnh</span>'
+            : '<span style="color:#94a3b8;font-size:12px;">-</span>';
         var comment = r.comment ? (r.comment.length > 80 ? r.comment.substring(0, 80) + '...' : r.comment) : '<span style="color:#94a3b8;font-style:italic;">Không có nội dung</span>';
-
-        html += '<tr style="border-bottom:1px solid #f1f5f9;">';
-        html += '<td style="padding:12px 8px;text-align:center;color:#64748b;font-size:13px;">' + r.stt + '</td>';
-        html += '<td style="padding:12px 8px;color:#1e293b;font-size:13px;font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (r.product_name || '') + '">' + (r.product_name || '-') + '</td>';
-        html += '<td style="padding:12px 8px;color:#334155;font-size:13px;">' + (r.user_name || 'Ẩn danh') + '<br><span style="color:#94a3b8;font-size:11px;">' + (r.user_email || '') + '</span></td>';
-        html += '<td style="padding:12px 8px;">' + stars + '</td>';
-        html += '<td style="padding:12px 8px;color:#475569;font-size:13px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (r.comment || '') + '">' + comment + '</td>';
-        html += '<td style="padding:12px 8px;text-align:center;">' + imagesHtml + '</td>';
-        html += '<td style="padding:12px 8px;color:#64748b;font-size:12px;">' + r.created_at + '</td>';
-        html += '<td style="padding:12px 8px;text-align:center;">';
-        html += '<button onclick="deleteReview(' + r.id + ')" style="padding:6px 12px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;color:#dc2626;font-size:12px;font-weight:500;cursor:pointer;font-family:\'Signika\',sans-serif;">Xóa</button>';
-        html += '</td>';
+        html += '<tr>';
+        html += '<td>' + r.stt + '</td>';
+        html += '<td style="font-weight:600;color:#1e293b;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (r.product_name || '') + '">' + (r.product_name || '-') + '</td>';
+        html += '<td>' + (r.user_name || 'Ẩn danh') + '<br><span style="color:#94a3b8;font-size:11px;">' + (r.user_email || '') + '</span></td>';
+        html += '<td><div class="da-inline-actions" style="gap:2px;">' + stars + '</div></td>';
+        html += '<td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (r.comment || '') + '">' + comment + '</td>';
+        html += '<td style="text-align:center;">' + imagesHtml + '</td>';
+        html += '<td style="color:#64748b;font-size:12px;">' + r.created_at + '</td>';
+        html += '<td style="text-align:center;"><button onclick="deleteReview(' + r.id + ')" class="da-btn da-btn-sm da-btn-del">Xóa</button></td>';
         html += '</tr>';
     });
-
     tbody.innerHTML = html;
 }
 
@@ -4466,24 +4671,24 @@ function deleteReview(reviewId) {
         headers: { 'X-CSRFToken': window.csrfToken },
         body: formData
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.success) {
-            if (window.QHToast) {
-                window.QHToast.show(data.message || 'Đã xóa đánh giá', 'success');
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                if (window.QHToast) {
+                    window.QHToast.show(data.message || 'Đã xóa đánh giá', 'success');
+                }
+                loadReviews(_reviewPage);
+            } else {
+                if (window.QHToast) {
+                    window.QHToast.show(data.message || 'Lỗi xóa đánh giá', 'error');
+                }
             }
-            loadReviews(_reviewPage);
-        } else {
+        })
+        .catch(function () {
             if (window.QHToast) {
-                window.QHToast.show(data.message || 'Lỗi xóa đánh giá', 'error');
+                window.QHToast.show('Lỗi kết nối', 'error');
             }
-        }
-    })
-    .catch(function() {
-        if (window.QHToast) {
-            window.QHToast.show('Lỗi kết nối', 'error');
-        }
-    });
+        });
 }
 
 // ==================== Blog Posts Management ====================
@@ -4491,6 +4696,7 @@ var _blogData = [];
 var _blogPage = 1;
 var _blogPerPage = 9;
 var _blogTotalPages = 1;
+var _blogSearch = '';
 var blogPreviewImage = null;
 
 function initBlogPostsSection() {
@@ -4503,94 +4709,99 @@ function loadBlogRows(page) {
     fetch('/blog-posts/list/', {
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.success) {
-            _blogData = data.blogs || [];
-            _blogPage = page;
-            _blogTotalPages = Math.ceil(_blogData.length / _blogPerPage) || 1;
-            renderBlogGrid();
-            renderBlogPagination();
-        }
-    })
-    .catch(function(err) {
-        console.error('Error loading blogs:', err);
-    });
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                _blogData = data.blogs || [];
+                _blogPage = page;
+                _blogTotalPages = Math.ceil(_blogData.length / _blogPerPage) || 1;
+                renderBlogGrid();
+                renderBlogPagination();
+            }
+        })
+        .catch(function (err) {
+            console.error('Error loading blogs:', err);
+        });
+}
+
+function _updateBlogSummary(allList, visibleList) {
+    allList = allList || [];
+    visibleList = visibleList || [];
+    var active = allList.filter(function (blog) { return blog.is_active !== false; }).length;
+    var hidden = allList.length - active;
+    var meta = document.getElementById('blogToolbarMeta');
+    if (document.getElementById('blogStatTotal')) document.getElementById('blogStatTotal').textContent = allList.length;
+    if (document.getElementById('blogStatActive')) document.getElementById('blogStatActive').textContent = active;
+    if (document.getElementById('blogStatHidden')) document.getElementById('blogStatHidden').textContent = hidden;
+    if (document.getElementById('blogStatVisible')) document.getElementById('blogStatVisible').textContent = visibleList.length;
+    if (meta) meta.textContent = 'Bộ lọc hiện tại: ' + visibleList.length + '/' + allList.length + ' bài viết';
 }
 
 function renderBlogGrid() {
     var grid = document.getElementById('blogGrid');
     if (!grid) return;
 
+    var visibleList = _blogData;
+    if (_blogSearch) {
+        visibleList = _blogData.filter(function (blog) {
+            var s = _blogSearch.toLowerCase();
+            return (blog.title || '').toLowerCase().includes(s) || (blog.summary || '').toLowerCase().includes(s);
+        });
+    }
+
+    _blogTotalPages = Math.ceil(visibleList.length / _blogPerPage) || 1;
+    if (_blogPage > _blogTotalPages) _blogPage = _blogTotalPages;
     var start = (_blogPage - 1) * _blogPerPage;
     var end = start + _blogPerPage;
-    var pageData = _blogData.slice(start, end);
+    var pageData = visibleList.slice(start, end);
+    _updateBlogSummary(_blogData, visibleList);
 
     if (pageData.length === 0) {
-        grid.innerHTML = '<div style="grid-column: 1/-1; padding: 40px; text-align: center; color: #94a3b8;">Chưa có bài viết nào. Bấm "Thêm bài viết" để tạo.</div>';
+        grid.innerHTML = '<div style="grid-column:1/-1;padding:52px 20px;text-align:center;color:#94a3b8;font-size:14px;">Chưa có bài viết nào phù hợp.</div>';
         return;
     }
 
     var html = '';
-    pageData.forEach(function(blog) {
+    pageData.forEach(function (blog) {
         var imageHtml = blog.image_url
-            ? '<img src="' + blog.image_url + '" alt="' + blog.title + '" style="width: 100%; height: 140px; object-fit: cover;">'
-            : '<div style="width: 100%; height: 140px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 14px;">Chưa có ảnh</div>';
-
+            ? '<img src="' + blog.image_url + '" alt="' + blog.title + '">'
+            : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:14px;">Chưa có ảnh</div>';
         var statusBadge = blog.is_active
-            ? '<span style="padding: 4px 10px; background: #22c55e; color: white; border-radius: 6px; font-size: 11px; font-weight: 600;">Hiển thị</span>'
-            : '<span style="padding: 4px 10px; background: #94a3b8; color: white; border-radius: 6px; font-size: 11px; font-weight: 600;">Ẩn</span>';
-
-        html +=
-            '<div style="position: relative; background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; transition: all 0.3s ease;">' +
-                '<div style="position: relative; aspect-ratio: 16/9; overflow: hidden; cursor: pointer;" onclick="openEditBlogModal(' + blog.id + ')">' +
-                    imageHtml +
-                    '<div style="position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; gap: 10px; opacity: 0; transition: opacity 0.3s;" class="blog-hover-overlay">' +
-                        '<button type="button" style="padding: 10px 20px; background: linear-gradient(135deg, #A9CCF0 0%, #8BB8E0 100%); color: #333; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;">Sửa</button>' +
-                        '<button type="button" onclick="event.stopPropagation(); deleteBlogItem(' + blog.id + ')" style="padding: 10px 20px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;">Xóa</button>' +
-                    '</div>' +
-                '</div>' +
-                '<div style="padding: 16px;">' +
-                    '<h4 style="margin: 0 0 8px 0; font-size: 15px; font-weight: 700; color: #1e293b; font-family: \'Signika\', sans-serif; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">' + blog.title + '</h4>' +
-                    '<p style="margin: 0 0 12px 0; font-size: 12px; color: #64748b; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">' + (blog.summary || 'Không có mô tả') + '</p>' +
-                    '<div style="display: flex; justify-content: space-between; align-items: center;">' +
-                        statusBadge +
-                        '<span style="font-size: 11px; color: #94a3b8;">' + blog.created_at + '</span>' +
-                    '</div>' +
-                '</div>' +
-            '</div>';
+            ? '<span class="da-badge da-badge-success">Hiển thị</span>'
+            : '<span class="da-badge da-badge-muted">Ẩn</span>';
+        html += '<div class="da-media-card">';
+        html += '<div class="da-media-hero" style="aspect-ratio:16/9;">' + imageHtml + '</div>';
+        html += '<div class="da-media-body">';
+        html += '<p class="da-media-title" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + blog.title + '</p>';
+        html += '<p class="da-media-sub" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px;">' + (blog.summary || 'Không có mô tả') + '</p>';
+        html += '<div class="da-inline-actions" style="justify-content:space-between;margin-top:12px;">' + statusBadge + '<span style="font-size:11px;color:#94a3b8;">' + blog.created_at + '</span></div>';
+        html += '<div class="da-media-actions">';
+        html += '<button type="button" onclick="openEditBlogModal(' + blog.id + ')" class="da-btn da-btn-sm da-btn-info">Sửa</button>';
+        html += '<button type="button" onclick="deleteBlogItem(' + blog.id + ')" class="da-btn da-btn-sm da-btn-del">Xóa</button>';
+        html += '</div></div></div>';
     });
-
     grid.innerHTML = html;
-
-    // Add hover effects
-    document.querySelectorAll('[class*="blog-hover-overlay"]').forEach(function(overlay) {
-        overlay.parentElement.addEventListener('mouseenter', function() {
-            overlay.style.display = 'flex';
-            overlay.style.opacity = '1';
-        });
-        overlay.parentElement.addEventListener('mouseleave', function() {
-            overlay.style.display = 'none';
-            overlay.style.opacity = '0';
-        });
-    });
 }
 
 function renderBlogPagination() {
-    var pagination = document.getElementById('blogPagination');
-    if (!pagination) return;
+    _renderPagination('blog', _blogTotalPages, _blogPage);
+}
 
-    if (_blogTotalPages <= 1) {
-        pagination.innerHTML = '';
-        return;
-    }
+function searchBlogPosts() {
+    var input = document.getElementById('blogSearchInput');
+    _blogSearch = input ? input.value.trim() : '';
+    _blogPage = 1;
+    renderBlogGrid();
+    renderBlogPagination();
+}
 
-    var html = '';
-    for (var i = 1; i <= _blogTotalPages; i++) {
-        var active = i === _blogPage ? 'background: #dc2626; color: white; border-color: #dc2626;' : 'background: white; color: #1e293b; border-color: #e2e8f0;';
-        html += '<button onclick="loadBlogRows(' + i + ')" style="min-width: 36px; height: 36px; border: 1px solid #e2e8f0; border-radius: 8px; background: white; color: #1e293b; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center;' + (i === _blogPage ? active : '') + '">' + i + '</button>';
-    }
-    pagination.innerHTML = html;
+function resetBlogSearch() {
+    var input = document.getElementById('blogSearchInput');
+    if (input) input.value = '';
+    _blogSearch = '';
+    _blogPage = 1;
+    renderBlogGrid();
+    renderBlogPagination();
 }
 
 function openAddBlogModal() {
@@ -4607,7 +4818,7 @@ function openAddBlogModal() {
 }
 
 function openEditBlogModal(blogId) {
-    var blog = _blogData.find(function(b) { return b.id === blogId; });
+    var blog = _blogData.find(function (b) { return b.id === blogId; });
     if (!blog) return;
 
     document.getElementById('blogModalTitle').textContent = 'Sửa bài viết blog';
@@ -4624,7 +4835,7 @@ function openEditBlogModal(blogId) {
     if (blog.image_url) {
         document.getElementById('blogPreviewGrid').innerHTML =
             '<div style="position: relative;">' +
-                '<img src="' + blog.image_url + '" style="width: 100px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">' +
+            '<img src="' + blog.image_url + '" style="width: 100px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">' +
             '</div>';
     }
 
@@ -4643,10 +4854,10 @@ function handleBlogFileChange(event) {
     blogPreviewImage = file;
 
     var reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         document.getElementById('blogPreviewGrid').innerHTML =
             '<div style="position: relative;">' +
-                '<img src="' + e.target.result + '" style="width: 100px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">' +
+            '<img src="' + e.target.result + '" style="width: 100px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">' +
             '</div>';
     };
     reader.readAsDataURL(file);
@@ -4685,25 +4896,25 @@ function saveBlog() {
         headers: { 'X-CSRFToken': window.csrfToken },
         body: formData
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.success) {
-            if (window.QHToast) {
-                window.QHToast.show(data.message || 'Đã lưu bài viết!', 'success');
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                if (window.QHToast) {
+                    window.QHToast.show(data.message || 'Đã lưu bài viết!', 'success');
+                }
+                closeAddBlogModal();
+                loadBlogRows(_blogPage);
+            } else {
+                if (window.QHToast) {
+                    window.QHToast.show(data.message || 'Lỗi lưu bài viết', 'error');
+                }
             }
-            closeAddBlogModal();
-            loadBlogRows(_blogPage);
-        } else {
+        })
+        .catch(function () {
             if (window.QHToast) {
-                window.QHToast.show(data.message || 'Lỗi lưu bài viết', 'error');
+                window.QHToast.show('Lỗi kết nối', 'error');
             }
-        }
-    })
-    .catch(function() {
-        if (window.QHToast) {
-            window.QHToast.show('Lỗi kết nối', 'error');
-        }
-    });
+        });
 }
 
 function deleteBlogItem(blogId) {
@@ -4717,24 +4928,24 @@ function deleteBlogItem(blogId) {
         headers: { 'X-CSRFToken': window.csrfToken },
         body: formData
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.success) {
-            if (window.QHToast) {
-                window.QHToast.show(data.message || 'Đã xóa bài viết', 'success');
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                if (window.QHToast) {
+                    window.QHToast.show(data.message || 'Đã xóa bài viết', 'success');
+                }
+                loadBlogRows(_blogPage);
+            } else {
+                if (window.QHToast) {
+                    window.QHToast.show(data.message || 'Lỗi xóa bài viết', 'error');
+                }
             }
-            loadBlogRows(_blogPage);
-        } else {
+        })
+        .catch(function () {
             if (window.QHToast) {
-                window.QHToast.show(data.message || 'Lỗi xóa bài viết', 'error');
+                window.QHToast.show('Lỗi kết nối', 'error');
             }
-        }
-    })
-    .catch(function() {
-        if (window.QHToast) {
-            window.QHToast.show('Lỗi kết nối', 'error');
-        }
-    });
+        });
 }
 
 // ==================== Quản lý Hot Sale ====================
@@ -4742,6 +4953,7 @@ var _hotSaleData = [];
 var _hotSalePage = 1;
 var _hotSalePerPage = 20;
 var _hotSaleTotalPages = 1;
+var _hotSaleSearch = '';
 var _hotSaleSearchTimer = null;
 
 function initHotSaleSection() {
@@ -4753,85 +4965,98 @@ function loadHotSaleRows(page) {
     fetch('/hot-sale/list/', {
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.success) {
-            _hotSaleData = data.entries || [];
-            _hotSalePage = page;
-            _hotSaleTotalPages = Math.ceil(_hotSaleData.length / _hotSalePerPage) || 1;
-            renderHotSaleTable();
-            renderHotSalePagination();
-        }
-    })
-    .catch(function(err) {
-        console.error('Error loading hot sale:', err);
-    });
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                _hotSaleData = data.entries || [];
+                _hotSalePage = page;
+                _hotSaleTotalPages = Math.ceil(_hotSaleData.length / _hotSalePerPage) || 1;
+                renderHotSaleTable();
+                renderHotSalePagination();
+            }
+        })
+        .catch(function (err) {
+            console.error('Error loading hot sale:', err);
+        });
+}
+
+function _updateHotSaleSummary(allList, visibleList) {
+    allList = allList || [];
+    visibleList = visibleList || [];
+    var active = allList.filter(function (entry) { return !!entry.is_active; }).length;
+    var hidden = allList.length - active;
+    var meta = document.getElementById('hotSaleToolbarMeta');
+    if (document.getElementById('hotSaleStatTotal')) document.getElementById('hotSaleStatTotal').textContent = allList.length;
+    if (document.getElementById('hotSaleStatActive')) document.getElementById('hotSaleStatActive').textContent = active;
+    if (document.getElementById('hotSaleStatHidden')) document.getElementById('hotSaleStatHidden').textContent = hidden;
+    if (document.getElementById('hotSaleStatVisible')) document.getElementById('hotSaleStatVisible').textContent = visibleList.length;
+    if (meta) meta.textContent = 'Bộ lọc hiện tại: ' + visibleList.length + '/' + allList.length + ' mục hot sale';
 }
 
 function renderHotSaleTable() {
     var tbody = document.getElementById('hotSaleTableBody');
     if (!tbody) return;
 
+    var visibleList = _hotSaleData;
+    if (_hotSaleSearch) {
+        var s = _hotSaleSearch.toLowerCase();
+        visibleList = _hotSaleData.filter(function (entry) {
+            return (entry.name || '').toLowerCase().includes(s) || (entry.brand || '').toLowerCase().includes(s);
+        });
+    }
+
+    _hotSaleTotalPages = Math.ceil(visibleList.length / _hotSalePerPage) || 1;
+    if (_hotSalePage > _hotSaleTotalPages) _hotSalePage = _hotSaleTotalPages;
     var start = (_hotSalePage - 1) * _hotSalePerPage;
     var end = start + _hotSalePerPage;
-    var pageData = _hotSaleData.slice(start, end);
+    var pageData = visibleList.slice(start, end);
+    _updateHotSaleSummary(_hotSaleData, visibleList);
 
     if (pageData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="padding:40px;text-align:center;color:#94a3b8;font-size:14px;">Chưa có sản phẩm nào trong Hot Sale. Bấm "+ Thêm sản phẩm" để thêm.</td></tr>';
+        tbody.innerHTML = '<tr class="da-table-empty"><td colspan="6">Chưa có sản phẩm nào trong Hot Sale.</td></tr>';
         return;
     }
 
     var html = '';
-    pageData.forEach(function(entry, idx) {
+    pageData.forEach(function (entry, idx) {
         var stt = start + idx + 1;
         var imgHtml = entry.image_url
-            ? '<img src="' + entry.image_url + '" alt="' + entry.name + '" style="width:52px;height:52px;object-fit:cover;border-radius:8px;border:1px solid #e2e8f0;">'
-            : '<div style="width:52px;height:52px;background:#f1f5f9;border-radius:8px;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:11px;">No img</div>';
+            ? '<span class="da-thumb-box"><img src="' + entry.image_url + '" alt="' + entry.name + '"></span>'
+            : '<span class="da-thumb-box" style="color:#94a3b8;font-size:11px;">No img</span>';
         var statusBadge = entry.is_active
-            ? '<span style="padding:4px 10px;background:#22c55e;color:white;border-radius:6px;font-size:11px;font-weight:600;">Hiển thị</span>'
-            : '<span style="padding:4px 10px;background:#94a3b8;color:white;border-radius:6px;font-size:11px;font-weight:600;">Ẩn</span>';
-
-        html += '<tr style="border-bottom:1px solid #f1f5f9;" onmouseenter="this.style.background=\'#f8fafc\'" onmouseleave="this.style.background=\'\'">'+
-            '<td style="padding:12px 16px;font-size:13px;color:#64748b;">' + stt + '</td>'+
-            '<td style="padding:12px 16px;">' + imgHtml + '</td>'+
-            '<td style="padding:12px 16px;">'+
-                '<div style="font-size:14px;font-weight:600;color:#1e293b;font-family:\'Signika\',sans-serif;">' + entry.name + '</div>'+
-                '<div style="font-size:12px;color:#94a3b8;">' + entry.brand + '</div>'+
-            '</td>'+
-            '<td style="padding:12px 16px;">'+
-                '<input type="number" value="' + entry.sort_order + '" min="0" onchange="updateHotSaleOrder(' + entry.id + ', this.value)" '+
-                    'style="width:70px;padding:6px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;text-align:center;">'+
-            '</td>'+
-            '<td style="padding:12px 16px;">'+
-                statusBadge +
-                '<button onclick="toggleHotSaleActive(' + entry.id + ', ' + !entry.is_active + ')" style="margin-left:8px;padding:4px 8px;background:#f1f5f9;color:#334155;border:1px solid #e2e8f0;border-radius:6px;font-size:11px;cursor:pointer;">'+
-                    (entry.is_active ? 'Ẩn' : 'Hiện') +
-                '</button>'+
-            '</td>'+
-            '<td style="padding:12px 16px;">'+
-                '<button onclick="deleteHotSaleEntry(' + entry.id + ')" style="padding:6px 14px;background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;font-size:13px;cursor:pointer;font-weight:500;">Xóa</button>'+
-            '</td>'+
-        '</tr>';
+            ? '<span class="da-badge da-badge-success">Hiển thị</span>'
+            : '<span class="da-badge da-badge-muted">Ẩn</span>';
+        html += '<tr>';
+        html += '<td>' + stt + '</td>';
+        html += '<td>' + imgHtml + '</td>';
+        html += '<td><div style="font-size:14px;font-weight:600;color:#1e293b;">' + entry.name + '</div><div style="font-size:12px;color:#94a3b8;margin-top:4px;">' + entry.brand + '</div></td>';
+        html += '<td><input type="number" value="' + entry.sort_order + '" min="0" onchange="updateHotSaleOrder(' + entry.id + ', this.value)" class="da-input-mini"></td>';
+        html += '<td><div class="da-inline-actions">' + statusBadge + '<button onclick="toggleHotSaleActive(' + entry.id + ', ' + (!entry.is_active) + ')" class="da-btn da-btn-sm da-btn-ghost">' + (entry.is_active ? 'Ẩn' : 'Hiện') + '</button></div></td>';
+        html += '<td><button onclick="deleteHotSaleEntry(' + entry.id + ')" class="da-btn da-btn-sm da-btn-del">Xóa</button></td>';
+        html += '</tr>';
     });
-
     tbody.innerHTML = html;
 }
 
 function renderHotSalePagination() {
-    var pagination = document.getElementById('hotSalePagination');
-    if (!pagination) return;
+    _renderPagination('hotSale', _hotSaleTotalPages, _hotSalePage);
+}
 
-    if (_hotSaleTotalPages <= 1) {
-        pagination.innerHTML = '';
-        return;
-    }
+function searchHotSaleTable() {
+    var input = document.getElementById('hotSaleTableSearchInput');
+    _hotSaleSearch = input ? input.value.trim() : '';
+    _hotSalePage = 1;
+    renderHotSaleTable();
+    renderHotSalePagination();
+}
 
-    var html = '';
-    for (var i = 1; i <= _hotSaleTotalPages; i++) {
-        var activeStyle = i === _hotSalePage ? 'background:#dc2626;color:white;border-color:#dc2626;' : 'background:white;color:#1e293b;border-color:#e2e8f0;';
-        html += '<button onclick="loadHotSaleRows(' + i + ')" style="min-width:36px;height:36px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;' + activeStyle + '">' + i + '</button>';
-    }
-    pagination.innerHTML = html;
+function resetHotSaleTableSearch() {
+    var input = document.getElementById('hotSaleTableSearchInput');
+    if (input) input.value = '';
+    _hotSaleSearch = '';
+    _hotSalePage = 1;
+    renderHotSaleTable();
+    renderHotSalePagination();
 }
 
 function openAddHotSaleModal() {
@@ -4856,38 +5081,38 @@ function searchHotSaleProduct(q) {
         results.style.display = 'none';
         return;
     }
-    _hotSaleSearchTimer = setTimeout(function() {
+    _hotSaleSearchTimer = setTimeout(function () {
         fetch('/api/autocomplete/?q=' + encodeURIComponent(q), {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-            var suggestions = (data.suggestions || []).filter(function(s) { return s.id; });
-            if (suggestions.length === 0) {
-                results.innerHTML = '<div style="padding:12px 16px;color:#94a3b8;font-size:13px;">Không tìm thấy sản phẩm</div>';
-            } else {
-                var html = '';
-                suggestions.forEach(function(s) {
-                    var imgHtml = s.image
-                        ? '<img src="' + s.image + '" style="width:36px;height:36px;object-fit:cover;border-radius:6px;flex-shrink:0;">'
-                        : '<div style="width:36px;height:36px;background:#f1f5f9;border-radius:6px;flex-shrink:0;"></div>';
-                    html += '<div onclick="selectHotSaleProduct(' + s.id + ',\'' + (s.name||'').replace(/\'/g, "\\\'") + '\',\'' + (s.image||'') + '\',\'' + (s.brand||'') + '\')" '+
-                        'style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f1f5f9;" '+
-                        'onmouseenter="this.style.background=\'#f8fafc\'" onmouseleave="this.style.background=\'\'">'+
-                        imgHtml +
-                        '<div>'+
-                            '<div style="font-size:13px;font-weight:600;color:#1e293b;font-family:\'Signika\',sans-serif;">' + s.name + '</div>'+
-                            '<div style="font-size:11px;color:#94a3b8;">' + (s.brand||'') + '</div>'+
-                        '</div>'+
-                    '</div>';
-                });
-                results.innerHTML = html;
-            }
-            results.style.display = 'block';
-        })
-        .catch(function() {
-            results.style.display = 'none';
-        });
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                var suggestions = (data.suggestions || []).filter(function (s) { return s.id; });
+                if (suggestions.length === 0) {
+                    results.innerHTML = '<div style="padding:12px 16px;color:#94a3b8;font-size:13px;">Không tìm thấy sản phẩm</div>';
+                } else {
+                    var html = '';
+                    suggestions.forEach(function (s) {
+                        var imgHtml = s.image
+                            ? '<img src="' + s.image + '" style="width:36px;height:36px;object-fit:cover;border-radius:6px;flex-shrink:0;">'
+                            : '<div style="width:36px;height:36px;background:#f1f5f9;border-radius:6px;flex-shrink:0;"></div>';
+                        html += '<div onclick="selectHotSaleProduct(' + s.id + ',\'' + (s.name || '').replace(/\'/g, "\\\'") + '\',\'' + (s.image || '') + '\',\'' + (s.brand || '') + '\')" ' +
+                            'style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f1f5f9;" ' +
+                            'onmouseenter="this.style.background=\'#f8fafc\'" onmouseleave="this.style.background=\'\'">' +
+                            imgHtml +
+                            '<div>' +
+                            '<div style="font-size:13px;font-weight:600;color:#1e293b;font-family:\'Signika\',sans-serif;">' + s.name + '</div>' +
+                            '<div style="font-size:11px;color:#94a3b8;">' + (s.brand || '') + '</div>' +
+                            '</div>' +
+                            '</div>';
+                    });
+                    results.innerHTML = html;
+                }
+                results.style.display = 'block';
+            })
+            .catch(function () {
+                results.style.display = 'none';
+            });
     }, 300);
 }
 
@@ -4929,19 +5154,49 @@ function saveHotSaleProduct() {
         headers: { 'X-CSRFToken': window.csrfToken },
         body: formData
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.success) {
-            if (window.QHToast) window.QHToast.show(data.message || 'Đã thêm sản phẩm vào Hot Sale!', 'success');
-            closeAddHotSaleModal();
-            loadHotSaleRows(_hotSalePage);
-        } else {
-            if (window.QHToast) window.QHToast.show(data.message || 'Lỗi thêm sản phẩm', 'error');
-        }
-    })
-    .catch(function() {
-        if (window.QHToast) window.QHToast.show('Lỗi kết nối', 'error');
-    });
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                if (window.QHToast) window.QHToast.show(data.message || 'Đã thêm sản phẩm vào Hot Sale!', 'success');
+                closeAddHotSaleModal();
+                loadHotSaleRows(_hotSalePage);
+            } else {
+                if (window.QHToast) window.QHToast.show(data.message || 'Lỗi thêm sản phẩm', 'error');
+            }
+        })
+        .catch(function () {
+            if (window.QHToast) window.QHToast.show('Lỗi kết nối', 'error');
+        });
+}
+
+function hotSaleAutoTopDiscount() {
+    var msg = 'Tự động thêm tối đa 10 sản phẩm có % giảm giá cao nhất (chưa có trong Hot Sale) vào danh sách?';
+    function doAuto() {
+        var fd = new FormData();
+        fd.append('limit', 10);
+        fetch('/hot-sale/auto-top-discount/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': window.csrfToken },
+            body: fd
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.success) {
+                    if (window.QHToast) window.QHToast.show(data.message, 'success');
+                    loadHotSaleRows(1);
+                } else {
+                    if (window.QHToast) window.QHToast.show(data.message, 'error');
+                }
+            })
+            .catch(function () {
+                if (window.QHToast) window.QHToast.show('Lỗi kết nối!', 'error');
+            });
+    }
+    if (window.QHConfirm && window.QHConfirm.show) {
+        window.QHConfirm.show(msg, doAuto);
+    } else {
+        if (confirm(msg)) doAuto();
+    }
 }
 
 function deleteHotSaleEntry(entryId) {
@@ -4955,18 +5210,18 @@ function deleteHotSaleEntry(entryId) {
         headers: { 'X-CSRFToken': window.csrfToken },
         body: formData
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.success) {
-            if (window.QHToast) window.QHToast.show(data.message || 'Đã xóa', 'success');
-            loadHotSaleRows(_hotSalePage);
-        } else {
-            if (window.QHToast) window.QHToast.show(data.message || 'Lỗi xóa', 'error');
-        }
-    })
-    .catch(function() {
-        if (window.QHToast) window.QHToast.show('Lỗi kết nối', 'error');
-    });
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                if (window.QHToast) window.QHToast.show(data.message || 'Đã xóa', 'success');
+                loadHotSaleRows(_hotSalePage);
+            } else {
+                if (window.QHToast) window.QHToast.show(data.message || 'Lỗi xóa', 'error');
+            }
+        })
+        .catch(function () {
+            if (window.QHToast) window.QHToast.show('Lỗi kết nối', 'error');
+        });
 }
 
 function updateHotSaleOrder(entryId, sortOrder) {
@@ -4979,18 +5234,18 @@ function updateHotSaleOrder(entryId, sortOrder) {
         headers: { 'X-CSRFToken': window.csrfToken },
         body: formData
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.success) {
-            if (window.QHToast) window.QHToast.show('Đã cập nhật thứ tự', 'success');
-            loadHotSaleRows(_hotSalePage);
-        } else {
-            if (window.QHToast) window.QHToast.show(data.message || 'Lỗi cập nhật', 'error');
-        }
-    })
-    .catch(function() {
-        if (window.QHToast) window.QHToast.show('Lỗi kết nối', 'error');
-    });
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                if (window.QHToast) window.QHToast.show('Đã cập nhật thứ tự', 'success');
+                loadHotSaleRows(_hotSalePage);
+            } else {
+                if (window.QHToast) window.QHToast.show(data.message || 'Lỗi cập nhật', 'error');
+            }
+        })
+        .catch(function () {
+            if (window.QHToast) window.QHToast.show('Lỗi kết nối', 'error');
+        });
 }
 
 function toggleHotSaleActive(entryId, newActive) {
@@ -5003,15 +5258,22 @@ function toggleHotSaleActive(entryId, newActive) {
         headers: { 'X-CSRFToken': window.csrfToken },
         body: formData
     })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.success) {
-            loadHotSaleRows(_hotSalePage);
-        } else {
-            if (window.QHToast) window.QHToast.show(data.message || 'Lỗi cập nhật', 'error');
-        }
-    })
-    .catch(function() {
-        if (window.QHToast) window.QHToast.show('Lỗi kết nối', 'error');
-    });
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                loadHotSaleRows(_hotSalePage);
+            } else {
+                if (window.QHToast) window.QHToast.show(data.message || 'Lỗi cập nhật', 'error');
+            }
+        })
+        .catch(function () {
+            if (window.QHToast) window.QHToast.show('Lỗi kết nối', 'error');
+        });
 }
+
+
+
+
+
+
+
