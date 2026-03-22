@@ -91,6 +91,11 @@ urlpatterns = [
     path('blog-posts/add/', views.blog_add, name='blog_add'),
     path('blog-posts/update/', views.blog_update, name='blog_update'),
     path('blog-posts/delete/', views.blog_delete, name='blog_delete'),
+    # Hot Sale Management
+    path('hot-sale/list/', views.hotsale_list, name='hotsale_list'),
+    path('hot-sale/add/', views.hotsale_add, name='hotsale_add'),
+    path('hot-sale/update/', views.hotsale_update, name='hotsale_update'),
+    path('hot-sale/delete/', views.hotsale_delete, name='hotsale_delete'),
     # Product Content Management
     path('product-content/list/', views.product_content_list, name='product_content_list'),
     path('product-content/add/', views.product_content_add, name='product_content_add'),
