@@ -623,6 +623,7 @@
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -798,6 +799,7 @@
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 
@@ -809,6 +811,7 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
 }
@@ -980,108 +983,405 @@
 }
 
 /* ==================== HOT SALE HÀNG NGÀY ==================== */
-/* Box trắng bên ngoài (container) - viền đỏ nhẹ kiểu LED */
-.qh-hotsale-section .qh-hotsale-inner {
-    border: 1px solid rgba(220, 38, 38, 0.3);
-    border-radius: 0 0 14px 14px;
-    box-shadow: inset 0 0 0 1px rgba(220, 38, 38, 0.12),
-        0 0 20px rgba(220, 38, 38, 0.1);
-    padding: 20px 20px 18px !important;
+.qh-hotsale-section {
+    max-width: 1400px;
+    margin: 32px auto 0;
+    padding: 0;
+    position: relative;
 }
 
-/* ---- Hot Sale Slider ---- */
-.qh-hotsale-slider-wrap {
+/* --- Header: dùng ảnh 2026_header_bg.png làm nền --- */
+.qh-hotsale-header {
+    position: relative;
+    z-index: 1;
+    width: calc(100% - 68px);
+    height: 54px;
+    margin: 0 auto -8px;
+    border-radius: 12px 12px 0 0;
+}
+
+.qh-hotsale-header-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 0 28px;
+}
+
+/* Tabs (trái) */
+.qh-hotsale-tabs {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+/* ── Dịch cả tab (ảnh + radius): thay đổi --hs-tab-x / --hs-tab-y ── */
+.qh-hotsale-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    width: 130px;
+    height: 50px;
+    --hs-tab-x: 40px;
+    /* dịch cả tab: âm = trái, dương = phải */
+    --hs-tab-y: -20px;
+    /* dịch cả tab: âm = lên,  dương = xuống */
+    transform: translate(var(--hs-tab-x), var(--hs-tab-y));
+    background-image: url('/media/hotsale/hs-tab-title-20-10.webp');
+    background-position: center center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.18s;
+}
+
+/* ── Điều chỉnh vị trí chữ: thay đổi --hs-tab-txt-x / --hs-tab-txt-y ── */
+.qh-hotsale-tab span {
+    position: relative;
+    z-index: 1;
+    --hs-tab-txt-x: 0px;
+    /* dịch chữ: âm = trái, dương = phải */
+    --hs-tab-txt-y: 0px;
+    /* dịch chữ: âm = lên, dương = xuống — dịch xuống để vào dải banner ảnh */
+    transform: translate(var(--hs-tab-txt-x), var(--hs-tab-txt-y));
+    font-size: 0.9rem;
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: 1px;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* Tab không active – mờ đi, hạ thấp hơn chút */
+.qh-hotsale-tab:not(.active) {
+    opacity: 0.55;
+}
+
+.qh-hotsale-tab:not(.active):hover {
+    opacity: 0.82;
+}
+
+/* Countdown (phải, trong header) */
+.qh-hotsale-countdown-row {
     display: flex;
     align-items: center;
+    align-self: center;
     gap: 10px;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+}
+
+.qh-hotsale-countdown-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.qh-hotsale-countdown {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-variant-numeric: tabular-nums;
+}
+
+.qh-hotsale-time-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    background: #7f1d1d;
+    border-radius: 5px;
+    padding: 0 4px;
+}
+
+.qh-hotsale-time {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.qh-hotsale-sep {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* --- Body chính: KHÔNG bo góc trên, liền mạch với header --- */
+.qh-hotsale-body {
+    position: relative;
+    min-height: 400px;
+    margin-top: 0;
+    padding: 20px 8px 16px;
+    overflow: visible;
+    z-index: 3;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+/* Ảnh góc trang trí — cần z-index > nav(5) để nằm trên cùng */
+.qh-hotsale-corner {
+    position: absolute;
+    z-index: 7;
+    pointer-events: none;
+    width: 56px;
+    height: auto;
+}
+
+.qh-hotsale-corner--tl {
+    top: 16px;
+    left: 20px;
+}
+
+.qh-hotsale-corner--bl {
+    bottom: 16px;
+    left: 20px;
+}
+
+.qh-hotsale-corner--tr {
+    top: 16px;
+    right: 20px;
+}
+
+.qh-hotsale-corner--br {
+    bottom: 16px;
+    right: 20px;
+}
+
+/* --- Slider wrap --- */
+.qh-hotsale-slider-wrap {
+    position: relative;
+    z-index: 2;
+    padding: 0 44px;
 }
 
 .qh-hotsale-overflow {
-    flex: 1;
-    min-width: 0;
+    width: 100%;
     overflow: hidden;
 }
 
 .qh-hotsale-track {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
 }
 
-.qh-hotsale-track .qh-hotsale-card {
-    flex-shrink: 0;
-}
-
-/* Hotsale: chỉ cần flex-shrink, phần còn lại kế thừa .qh-slider-nav */
+/* Nav buttons */
 .qh-hotsale-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+}
+
+.qh-hotsale-nav.prev {
+    left: -4px;
+}
+
+.qh-hotsale-nav.next {
+    right: -4px;
+}
+
+.qh-hotsale-nav:hover {
+    transform: translateY(-50%) scale(1.08);
+}
+
+/* --- Product card --- */
+.qh-hotsale-card {
     flex-shrink: 0;
-}
-
-.qh-hotsale-section .qh-product-grid {
-    margin-bottom: 0 !important;
-}
-
-/* Card sản phẩm Hot Sale dùng viền trung tính để không bị ám đỏ */
-.qh-hotsale-section .qh-hotsale-card {
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    animation: none;
-    /* Căn đều chiều cao: card = flex column, info phần dưới co giãn, nút So sánh dính đáy */
     display: flex;
     flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.qh-hotsale-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+}
+
+.qh-hotsale-card-img {
+    aspect-ratio: 1;
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qh-hotsale-card-img img {
+    width: 100%;
     height: 100%;
+    object-fit: contain;
 }
 
-.qh-hotsale-section .qh-hotsale-card .qh-product-image {
-    flex-shrink: 0;
-}
-
-.qh-hotsale-section .qh-hotsale-card .qh-product-info {
+.qh-hotsale-card-info {
+    padding: 10px 12px 12px;
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 0;
 }
 
-/* Đẩy nút So sánh xuống sát đáy để tránh khoảng trống thừa khi giá 1 dòng vs 2 dòng */
-.qh-hotsale-section .qh-hotsale-card .qh-product-info>div:last-of-type {
+.qh-hotsale-card-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 6px;
+    line-height: 1.35;
+    min-height: 38px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.qh-hotsale-card-price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.qh-hotsale-price-now {
+    font-size: 16px;
+    font-weight: 700;
+    color: #dc2626;
+}
+
+.qh-hotsale-price-old {
+    font-size: 12px;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+/* Thanh "Đã bán x/y suất" */
+.qh-hotsale-card-sold {
     margin-top: auto;
 }
 
-.qh-hotsale-section .qh-hotsale-card:hover {
-    border-color: #d1d5db;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+.qh-hotsale-sold-bar {
+    width: 100%;
+    height: 16px;
+    background: #fee2e2;
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
 }
 
-@keyframes qh-hotsale-led {
+.qh-hotsale-sold-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f87171, #dc2626);
+    border-radius: 999px;
+    min-width: 8px;
+    transition: width 0.5s;
+}
 
-    0%,
-    100% {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(220, 38, 38, 0.2), 0 0 14px rgba(220, 38, 38, 0.1);
-    }
+.qh-hotsale-sold-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #dc2626;
+    margin-top: 4px;
+}
 
-    50% {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(220, 38, 38, 0.35), 0 0 20px rgba(220, 38, 38, 0.16);
+.qh-hotsale-sold-text i {
+    font-size: 12px;
+}
+
+.qh-hotsale-empty {
+    padding: 40px 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    font-weight: 500;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.qh-hotsale-note {
+    position: relative;
+    z-index: 2;
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.3px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1300px) {
+
+    /* Khi body hẹp hơn ~1300px, 2 bên không còn chỗ cho icon trang trí */
+    .qh-hotsale-corner--tl,
+    .qh-hotsale-corner--bl,
+    .qh-hotsale-corner--tr,
+    .qh-hotsale-corner--br {
+        display: none;
     }
 }
 
 @media (max-width: 768px) {
-    .qh-hotsale-section>div:first-child {
-        flex-direction: column;
-        align-items: flex-start !important;
-        gap: 12px !important;
+    .qh-hotsale-header {
+        width: calc(100% - 24px);
+        height: 40px;
     }
 
-    .qh-hotsale-section .qh-product-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px !important;
+    .qh-hotsale-header-inner {
+        padding: 0 16px;
+    }
+
+    .qh-hotsale-body {
+        padding: 14px 6px 12px;
+    }
+
+    .qh-hotsale-time-box {
+        min-width: 26px;
+        height: 26px;
+    }
+
+    .qh-hotsale-time,
+    .qh-hotsale-sep {
+        font-size: 0.8rem;
+    }
+
+    .qh-hotsale-countdown-label {
+        font-size: 0.75rem;
+    }
+
+    .qh-hotsale-tab {
+        padding: 5px 14px;
+        font-size: 0.85rem;
     }
 }
 
 @media (max-width: 480px) {
-    .qh-hotsale-section h2 {
-        font-size: 1.2rem !important;
+    .qh-hotsale-countdown-label {
+        display: none;
+    }
+
+    .qh-hotsale-tab {
+        padding: 4px 12px;
+        font-size: 0.75rem;
     }
 }
 

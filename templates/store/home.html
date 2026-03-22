@@ -150,27 +150,84 @@
         </div>
     </div>
 
-    <!-- HOT SALE HÀNG NGÀY Section - 24h countdown + sản phẩm từ featured -->
-    <div class="qh-hotsale-section" style="margin: 32px 0; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); border-radius: 16px; overflow: hidden;">
-        <div style="padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-size: 22px;"><i class="ri-fire-fill" style="color: #fff;"></i></span>
-                <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; text-transform: uppercase;">Hot Sale Hàng Ngày</h2>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.95);">KẾT THÚC SAU</span>
-                <div class="qh-hotsale-countdown" id="qhHotsaleCountdown" data-end-timestamp="{{ hot_sale_end_timestamp|default:0 }}" style="display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.35); padding: 8px 14px; border-radius: 10px; font-variant-numeric: tabular-nums;">
-                    <span class="qh-hotsale-time" data-unit="days" style="font-size: 1.1rem; font-weight: 700; color: #fff; min-width: 28px; text-align: center;">00</span>
-                    <span style="font-weight: 700; color: rgba(255,255,255,0.9);">:</span>
-                    <span class="qh-hotsale-time" data-unit="hours" style="font-size: 1.1rem; font-weight: 700; color: #fff; min-width: 28px; text-align: center;">00</span>
-                    <span style="font-weight: 700; color: rgba(255,255,255,0.9);">:</span>
-                    <span class="qh-hotsale-time" data-unit="minutes" style="font-size: 1.1rem; font-weight: 700; color: #fff; min-width: 28px; text-align: center;">00</span>
-                    <span style="font-weight: 700; color: rgba(255,255,255,0.9);">:</span>
-                    <span class="qh-hotsale-time" data-unit="seconds" style="font-size: 1.1rem; font-weight: 700; color: #fff; min-width: 28px; text-align: center;">00</span>
+<!-- HOT SALE HÀNG NGÀY -->
+    <div class="qh-hotsale-section">
+        <!-- Header "nắp trên" — hẹp hơn body, căn giữa -->
+        <div class="qh-hotsale-header" style="background: url('/media/hotsale/2026_header_bg.png') center / 100% 100% no-repeat">
+            <div class="qh-hotsale-header-inner">
+                <div class="qh-hotsale-tabs">
+                    <span class="qh-hotsale-tab active" data-tab="suggested"><span>GỢI Ý</span></span>
+                    <span class="qh-hotsale-tab" data-tab="bestseller"><span>BÁN CHẠY</span></span>
+                    <span class="qh-hotsale-tab" data-tab="hotsale"><span>HOTSALE</span></span>
+                </div>
+                <div class="qh-hotsale-countdown-row" id="qhCountdownRow" style="display:none">
+                    <span class="qh-hotsale-countdown-label">KẾT THÚC SAU</span>
+                    <div class="qh-hotsale-countdown" id="qhHotsaleCountdown" data-end-timestamp="{{ hot_sale_end_timestamp|default:0 }}">
+                        <span class="qh-hotsale-time-box"><span class="qh-hotsale-time" data-unit="days">00</span></span>
+                        <span class="qh-hotsale-sep">:</span>
+                        <span class="qh-hotsale-time-box"><span class="qh-hotsale-time" data-unit="hours">00</span></span>
+                        <span class="qh-hotsale-sep">:</span>
+                        <span class="qh-hotsale-time-box"><span class="qh-hotsale-time" data-unit="minutes">00</span></span>
+                        <span class="qh-hotsale-sep">:</span>
+                        <span class="qh-hotsale-time-box"><span class="qh-hotsale-time" data-unit="seconds">00</span></span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="qh-hotsale-inner" style="background: #fff; padding: 20px;">
+
+        <!-- Body chính — full width, chồng lên nắp -->
+        <div class="qh-hotsale-body" style="background: url('/media/hotsale/2026_body_bg_desk.webp') center / 100% 100% no-repeat">
+            <img src="/media/hotsale/2026_left_icon.webp" alt="" class="qh-hotsale-corner qh-hotsale-corner--tl">
+            <img src="/media/hotsale/2026_left_icon.webp" alt="" class="qh-hotsale-corner qh-hotsale-corner--bl">
+            <img src="/media/hotsale/2026_right_icon.webp" alt="" class="qh-hotsale-corner qh-hotsale-corner--tr">
+            <img src="/media/hotsale/2026_right_icon.webp" alt="" class="qh-hotsale-corner qh-hotsale-corner--br">
+
+            <!-- Panel: GỢI Ý -->
+            <div class="qh-hs-panel" id="qhPanelSuggested">
+                <div class="qh-hotsale-slider-wrap">
+                    <button type="button" class="qh-slider-nav qh-hotsale-nav prev" id="qhSuggestedPrev" aria-label="Trang trước">
+                        <svg style="width:20px;height:20px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <div class="qh-hotsale-overflow">
+                        <div class="qh-hotsale-track" id="qhSuggestedTrack">
+                {% if suggested_products %}
+                {% for product in suggested_products %}
+                <a href="{% url 'store:product_detail' product.id %}" class="qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}">
+                    <div class="qh-hotsale-card-img">
+                        {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
+                    </div>
+                    <div class="qh-hotsale-card-info">
+                        <h3 class="qh-hotsale-card-name">{{ product.name }}</h3>
+                        <div class="qh-hotsale-card-price">
+                            <span class="qh-hotsale-price-now">
+                                {% if product.detail %}{{ product.detail.discounted_price|format_price_with_unit }}{% else %}{{ product.price|format_price_with_unit }}{% endif %}
+                            </span>
+                            {% if product.detail and product.detail.summary_original_price and product.detail.summary_original_price > product.detail.discounted_price %}
+                            <span class="qh-hotsale-price-old">{{ product.detail.summary_original_price|format_price_with_unit }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+                {% else %}
+                <div class="qh-hotsale-empty">Chưa có dữ liệu gợi ý.</div>
+                {% endif %}
+                        </div>
+                    </div>
+                    <button type="button" class="qh-slider-nav qh-hotsale-nav next" id="qhSuggestedNext" aria-label="Trang sau">
+                        <svg style="width:20px;height:20px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="qh-hotsale-note"></p>
+            </div><!-- /qhPanelSuggested -->
+
+            <!-- Panel: HOTSALE -->
+            <div class="qh-hs-panel" id="qhPanelHotsale" style="display:none">
+            <!-- Slider sản phẩm -->
             <div class="qh-hotsale-slider-wrap">
                 <button type="button" class="qh-slider-nav qh-hotsale-nav prev" id="qhHotsalePrev" aria-label="Trang trước">
                     <svg style="width:20px;height:20px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,88 +238,33 @@
                     <div class="qh-hotsale-track" id="qhHotsaleTrack">
                 {% if hot_sale_products and hot_sale_products|length > 0 %}
                 {% for product in hot_sale_products %}
-                <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
-                    <div class="qh-product-image" style="position: relative; aspect-ratio: 1; background: #ffffff; overflow: hidden;">
+                <a href="{% url 'store:product_detail' product.id %}" class="qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}">
+                    <div class="qh-hotsale-card-img">
                         {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% else %}
-                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--qh-text-light);">
-                            <svg style="width: 64px; height: 64px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        {% endif %}
-                        {% if product.detail and product.detail.summary_original_price and product.detail.summary_original_price > product.detail.discounted_price and product.detail.summary_discount_percent > 0 %}
-                        <div class="discount-badge">
-                            -{{ product.detail.summary_discount_percent }}%
-                        </div>
-                        {% endif %}
-                        {% if product.id in wishlist_product_ids %}
-                        <button class="wishlist-btn liked" data-product-id="{{ product.id }}" onclick="toggleWishlist(this, {{ product.id }}); return false;">
-                        {% else %}
-                        <button class="wishlist-btn" data-product-id="{{ product.id }}" onclick="toggleWishlist(this, {{ product.id }}); return false;">
-                        {% endif %}
-                            <svg viewBox="0 0 24 24" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </button>
-                        {% if product.stock == 0 %}
-                        <div class="out-of-stock-overlay"></div>
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
                         {% endif %}
                     </div>
-                    <div class="qh-product-info" style="padding: 12px 14px 14px; border-top: 1px solid #f0f0f0;">
-                        <h3 class="qh-product-name" style="font-size: 17px; font-weight: 600; color: var(--qh-text); margin-bottom: 4px; line-height: 1.4; min-height: 44px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                            {{ product.name }}
-                        </h3>
-                        <div class="qh-product-price" style="margin-bottom: 6px;">
-                            {% if product.detail and product.detail.summary_original_price and product.detail.summary_original_price > product.detail.discounted_price and product.detail.summary_discount_percent > 0 %}
-                            <span style="font-size: 13px; color: #999; text-decoration: line-through; display: block; margin-bottom: 1px;">
-                                {{ product.detail.summary_original_price|format_price_with_unit }}
-                            </span>
-                            <span style="font-size: 18px; font-weight: 700; color: #dc2626;">
-                                {{ product.detail.discounted_price|format_price_with_unit }}
-                            </span>
-                            {% else %}
-                            <span style="font-size: 18px; font-weight: 700; color: var(--qh-primary);">
+                    <div class="qh-hotsale-card-info">
+                        <h3 class="qh-hotsale-card-name">{{ product.name }}</h3>
+                        <div class="qh-hotsale-card-price">
+                            <span class="qh-hotsale-price-now">
                                 {% if product.detail %}{{ product.detail.discounted_price|format_price_with_unit }}{% else %}{{ product.price|format_price_with_unit }}{% endif %}
                             </span>
+                            {% if product.detail and product.detail.summary_original_price and product.detail.summary_original_price > product.detail.discounted_price %}
+                            <span class="qh-hotsale-price-old">{{ product.detail.summary_original_price|format_price_with_unit }}</span>
                             {% endif %}
                         </div>
-                        <div style="display: flex; gap: 6px; margin-bottom: 10px;">
-                            {% if product.stock > 0 %}
-                            <span style="font-size: 11px; color: #059669; font-weight: 600; background: #d1fae5; padding: 4px 8px; border-radius: 4px; flex: 1; text-align: center;">
-                                Còn hàng
-                            </span>
-                            <span style="font-size: 11px; color: #d97706; font-weight: 600; background: #fef3c7; padding: 4px 8px; border-radius: 4px; flex: 1; text-align: center;">
-                                Trả góp 0%
-                            </span>
-                            {% else %}
-                            <span style="font-size: 11px; color: #dc2626; font-weight: 600; background: #fee2e2; padding: 4px 8px; border-radius: 4px; flex: 1; text-align: center;">
-                                Hết hàng
-                            </span>
-                            {% endif %}
-                        </div>
-                        <div style="display: flex; gap: 6px;">
-                            <button class="qh-btn qh-cart-quick-btn"
-                                    onclick="event.preventDefault();event.stopPropagation();quickAddToCart({{ product.id }})"
-                                    style="flex: 1; padding: 8px 4px; font-size: 12px; border: 1px solid #b91c1c; background: #b91c1c; color: #fff; border-radius: 6px; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center; gap:4px; {% if product.stock == 0 %}opacity: 0.5; pointer-events: none;{% endif %}">
-                                <i class="ri-shopping-cart-2-line"></i> Thêm giỏ
-                            </button>
-                            <button class="qh-btn qh-btn-outline qh-compare-btn"
-                                    data-product-id="{{ product.id }}"
-                                    data-product-name="{{ product.name }}"
-                                    data-product-image="{% if product.image %}{{ product.image.url }}{% else %}{% endif %}"
-                                    data-product-price="{% if product.detail %}{{ product.detail.discounted_price|format_price_with_unit }}{% else %}{{ product.price|format_price_with_unit }}{% endif %}"
-                                    onclick="event.preventDefault();event.stopPropagation();QHCompare.addToCompare({{ product.id }}, this.dataset.productName, this.dataset.productImage, this.dataset.productPrice)"
-                                    style="flex: 1; padding: 8px 4px; font-size: 12px; border: 1px solid var(--qh-border); background: transparent; border-radius: 6px; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center; gap:4px;">
-                                <i class="ri-arrow-left-right-line"></i> So sánh
-                            </button>
+                        <div class="qh-hotsale-card-sold">
+                            <div class="qh-hotsale-sold-bar">
+                                <div class="qh-hotsale-sold-fill" style="width: {% if product.stock > 0 %}{% widthratio product.sold_count product.stock 100 %}{% else %}0{% endif %}%"></div>
+                            </div>
+                            <span class="qh-hotsale-sold-text"><i class="ri-fire-fill"></i> Đã bán {{ product.sold_count|default:0 }}/{{ product.stock }} suất</span>
                         </div>
                     </div>
                 </a>
                 {% endfor %}
                 {% else %}
-                <div style="padding: 40px 0; text-align: center; color: #888; font-size: 1.1rem; font-weight: 500; white-space: nowrap;">Chưa có sản phẩm hot sale.</div>
+                <div class="qh-hotsale-empty">Chưa có sản phẩm hot sale.</div>
                 {% endif %}
                     </div>
                 </div>
@@ -272,128 +274,57 @@
                     </svg>
                 </button>
             </div>
+
+            <p class="qh-hotsale-note"></p>
+            </div><!-- /qhPanelHotsale -->
+
+            <!-- Panel: BÁN CHẠY -->
+            <div class="qh-hs-panel" id="qhPanelBestseller" style="display:none">
+                <div class="qh-hotsale-slider-wrap">
+                    <button type="button" class="qh-slider-nav qh-hotsale-nav prev" id="qhBestsellerPrev" aria-label="Trang trước">
+                        <svg style="width:20px;height:20px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <div class="qh-hotsale-overflow">
+                        <div class="qh-hotsale-track" id="qhBestsellerTrack">
+                {% if best_sellers %}
+                {% for item in best_sellers %}{% with product=item.product %}
+                <a href="{% url 'store:product_detail' product.id %}" class="qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}">
+                    <div class="qh-hotsale-card-img">
+                        {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
+                    </div>
+                    <div class="qh-hotsale-card-info">
+                        <h3 class="qh-hotsale-card-name">{{ product.name }}</h3>
+                        <div class="qh-hotsale-card-price">
+                            <span class="qh-hotsale-price-now">
+                                {% if product.detail %}{{ product.detail.discounted_price|format_price_with_unit }}{% else %}{{ product.price|format_price_with_unit }}{% endif %}
+                            </span>
+                            {% if product.detail and product.detail.summary_original_price and product.detail.summary_original_price > product.detail.discounted_price %}
+                            <span class="qh-hotsale-price-old">{{ product.detail.summary_original_price|format_price_with_unit }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="qh-hotsale-card-sold">
+                            <span class="qh-hotsale-sold-text"><i class="ri-fire-fill"></i> Đã bán {{ item.total_sold }} sp</span>
+                        </div>
+                    </div>
+                </a>
+                {% endwith %}{% endfor %}
+                {% else %}
+                <div class="qh-hotsale-empty">Chưa có dữ liệu bán chạy.</div>
+                {% endif %}
+                        </div>
+                    </div>
+                    <button type="button" class="qh-slider-nav qh-hotsale-nav next" id="qhBestsellerNext" aria-label="Trang sau">
+                        <svg style="width:20px;height:20px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="qh-hotsale-note"></p>
+            </div><!-- /qhPanelBestseller -->
         </div>
     </div>
-
-    <!-- SẢN PHẨM BÁN CHẠY: banner ảnh + box đỏ liền mạch -->
-    {% if best_sellers %}
-    <section class="qh-bestseller-section" aria-labelledby="qh-bestseller-heading">
-        <div class="qh-bestseller-shell">
-            {% if best_seller_banner and best_seller_banner.image %}
-            <div class="qh-bestseller-banner-wrap" aria-hidden="true">
-                <img src="{{ best_seller_banner.image.url }}" alt="" class="qh-bestseller-banner-img" loading="lazy">
-            </div>
-            {% endif %}
-
-            <div class="qh-bestseller-box">
-
-                <div class="qh-bestseller-grid">
-        {% for item in best_sellers %}
-        {% with product=item.product %}
-        <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
-            
-            <!-- Ảnh sản phẩm -->
-            <div class="qh-product-image" style="position: relative; aspect-ratio: 1; background: #ffffff; overflow: hidden;">
-                
-                {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                {% else %}
-                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--qh-text-light);">
-                    <svg style="width: 64px; height: 64px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                </div>
-                {% endif %}
-                
-                <!-- Huy hiệu giảm giá -->
-                {% if product.detail and product.detail.summary_original_price and product.detail.summary_original_price > product.detail.discounted_price and product.detail.summary_discount_percent > 0 %}
-                <div class="discount-badge">
-                    -{{ product.detail.summary_discount_percent }}%
-                </div>
-                {% endif %}
-                
-                <!-- Nút tim danh sách yêu thích -->
-                {% if product.id in wishlist_product_ids %}
-                <button class="wishlist-btn liked" data-product-id="{{ product.id }}" onclick="toggleWishlist(this, {{ product.id }}); return false;">
-                {% else %}
-                <button class="wishlist-btn" data-product-id="{{ product.id }}" onclick="toggleWishlist(this, {{ product.id }}); return false;">
-                {% endif %}
-                    <svg viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                    </svg>
-                </button>
-                
-                <!-- Lớp phủ hết hàng -->
-                {% if product.stock == 0 %}
-                <div class="out-of-stock-overlay"></div>
-                {% endif %}
-            </div>
-            
-            <!-- Thông tin sản phẩm -->
-            <div class="qh-product-info" style="padding: 12px 14px 14px; border-top: 1px solid #f0f0f0;">
-                <!-- Tên sản phẩm -->
-                <h3 class="qh-product-name" style="font-size: 17px; font-weight: 600; color: var(--qh-text); margin-bottom: 4px; line-height: 1.4; min-height: 44px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                    {{ product.name }}
-                </h3>
-                
-                <!-- Giá -->
-                <div class="qh-product-price" style="margin-bottom: 6px;">
-                    {% if product.detail and product.detail.summary_original_price and product.detail.summary_original_price > product.detail.discounted_price and product.detail.summary_discount_percent > 0 %}
-                    <span style="font-size: 13px; color: #999; text-decoration: line-through; display: block; margin-bottom: 1px;">
-                        {{ product.detail.summary_original_price|format_price_with_unit }}
-                    </span>
-                    <span style="font-size: 18px; font-weight: 700; color: #dc2626;">
-                        {{ product.detail.discounted_price|format_price_with_unit }}
-                    </span>
-                    {% else %}
-                    <span style="font-size: 18px; font-weight: 700; color: var(--qh-primary);">
-                        {% if product.detail %}{{ product.detail.discounted_price|format_price_with_unit }}{% else %}{{ product.price|format_price_with_unit }}{% endif %}
-                    </span>
-                    {% endif %}
-                </div>
-                
-                <!-- Hàng hiển thị trạng thái sản phẩm -->
-                <div style="display: flex; gap: 6px; margin-bottom: 10px;">
-                    {% if product.stock > 0 %}
-                    <span style="font-size: 11px; color: #059669; font-weight: 600; background: #d1fae5; padding: 4px 8px; border-radius: 4px; flex: 1; text-align: center;">
-                        Còn hàng
-                    </span>
-                    <span style="font-size: 11px; color: #d97706; font-weight: 600; background: #fef3c7; padding: 4px 8px; border-radius: 4px; flex: 1; text-align: center;">
-                        Trả góp 0%
-                    </span>
-                    {% else %}
-                    <span style="font-size: 11px; color: #dc2626; font-weight: 600; background: #fee2e2; padding: 4px 8px; border-radius: 4px; flex: 1; text-align: center;">
-                        Hết hàng
-                    </span>
-                    {% endif %}
-                </div>
-                
-                <!-- Các nút hành động -->
-                <div style="display: flex; gap: 6px;">
-                    <button class="qh-btn qh-cart-quick-btn"
-                            onclick="event.preventDefault();event.stopPropagation();quickAddToCart({{ product.id }})"
-                            style="flex: 1; padding: 8px 4px; font-size: 12px; border: 1px solid #b91c1c; background: #b91c1c; color: #fff; border-radius: 6px; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center; gap:4px; {% if product.stock == 0 %}opacity: 0.5; pointer-events: none;{% endif %}">
-                        <i class="ri-shopping-cart-2-line"></i> Thêm giỏ
-                    </button>
-                    <button class="qh-btn qh-btn-outline qh-compare-btn"
-                            data-product-id="{{ product.id }}"
-                            data-product-name="{{ product.name }}"
-                            data-product-image="{% if product.image %}{{ product.image.url }}{% else %}{% endif %}"
-                            data-product-price="{% if product.detail %}{{ product.detail.discounted_price|format_price_with_unit }}{% else %}{{ product.price|format_price_with_unit }}{% endif %}"
-                            onclick="event.preventDefault();event.stopPropagation();QHCompare.addToCompare({{ product.id }}, this.dataset.productName, this.dataset.productImage, this.dataset.productPrice)"
-                            style="flex: 1; padding: 8px 4px; font-size: 12px; border: 1px solid var(--qh-border); background: transparent; border-radius: 6px; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center; gap:4px;">
-                        <i class="ri-arrow-left-right-line"></i> So sánh
-                    </button>
-                </div>
-            </div>
-        </a>
-        {% endwith %}
-        {% endfor %}
-                </div>
-            </div>
-        </div>
-    </section>
-    {% endif %}
     
     {% if products %}
     <!-- Tiêu đề phần -->
@@ -464,7 +395,7 @@
     <div class="qh-advanced-filter-overlay" id="qhAdvancedFilterOverlay"></div>
     <aside class="qh-advanced-filter-drawer" id="qhAdvancedFilterDrawer" aria-hidden="true">
         <div class="qh-advanced-filter-head">
-            <h3>CHỌN THÔNG SỐ BẠN YÊU THÍCH</h3>
+            <h3>CHỌN THÔNG SỐ YÊU THÍCH</h3>
             <button type="button" class="qh-advanced-filter-close" id="qhAdvancedFilterClose" aria-label="Đóng bộ lọc">×</button>
         </div>
         <div class="qh-advanced-filter-body" id="qhAdvancedFilterBody">
@@ -1172,18 +1103,17 @@ function toggleWishlist(button, productId) {
 <script src="{% static 'js/home.js' %}"></script>
 <script>
 (function() {
-    // ---- Hot Sale Slider ----
-    var track = document.getElementById('qhHotsaleTrack');
-    var prevBtn = document.getElementById('qhHotsalePrev');
-    var nextBtn = document.getElementById('qhHotsaleNext');
-    if (track && prevBtn && nextBtn) {
+    // ---- Shared slider factory ----
+    function initSlider(trackId, prevId, nextId) {
+        var track = document.getElementById(trackId);
+        var prevBtn = document.getElementById(prevId);
+        var nextBtn = document.getElementById(nextId);
+        if (!track || !prevBtn || !nextBtn) return;
         var overflow = track.parentElement;
         var VISIBLE = 5;
-        var GAP = 16;
-        var page = 0;
-
+        var GAP = 12;
+        var index = 0;
         function getCards() { return track.querySelectorAll('.qh-hotsale-card'); }
-
         function setCardWidths() {
             var w = overflow.offsetWidth;
             var cardW = Math.floor((w - GAP * (VISIBLE - 1)) / VISIBLE);
@@ -1192,25 +1122,52 @@ function toggleWishlist(button, productId) {
                 c.style.width = cardW + 'px';
             });
         }
-
-        function totalPages() { return Math.ceil(getCards().length / VISIBLE); }
-
-        function goTo(p) {
+        function goTo(i) {
+            var total = getCards().length;
+            var maxIndex = Math.max(0, total - VISIBLE);
+            index = Math.min(Math.max(i, 0), maxIndex);
             var w = overflow.offsetWidth;
             var cardW = Math.floor((w - GAP * (VISIBLE - 1)) / VISIBLE);
-            var offset = p * (cardW + GAP) * VISIBLE;
+            var offset = index * (cardW + GAP);
             track.style.transform = 'translateX(-' + offset + 'px)';
-            page = p;
-            prevBtn.disabled = (page === 0);
-            nextBtn.disabled = (page >= totalPages() - 1);
+            prevBtn.disabled = (index === 0);
+            nextBtn.disabled = (index >= maxIndex);
         }
-
         setCardWidths();
         goTo(0);
-        prevBtn.addEventListener('click', function() { if (page > 0) goTo(page - 1); });
-        nextBtn.addEventListener('click', function() { if (page < totalPages() - 1) goTo(page + 1); });
-        window.addEventListener('resize', function() { setCardWidths(); goTo(page); });
+        prevBtn.addEventListener('click', function() { goTo(index - 1); });
+        nextBtn.addEventListener('click', function() { goTo(index + 1); });
+        window.addEventListener('resize', function() { setCardWidths(); goTo(index); });
     }
+
+    // ---- Gợi ý Slider (active by default) ----
+    initSlider('qhSuggestedTrack', 'qhSuggestedPrev', 'qhSuggestedNext');
+
+    // ---- Tab switching ----
+    var tabs = document.querySelectorAll('.qh-hotsale-tab');
+    var panels = {
+        suggested: document.getElementById('qhPanelSuggested'),
+        bestseller: document.getElementById('qhPanelBestseller'),
+        hotsale: document.getElementById('qhPanelHotsale'),
+    };
+    var countdownRow = document.getElementById('qhCountdownRow');
+    var inited = { suggested: true, bestseller: false, hotsale: false };
+    tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            var name = this.dataset.tab;
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            this.classList.add('active');
+            Object.keys(panels).forEach(function(k) {
+                if (panels[k]) panels[k].style.display = (k === name) ? '' : 'none';
+            });
+            if (countdownRow) countdownRow.style.display = (name === 'hotsale') ? '' : 'none';
+            if (!inited[name]) {
+                inited[name] = true;
+                if (name === 'bestseller') initSlider('qhBestsellerTrack', 'qhBestsellerPrev', 'qhBestsellerNext');
+                if (name === 'hotsale') initSlider('qhHotsaleTrack', 'qhHotsalePrev', 'qhHotsaleNext');
+            }
+        });
+    });
 
     // ---- Countdown 24h ----
     var endEl = document.getElementById('qhHotsaleCountdown');
