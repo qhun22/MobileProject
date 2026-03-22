@@ -223,6 +223,7 @@
     <a class="da-nav-item{% if request.GET.section == 'product-content' %} active{% endif %}" onclick="window.location.href='?section=product-content'" data-section="product-content">THÔNG TIN SẢN PHẨM</a>
     <a class="da-nav-item{% if request.GET.section == 'reviews' %} active{% endif %}" onclick="window.location.href='?section=reviews'" data-section="reviews">ĐÁNH GIÁ SẢN PHẨM</a>
     <a class="da-nav-item{% if request.GET.section == 'blog-posts' %} active{% endif %}" onclick="window.location.href='?section=blog-posts'" data-section="blog-posts">BLOG SẢN PHẨM</a>
+    <a class="da-nav-item{% if request.GET.section == 'hot-sale' %} active{% endif %}" onclick="window.location.href='?section=hot-sale'" data-section="hot-sale">HOT SALE</a>
     <!-- hidden compat elements for dashboard.js -->
     <ul id="qhSidebarMenu" style="display:none;"></ul>
     <div id="qhSidebarPagination" style="display:none;"></div>
@@ -911,6 +912,75 @@
                 <div style="padding: 16px 24px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0;">
                     <button type="button" onclick="closeAddBlogModal()" style="padding: 10px 20px; background: #f1f5f9; color: #334155; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-family: 'Signika', sans-serif;">Hủy</button>
                     <button type="button" onclick="saveBlog()" style="padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-family: 'Signika', sans-serif; font-weight: 500;">Lưu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Phần quản lý Hot Sale ==================== -->
+        <div id="hot-sale-section" style="display: none;">
+            <div class="da-toolbar">
+                <span style="font-size:15px;font-weight:700;color:#1e293b;">Quản lý Hot Sale</span>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <button type="button" onclick="openAddHotSaleModal()" class="da-btn da-btn-md da-btn-primary">+ Thêm sản phẩm</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;margin-top:20px;">
+                <table style="width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.07);border:1px solid #e2e8f0;">
+                    <thead>
+                        <tr style="background:#f8fafc;border-bottom:1px solid #e2e8f0;">
+                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">STT</th>
+                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">Ảnh</th>
+                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;">Tên sản phẩm</th>
+                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">Thứ tự</th>
+                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">Trạng thái</th>
+                            <th style="padding:12px 16px;text-align:left;font-size:13px;font-weight:600;color:#64748b;white-space:nowrap;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hotSaleTableBody">
+                        <tr><td colspan="6" style="padding:40px;text-align:center;color:#94a3b8;font-size:14px;">Đang tải...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="hotSalePagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:20px;padding:16px;"></div>
+        </div>
+
+        <!-- Modal thêm sản phẩm Hot Sale -->
+        <div id="addHotSaleModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+            <div onclick="event.stopPropagation()" style="background:white;border-radius:12px;width:520px;max-width:94%;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid #e2e8f0;flex-shrink:0;">
+                    <h3 style="font-size:18px;font-weight:600;font-family:'Signika',sans-serif;margin:0;color:#1e293b;">Thêm sản phẩm Hot Sale</h3>
+                    <button type="button" onclick="closeAddHotSaleModal()" class="da-btn da-btn-md da-btn-ghost">Đóng</button>
+                </div>
+                <div style="padding:20px 24px;overflow-y:auto;flex:1;">
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block;font-size:14px;font-weight:600;color:#1e293b;margin-bottom:6px;">Tìm sản phẩm *</label>
+                        <div style="position:relative;">
+                            <input type="text" id="hotSaleSearchInput" placeholder="Nhập tên sản phẩm để tìm kiếm..." oninput="searchHotSaleProduct(this.value)" autocomplete="off"
+                                style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;font-family:'Signika',sans-serif;outline:none;">
+                            <div id="hotSaleSearchResults" style="display:none;position:absolute;top:100%;left:0;right:0;background:white;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);max-height:220px;overflow-y:auto;z-index:10;margin-top:4px;"></div>
+                        </div>
+                        <div id="hotSaleSelectedProduct" style="display:none;margin-top:10px;padding:10px 12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;display:flex;align-items:center;gap:10px;">
+                            <img id="hotSaleSelectedImg" src="" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid #e2e8f0;">
+                            <div>
+                                <div id="hotSaleSelectedName" style="font-size:14px;font-weight:600;color:#166534;font-family:'Signika',sans-serif;"></div>
+                                <div id="hotSaleSelectedBrand" style="font-size:12px;color:#4ade80;"></div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="hotSaleProductId">
+                    </div>
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block;font-size:14px;font-weight:600;color:#1e293b;margin-bottom:6px;">Thứ tự hiển thị</label>
+                        <input type="number" id="hotSaleSortOrder" value="0" min="0" style="width:120px;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;font-family:'Signika',sans-serif;">
+                        <span style="font-size:12px;color:#94a3b8;margin-left:8px;">Số nhỏ hiển thị trước</span>
+                    </div>
+                    <div style="margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+                        <input type="checkbox" id="hotSaleIsActive" checked style="width:16px;height:16px;">
+                        <label for="hotSaleIsActive" style="font-size:14px;color:#1e293b;cursor:pointer;">Hiển thị trên trang chủ</label>
+                    </div>
+                </div>
+                <div style="padding:16px 24px;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;">
+                    <button type="button" onclick="closeAddHotSaleModal()" style="padding:10px 20px;background:#f1f5f9;color:#334155;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-family:'Signika',sans-serif;">Hủy</button>
+                    <button type="button" onclick="saveHotSaleProduct()" style="padding:10px 20px;background:#dc2626;color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-family:'Signika',sans-serif;font-weight:500;">Thêm vào Hot Sale</button>
                 </div>
             </div>
         </div>
