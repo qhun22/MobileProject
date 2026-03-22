@@ -1461,12 +1461,16 @@
     gap: 0;
 }
 
+/* Grid 4 cột cố định: [user 220px] [sao 120px] [comment 1fr] [ảnh 96px]
+   Dù có hay không có ảnh/comment, mọi hàng đều căn đều nhau. */
 .pd-review-item {
-    display: flex;
+    display: grid;
+    grid-template-columns: 220px 120px 1fr 96px;
     align-items: center;
-    justify-content: space-between;
+    gap: 12px;
     padding: 14px 0;
     border-bottom: 1px solid #e2e8f0;
+    min-height: 56px;
 }
 
 .pd-review-item:last-child {
@@ -1477,6 +1481,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    min-width: 0;
 }
 
 .pd-review-avatar {
@@ -1497,17 +1502,21 @@
 .pd-review-user-info {
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .pd-review-name {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #1e293b;
     font-family: 'Signika', sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .pd-review-date {
-    font-size: 12px;
+    font-size: 11px;
     color: #94a3b8;
     font-family: 'Signika', sans-serif;
 }
@@ -1515,16 +1524,53 @@
 .pd-review-rating {
     display: flex;
     gap: 2px;
+    justify-content: center;
 }
 
 .pd-star-sm {
     width: 16px;
     height: 16px;
     fill: #e2e8f0;
+    flex-shrink: 0;
 }
 
 .pd-star-sm.filled {
     fill: #f59e0b;
+}
+
+/* Cột comment - luôn tồn tại, fill phần giữa */
+.pd-review-text {
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.5;
+    word-break: break-word;
+    min-width: 0;
+}
+
+/* Cột ảnh - luôn tồn tại, cố định 96px bên phải */
+.pd-review-img-col {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 0;
+}
+
+.pd-review-thumb {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    display: block;
+}
+
+.pd-review-thumb:hover {
+    opacity: 0.85;
+    transform: scale(1.04);
 }
 
 /* ---- Related Products Body (inside pd-extra-box) ---- */
@@ -1716,10 +1762,15 @@
     }
 
     .pd-review-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 6px 12px;
     }
+    /* user: cột 1 hàng 1, sao: cột 2 hàng 1, comment: span 2 hàng 2, ảnh: span 2 hàng 3 */
+    .pd-review-user { grid-column: 1; grid-row: 1; }
+    .pd-review-rating { grid-column: 2; grid-row: 1; justify-content: flex-end; }
+    .pd-review-text { grid-column: 1 / -1; grid-row: 2; }
+    .pd-review-img-col { grid-column: 1 / -1; grid-row: 3; justify-content: flex-start; }
 }
 
 @media (max-width: 480px) {
