@@ -277,14 +277,12 @@ function qhLoadRefundData() {
                 html += '<th style="padding:8px;text-align:left;font-weight:600;color:#64748b;">Mã đơn</th>';
                 html += '<th style="padding:8px;text-align:left;font-weight:600;color:#64748b;">Sản phẩm</th>';
                 html += '<th style="padding:8px;text-align:center;font-weight:600;color:#64748b;">Trạng thái</th>';
-                html += '<th style="padding:8px;text-align:center;font-weight:600;color:#64748b;">Xem</th>';
                 html += '</tr></thead><tbody>';
                 data.orders.forEach(function (o) {
                     html += '<tr style="border-bottom:1px solid #f1f5f9;">';
                     html += '<td style="padding:8px;color:#3b82f6;font-weight:600;">' + o.order_code + '</td>';
                     html += '<td style="padding:8px;color:#1e293b;">' + (o.items.length > 0 ? o.items[0].product_name : '—') + '</td>';
                     html += '<td style="padding:8px;text-align:center;"><span class="qh-ot-badge cancelled">Chờ hoàn tiền</span></td>';
-                    html += '<td style="padding:8px;text-align:center;"><button onclick="qhShowRefundDetail(\'' + o.order_code + '\')" style="padding:4px 12px;background:#3b82f6;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:12px;">Xem</button></td>';
                     html += '</tr>';
                 });
                 html += '</tbody></table>';

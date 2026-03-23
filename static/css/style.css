@@ -679,6 +679,14 @@ body {
     color: #ef4444;
 }
 
+.qh-toast-warning {
+    border-left: 4px solid #f59e0b;
+}
+
+.qh-toast-warning .qh-toast-icon {
+    color: #f59e0b;
+}
+
 /* ==================== MODAL STYLES ==================== */
 .qh-modal {
     position: fixed;

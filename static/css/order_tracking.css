@@ -159,6 +159,11 @@
     color: #991b1b;
 }
 
+.qh-ot-badge.payment_expired {
+    background: #fef3c7;
+    color: #92400e;
+}
+
 .qh-ot-badge.refunding {
     background: #fce7f3;
     color: #9d174d;

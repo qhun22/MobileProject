@@ -1,8 +1,18 @@
 /* ==================== PROFILE PAGE STYLES ==================== */
 
+:root {
+    --qh-pf-section-gap: 32px;
+    --qh-pf-section-title-gap: 20px;
+    --qh-pf-box-padding: 16px;
+    --qh-pf-box-radius: 10px;
+    --qh-pf-fixed-panel-height: 420px;
+    --qh-pf-fixed-card-height: 148px;
+    --qh-pf-order-card-height: 180px;
+}
+
 /* Page Container */
 .qh-profile-page {
-    /* Inherits from .qh-main */
+    display: block;
 }
 
 /* ---- User Info Card (top) ---- */
@@ -376,7 +386,7 @@
 .qh-pf-addr-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 32px;
+    gap: var(--qh-pf-section-gap);
 }
 
 .qh-pf-addr-section {
@@ -388,7 +398,7 @@
     font-size: 18px;
     font-weight: 700;
     color: var(--qh-text);
-    margin-bottom: 20px;
+    margin-bottom: var(--qh-pf-section-title-gap);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -450,8 +460,8 @@
 
 .qh-pf-addr-card {
     border: 1.5px solid var(--qh-border);
-    border-radius: 10px;
-    padding: 16px;
+    border-radius: var(--qh-pf-box-radius);
+    padding: var(--qh-pf-box-padding);
     position: relative;
     transition: all 0.2s;
 }
@@ -550,7 +560,8 @@
 .qh-pf-pw-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 32px;
+    gap: var(--qh-pf-section-gap);
+    align-items: start;
 }
 
 .qh-pf-pw-section {
@@ -562,7 +573,7 @@
     font-size: 18px;
     font-weight: 700;
     color: var(--qh-text);
-    margin-bottom: 20px;
+    margin-bottom: var(--qh-pf-section-title-gap);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -586,6 +597,7 @@
     display: flex;
     flex-direction: column;
     gap: 0;
+    min-height: var(--qh-pf-fixed-panel-height);
 }
 
 .qh-pf-pw-pagination {
@@ -812,15 +824,18 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
+    align-items: stretch;
 }
 
 .qh-pf-coupon-card {
     background: white;
-    border-radius: 12px;
+    border-radius: var(--qh-pf-box-radius);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     overflow: hidden;
     display: flex;
     border: 1px solid #e2e8f0;
+    min-height: var(--qh-pf-fixed-card-height);
+    height: var(--qh-pf-fixed-card-height);
 }
 
 /* Responsive Coupon Grid */
@@ -841,17 +856,20 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
+    align-items: stretch;
 }
 
 .qh-pf-order-card {
     background: var(--qh-white);
     border: 1px solid var(--qh-border);
-    border-radius: 10px;
-    padding: 16px;
+    border-radius: var(--qh-pf-box-radius);
+    padding: var(--qh-pf-box-padding);
     display: flex;
     flex-direction: column;
     gap: 8px;
     transition: box-shadow 0.2s;
+    min-height: var(--qh-pf-order-card-height);
+    height: var(--qh-pf-order-card-height);
 }
 
 .qh-pf-order-card:hover {
@@ -878,6 +896,7 @@
     color: var(--qh-text);
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -1007,38 +1026,17 @@
 }
 
 /* ---- Refund Section ---- */
-.qh-pf-refund-split {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+.qh-pf-refund-body {
+    min-height: var(--qh-pf-fixed-panel-height);
+    max-height: var(--qh-pf-fixed-panel-height);
+    overflow-y: auto;
 }
 
-.qh-pf-refund-list {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+.qh-pf-refund-loading {
+    color: #94a3b8;
+    font-size: 14px;
+    text-align: center;
     padding: 20px;
-}
-
-.qh-pf-refund-list h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--qh-text);
-    margin-bottom: 16px;
-}
-
-.qh-pf-refund-history {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    padding: 20px;
-}
-
-.qh-pf-refund-history h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--qh-text);
-    margin-bottom: 16px;
 }
 
 /* Refund Table */
@@ -1107,6 +1105,11 @@
     font-weight: 500;
 }
 
+.qh-pf-student-status-badge i {
+    font-size: 20px;
+    line-height: 1;
+}
+
 .qh-pf-student-status-badge svg {
     width: 20px;
     height: 20px;
@@ -1123,101 +1126,181 @@
     margin-bottom: 12px;
     min-height: 20px;
 }
-
-.qh-pf-student-voucher-code {
-    text-align: center;
-    padding: 24px;
-    background: linear-gradient(135deg, #dbeafe, #e0e7ff);
-    border-radius: 12px;
+/* ---- Match Address Book sizing across profile tabs ---- */
+#tab-password .qh-pf-pw-section,
+#tab-student .qh-pf-pw-section,
+#tab-refund .qh-pf-pw-section {
+    min-height: calc(var(--qh-pf-fixed-panel-height) + var(--qh-pf-section-title-gap) + 28px);
 }
 
-.qh-pf-student-voucher-code-title {
-    font-size: 18px;
+#tab-password .qh-pf-form,
+#tab-student .qh-pf-form {
+    min-height: var(--qh-pf-fixed-panel-height);
+}
+
+#tab-coupon #couponGridContainer,
+#tab-history {
+    min-height: calc(var(--qh-pf-fixed-panel-height) + 44px);
+}
+
+#tab-coupon .qh-pf-coupon-grid {
+    min-height: var(--qh-pf-fixed-panel-height);
+}
+
+#tab-history .qh-pf-order-grid {
+    min-height: var(--qh-pf-fixed-panel-height);
+}
+
+#tab-coupon .qh-pf-coupon-card,
+#tab-coupon .qh-pf-coupon-grid > .qh-pf-coupon-card,
+#tab-history .qh-pf-order-card {
+    width: 100%;
+}
+
+/* Voucher ticket card */
+.qh-pf-voucher-ticket {
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+.qh-pf-voucher-ticket-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
+    background: var(--qh-primary);
+    color: #fff;
+    min-width: 100px;
+    position: relative;
+}
+
+.qh-pf-voucher-ticket-left::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 0;
+    bottom: 0;
+    width: 16px;
+    background: radial-gradient(circle at 0 12px, transparent 8px, #fff 8px) 0 -4px / 16px 24px repeat-y;
+}
+
+.qh-pf-voucher-ticket-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    opacity: 0.9;
+}
+
+.qh-pf-voucher-ticket-discount {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.qh-pf-voucher-ticket-off {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-top: 2px;
+}
+
+.qh-pf-voucher-ticket-right {
+    flex: 1;
+    padding: 20px 20px 20px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+.qh-pf-voucher-ticket-title {
+    font-size: 16px;
     font-weight: 700;
     color: var(--qh-text);
-    margin-bottom: 16px;
 }
 
-.qh-pf-student-voucher-code-discount {
-    font-size: 36px;
-    font-weight: 800;
-    color: #dc2626;
-    margin-bottom: 8px;
-}
-
-.qh-pf-student-voucher-code-limit {
-    font-size: 14px;
-    color: var(--qh-text-light);
-    margin-bottom: 16px;
-}
-
-.qh-pf-student-voucher-code-box {
-    background: white;
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-}
-
-.qh-pf-student-voucher-code-label {
-    font-size: 12px;
-    color: var(--qh-text-light);
-    margin-bottom: 4px;
-}
-
-.qh-pf-student-voucher-code-value {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--qh-primary);
-    letter-spacing: 2px;
-}
-
-.qh-pf-student-voucher-code-expire {
+.qh-pf-voucher-ticket-limit {
     font-size: 13px;
     color: var(--qh-text-light);
 }
 
-.qh-pf-student-voucher-used {
+.qh-pf-voucher-ticket-code {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    padding: 24px;
-    background: #fef3c7;
-    border-radius: 12px;
+    margin-top: 4px;
+}
+
+.qh-pf-voucher-ticket-code-label {
+    font-size: 13px;
+    color: var(--qh-text-light);
+}
+
+.qh-pf-voucher-ticket-code-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--qh-primary);
+    letter-spacing: 2px;
+    background: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+
+.qh-pf-voucher-ticket-expire {
+    font-size: 13px;
+    color: var(--qh-text-light);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.qh-pf-voucher-ticket-expire i {
+    font-size: 14px;
+}
+
+.qh-pf-student-voucher-used {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #d1fae5;
+    color: #059669;
+    border-radius: 8px;
+    font-weight: 500;
 }
 
 .qh-pf-student-voucher-used-icon {
-    width: 24px;
-    height: 24px;
-    color: #d97706;
+    font-size: 20px;
+    line-height: 1;
 }
 
 .qh-pf-student-voucher-used-text {
-    font-size: 16px;
-    font-weight: 600;
-    color: #d97706;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .qh-pf-student-voucher-expired {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    padding: 24px;
+    padding: 8px 16px;
     background: #fee2e2;
-    border-radius: 12px;
+    color: #dc2626;
+    border-radius: 8px;
+    font-weight: 500;
 }
 
 .qh-pf-student-voucher-expired-icon {
-    width: 24px;
-    height: 24px;
-    color: #dc2626;
+    font-size: 20px;
+    line-height: 1;
 }
 
 .qh-pf-student-voucher-expired-text {
-    font-size: 16px;
-    font-weight: 600;
-    color: #dc2626;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 /* ============================================

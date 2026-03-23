@@ -8,7 +8,7 @@ const QHToast = {
      * Hiển thị thông báo thành công
      * @param {string} message - Nội dung thông báo
      */
-    success: function(message) {
+    success: function (message) {
         this.show(message, 'success');
     },
 
@@ -16,16 +16,24 @@ const QHToast = {
      * Hiển thị thông báo lỗi
      * @param {string} message - Nội dung thông báo lỗi
      */
-    error: function(message) {
+    error: function (message) {
         this.show(message, 'error');
+    },
+
+    /**
+     * Hiển thị cảnh báo
+     * @param {string} message - Nội dung cảnh báo
+     */
+    warning: function (message) {
+        this.show(message, 'warning');
     },
 
     /**
      * Hiển thị thông báo
      * @param {string} message - Nội dung thông báo
-     * @param {string} type - Loại thông báo (success/error)
+     * @param {string} type - Loại thông báo (success/error/warning)
      */
-    show: function(message, type = 'success') {
+    show: function (message, type = 'success') {
         // Tạo container nếu chưa có
         let container = document.querySelector('.qh-toast-container');
         if (!container) {
@@ -37,12 +45,15 @@ const QHToast = {
         // Tạo toast element
         const toast = document.createElement('div');
         toast.className = `qh-toast qh-toast-${type}`;
-        
+
         // Thêm icon dựa trên loại thông báo
-        const icon = type === 'success' 
-            ? '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>'
-            : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
-        
+        const icons = {
+            success: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+            error: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+            warning: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>'
+        };
+        const icon = icons[type] || icons.success;
+
         toast.innerHTML = `
             <span class="qh-toast-icon">${icon}</span>
             <span class="qh-toast-text">${message}</span>
@@ -61,7 +72,7 @@ const QHToast = {
         setTimeout(() => {
             toast.classList.remove('qh-toast-show');
             toast.classList.add('qh-toast-hide');
-            
+
             setTimeout(() => {
                 toast.remove();
             }, 300);

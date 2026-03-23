@@ -44,7 +44,7 @@
 }
 
 .qh-compare-bar-items.qh-compare-bar-items--has-items {
-    /* kept for compatibility */
+    display: grid;
 }
 
 .qh-compare-empty-state {
@@ -95,7 +95,7 @@
 }
 
 .qh-compare-bar-items.qh-compare-bar-items--full .qh-compare-bar-item {
-    /* already handled by base item styles */
+    max-width: none;
 }
 
 .qh-compare-bar-item img {
