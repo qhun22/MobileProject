@@ -14,3 +14,7 @@
 2026-03-22 17:08:42,718 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1774174118718_g9t18t intent=unknown source=local engine=django_local latency_ms=3998
 2026-03-22 22:12:42,857 | INFO | store.chatbot.api | chatbot_api request_id=fb4fb8a739a1 action=reset user_id=36 session=s4vocq1uge5qawa4ex8abagkxq6rbjix message_len=0
 2026-03-22 22:12:42,862 | INFO | store.chatbot.api | chatbot_api reset request_id=fb4fb8a739a1 ok=True latency_ms=7
+2026-03-23 11:06:41,348 | INFO | store.chatbot.api | chatbot_api request_id=qh_1774238801343_wpk8ce action=message user_id=45 session=kes3nuie00ir3lw58bnekzusnw5bjjh4 message_len=15
+2026-03-23 11:06:47,282 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1774238801343_wpk8ce intent=unknown source=claude engine=django_local latency_ms=5937
+2026-03-23 11:06:51,747 | INFO | store.chatbot.api | chatbot_api request_id=qh_1774238811743_zy3fyd action=message user_id=45 session=kes3nuie00ir3lw58bnekzusnw5bjjh4 message_len=13
+2026-03-23 11:06:51,752 | INFO | store.chatbot.api | chatbot_api response request_id=qh_1774238811743_zy3fyd intent=unknown source=local engine=django_local latency_ms=8
