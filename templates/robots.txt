@@ -1,0 +1,42 @@
+User-agent: *
+Allow: /
+Allow: /products/search/
+Allow: /product/
+Allow: /blog/
+Allow: /compare/
+Allow: /order-tracking/
+
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /order/
+Disallow: /profile/
+Disallow: /wishlist/
+Disallow: /login/
+Disallow: /register/
+Disallow: /forgot-password/
+Disallow: /send-otp/
+Disallow: /reset-password/
+Disallow: /api/
+Disallow: /accounts/
+Disallow: /vnpay/
+Disallow: /momo/
+Disallow: /vietqr/
+Disallow: /qr-payment/
+Disallow: /brands/add/
+Disallow: /brands/edit/
+Disallow: /brands/delete/
+Disallow: /products/add/
+Disallow: /products/edit/
+Disallow: /products/delete/
+Disallow: /export/
+Disallow: /upload-temp-image/
+Disallow: /blog-posts/
+Disallow: /hot-sale/
+Disallow: /product-content/
+Disallow: /reviews/
+Disallow: /banner-images/
+Disallow: /product-images/
+
+Sitemap: {{ sitemap_url }}
