@@ -606,6 +606,7 @@ class Order(models.Model):
         ('shipped', 'Đang giao'),
         ('delivered', 'Đã giao hàng'),
         ('cancelled', 'Hủy đơn'),
+        ('payment_expired', 'Hết hạn thanh toán'),
     ]
     
     PAYMENT_METHOD_CHOICES = [
@@ -636,7 +637,25 @@ class Order(models.Model):
         ('completed', 'Đã hoàn tiền'),
     ]
     refund_status = models.CharField(max_length=20, choices=REFUND_STATUS_CHOICES, blank=True, default='', verbose_name='Trạng thái hoàn tiền')
-    
+
+    # VietQR - mã thanh toán & thời hạn phiên
+    payment_code = models.CharField(max_length=20, blank=True, default='', verbose_name='Mã thanh toán VietQR')
+    expires_at = models.DateTimeField(blank=True, null=True, verbose_name='Hết hạn thanh toán VietQR')
+
+    # Trạng thái thanh toán (tách biệt với trạng thái đơn hàng)
+    PAYMENT_STATUS_CHOICES = [
+        ('pending', 'Chờ thanh toán'),
+        ('paid', 'Đã thanh toán'),
+        ('cancelled', 'Đã hủy thanh toán'),
+        ('expired', 'Hết hạn thanh toán'),
+    ]
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PAYMENT_STATUS_CHOICES,
+        default='pending',
+        verbose_name='Trạng thái thanh toán',
+    )
+
     class Meta:
         verbose_name = 'Đơn hàng'
         verbose_name_plural = 'Đơn hàng'
@@ -644,6 +663,14 @@ class Order(models.Model):
     
     def __str__(self):
         return f"Order {self.order_code}"
+
+    @property
+    def is_payment_expired(self):
+        """Kiểm tra phiên VietQR đã hết hạn chưa"""
+        if not self.expires_at:
+            return False
+        from django.utils import timezone
+        return timezone.now() > self.expires_at
 
 
 class OrderItem(models.Model):

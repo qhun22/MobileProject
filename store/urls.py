@@ -9,8 +9,10 @@ app_name = 'store'
 urlpatterns = [
     # Trang chủ
     path('', views.home, name='home'),
-    # Chi tiết sản phẩm
-    path('product/<int:product_id>/', views.product_detail_view, name='product_detail'),
+    # Chi tiết sản phẩm (URL đẹp dùng slug)
+    path('product/<slug:slug>/', views.product_detail_view, name='product_detail'),
+    # Redirect cũ: /product/123/ → /product/iphone-16-pro-max/ (301)
+    path('product/<int:product_id>/', views.product_detail_id_redirect, name='product_detail_id_redirect'),
     # So sánh sản phẩm
     path('compare/', views.compare_view, name='compare'),
     path('newsletter/subscribe/', views.newsletter_subscribe, name='newsletter_subscribe'),
@@ -88,7 +90,10 @@ urlpatterns = [
     path('banner-images/replace/', views.banner_replace, name='banner_replace'),
     path('banner-images/delete/', views.banner_delete, name='banner_delete'),
 
-    # Blog Posts
+    # Blog Posts (Public - trang hiển thị người dùng)
+    path('blog/', views.blog_page_list, name='blog_page_list'),
+    path('blog/<int:post_id>/', views.blog_page_detail, name='blog_page_detail'),
+    # Blog Posts (Admin API)
     path('blog-posts/list/', views.blog_list, name='blog_list'),
     path('blog-posts/add/', views.blog_add, name='blog_add'),
     path('blog-posts/update/', views.blog_update, name='blog_update'),
@@ -141,9 +146,11 @@ urlpatterns = [
 
     # VietQR Separate Payment Page
     path('vietqr/create-order/', views.vietqr_create_order, name='vietqr_create_order'),
-    path('vietqr-payment/', views.vietqr_payment_page, name='vietqr_payment_page'),
+    path('vietqr-payment/<int:order_id>/', views.vietqr_payment_page, name='vietqr_payment_page'),
     path('vietqr/page-status/', views.vietqr_page_status, name='vietqr_page_status'),
     path('vietqr/expire/', views.vietqr_expire, name='vietqr_expire'),
+    path('vietqr/mark-paid/', views.vietqr_mark_paid, name='vietqr_mark_paid'),
+    path('vietqr/callback/', views.vietqr_callback, name='vietqr_callback'),
 
     # VNPay Payment
     path('vnpay/create/', views.vnpay_create, name='vnpay_create'),

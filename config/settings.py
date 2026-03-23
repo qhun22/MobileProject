@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.humanize',
+    'django.contrib.sitemaps',
     # Third party apps
     'allauth',
     'allauth.account',
@@ -171,6 +172,7 @@ VNPAY_CONFIG = {
 BANK_ID = os.getenv('BANK_ID', 'TCB')
 BANK_ACCOUNT_NO = os.getenv('BANK_ACCOUNT_NO', '')
 BANK_ACCOUNT_NAME = os.getenv('BANK_ACCOUNT_NAME', '')
+VIETQR_CALLBACK_TOKEN = os.getenv('VIETQR_CALLBACK_TOKEN', 'dev-secret')
 
 # ==================== EMAIL (SMTP) CONFIG ====================
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
