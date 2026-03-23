@@ -2,7 +2,8 @@
 {% load custom_filters %}
 {% load static %}
 
-{% block title %}KIỂM TRA - QHUN22 Mobile{% endblock %}
+{% block title %}Tra Cứu Đơn Hàng - QHUN22 Mobile{% endblock %}
+{% block meta_robots %}noindex, follow{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/order_tracking.css' %}">
@@ -54,6 +55,10 @@
                             <span class="qh-ot-badge delivered">Đã tất toán</span>
                             {% elif order.status == 'cancelled' %}
                             <span class="qh-ot-badge cancelled">Đã hủy</span>
+                            {% elif order.status == 'payment_expired' and order.payment_status == 'cancelled' %}
+                            <span class="qh-ot-badge payment_expired">Đã hủy thanh toán</span>
+                            {% elif order.status == 'payment_expired' %}
+                            <span class="qh-ot-badge payment_expired">Hết hạn thanh toán</span>
                             {% else %}
                             <span class="qh-ot-badge {{ order.status }}">{{ order.get_status_display }}</span>
                             {% endif %}
@@ -80,6 +85,10 @@
                             <span class="qh-ot-badge delivered">Đã tất toán</span>
                             {% elif order.status == 'cancelled' %}
                             <span class="qh-ot-badge cancelled">Đã hủy</span>
+                            {% elif order.status == 'payment_expired' and order.payment_status == 'cancelled' %}
+                            <span class="qh-ot-badge payment_expired">Đã hủy thanh toán</span>
+                            {% elif order.status == 'payment_expired' %}
+                            <span class="qh-ot-badge payment_expired">Hết hạn thanh toán</span>
                             {% else %}
                             <span class="qh-ot-badge {{ order.status }}">{{ order.get_status_display }}</span>
                             {% endif %}

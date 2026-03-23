@@ -342,6 +342,12 @@
                 <div class="da-stat"><div class="da-stat-label">Đơn hàng đang giao</div><div class="da-stat-val">{{ orders_shipped|default:0 }}</div><button class="da-stat-btn" onclick="openStatDetailBox('order','shipped')">Chi tiết</button></div>
                 <div class="da-stat"><div class="da-stat-label">Đã giao hàng</div><div class="da-stat-val">{{ orders_delivered|default:0 }}</div><button class="da-stat-btn" onclick="openStatDetailBox('order','delivered')">Chi tiết</button></div>
                 <div class="da-stat"><div class="da-stat-label">Đơn đã hủy</div><div class="da-stat-val">{{ orders_cancelled|default:0 }}</div><button class="da-stat-btn" onclick="openStatDetailBox('order','cancelled')">Chi tiết</button></div>
+                <div class="da-stat"><div class="da-stat-label">Hết hạn thanh toán</div><div class="da-stat-val">{{ orders_payment_expired|default:0 }}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px;">VietQR hết hạn / hủy TT</div></div>
+            </div>
+            <div class="da-row da-c3">
+                <div class="da-stat"><div class="da-stat-label">Tỷ lệ TT thất bại (VietQR)</div><div class="da-stat-val" style="color:{{ vietqr_fail_rate|default:0 }}{% if vietqr_fail_rate > 30 %}#ef4444{% else %}#1e293b{% endif %}">{{ vietqr_fail_rate|default:0 }}%</div><div style="font-size:11px;color:#94a3b8;margin-top:2px;">{{ vietqr_failed|default:0 }}/{{ vietqr_total|default:0 }} đơn VietQR thất bại</div></div>
+                <div class="da-stat"><div class="da-stat-label">Sản phẩm có khuyến mãi</div><div class="da-stat-val">{{ discounted_products_count|default:0 }}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px;">SP có % giảm giá</div></div>
+                <div class="da-stat"><div class="da-stat-label">Sản phẩm sắp hết hàng</div><div class="da-stat-val">{{ low_stock_products_count }}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px;">Tồn kho &lt; 5</div></div>
             </div>
 
             <!-- Modal nhập giá vốn sản phẩm -->
@@ -435,6 +441,10 @@
                     <button class="da-stat-btn" onclick="openCostPriceModal()">Chi tiết</button>
                 </div>
                 <div class="da-stat"><div class="da-stat-label">Doanh thu hôm nay</div><div class="da-stat-val">{{ revenue_today|format_price_with_unit }}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px;">Đơn đã giao hôm nay</div></div>
+                <div class="da-stat"><div class="da-stat-label">Doanh thu hôm qua</div><div class="da-stat-val">{{ revenue_yesterday|format_price_with_unit }}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px;">Đơn đã giao hôm qua</div></div>
+            </div>
+            <div class="da-row da-c2">
+                <div class="da-stat"><div class="da-stat-label">Doanh thu 7 ngày gần nhất</div><div class="da-stat-val">{{ revenue_7days|format_price_with_unit }}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px;">Đơn đã giao 7 ngày qua</div></div>
                 <div class="da-stat"><div class="da-stat-label">Doanh thu tháng này</div><div class="da-stat-val">{{ revenue_this_month|format_price_with_unit }}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px;">Đơn đã giao trong tháng</div></div>
             </div>
 
@@ -1843,7 +1853,7 @@
                 <div style="border:2px dashed #e2e8f0;border-radius:8px;padding:20px;text-align:center;cursor:pointer;" onclick="document.getElementById('addProductImage').click()">
                     <input type="file" name="image" id="addProductImage" accept="image/*" style="display:none;" onchange="previewAddProductImage(event)">
                     <div id="addImagePreviewContainer" style="display:none;">
-                        <img id="addImagePreview" style="max-width:200px;max-height:150px;border-radius:8px;">
+                        <img id="addImagePreview" alt="Xem trước ảnh sản phẩm" style="max-width:200px;max-height:150px;border-radius:8px;">
                         <p style="margin-top:10px;color:#64748b;font-size:13px;">Click để thay đổi ảnh</p>
                     </div>
                     <div id="addImagePlaceholder">
@@ -1889,7 +1899,7 @@
                 <div style="border:2px dashed #e2e8f0;border-radius:8px;padding:20px;text-align:center;cursor:pointer;" onclick="document.getElementById('editProductImage').click()">
                     <input type="file" name="image" id="editProductImage" accept="image/*" style="display:none;" onchange="previewEditProductImage(event)">
                     <div id="editImagePreviewContainer" style="display:none;">
-                        <img id="editImagePreview" style="max-width:200px;max-height:150px;border-radius:8px;">
+                        <img id="editImagePreview" alt="Xem trước ảnh sản phẩm" style="max-width:200px;max-height:150px;border-radius:8px;">
                         <p style="margin-top:10px;color:#64748b;font-size:13px;">Click để thay đổi ảnh</p>
                     </div>
                     <div id="editImagePlaceholder">

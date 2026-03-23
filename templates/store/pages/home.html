@@ -3,7 +3,52 @@
 {% load humanize %}
 {% load custom_filters %}
 
-{% block title %}TRANG CHỦ - QHUN22 Mobile{% endblock %}
+{% block title %}QHUN22 Mobile - Mua Điện Thoại iPhone, Samsung, Xiaomi Chính Hãng{% endblock %}
+
+{% block meta_description %}QHUN22 Mobile – cửa hàng bán điện thoại chính hãng iPhone, Samsung, Xiaomi, OPPO tại Việt Nam. Giá tốt, trả góp 0%, giao hàng toàn quốc. Hotline: 032.722.1005.{% endblock %}
+
+{% block og_title %}QHUN22 Mobile - Mua Điện Thoại Chính Hãng Giá Tốt{% endblock %}
+{% block og_description %}Cửa hàng điện thoại chính hãng iPhone, Samsung, Xiaomi, OPPO. Giá tốt, trả góp 0%, giao hàng toàn quốc.{% endblock %}
+
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}/{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "{{ request.scheme }}://{{ request.get_host }}/#website",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/",
+      "name": "QHUN22 Mobile",
+      "description": "Cửa hàng điện thoại chính hãng iPhone, Samsung, Xiaomi, OPPO",
+      "inLanguage": "vi-VN",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "{{ request.scheme }}://{{ request.get_host }}/products/search/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "{{ request.scheme }}://{{ request.get_host }}/#organization",
+      "name": "QHUN22 Mobile",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/",
+      "telephone": "+84327221005",
+      "email": "qhun22@gmail.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'logos/sean.gif' %}"
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
@@ -194,7 +239,7 @@
                         <div class="qh-hotsale-track" id="qhSuggestedTrack">
                 {% if suggested_products %}
                 {% for product in suggested_products %}
-                <a href="{% url 'store:product_detail' product.id %}" class="qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}">
+                <a href="{% url 'store:product_detail' product.slug %}" class="qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}">
                     <div class="qh-hotsale-card-img">
                         {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
                     </div>
@@ -238,7 +283,7 @@
                     <div class="qh-hotsale-track" id="qhHotsaleTrack">
                 {% if hot_sale_products and hot_sale_products|length > 0 %}
                 {% for product in hot_sale_products %}
-                <a href="{% url 'store:product_detail' product.id %}" class="qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}">
+                <a href="{% url 'store:product_detail' product.slug %}" class="qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}">
                     <div class="qh-hotsale-card-img">
                         {% if product.image %}
                         <img src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -285,7 +330,7 @@
                         <div class="qh-hotsale-track" id="qhBestsellerTrack">
                 {% if best_sellers %}
                 {% for item in best_sellers %}{% with product=item.product %}
-                <a href="{% url 'store:product_detail' product.id %}" class="qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}">
+                <a href="{% url 'store:product_detail' product.slug %}" class="qh-hotsale-card {% if product.stock == 0 %}out-of-stock{% endif %}">
                     <div class="qh-hotsale-card-img">
                         {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
                     </div>
@@ -512,7 +557,7 @@
     <!-- Container for AJAX product list -->
     <div id="qhProductListContainer" class="qh-product-grid">
         {% for product in products %}
-        <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
+        <a href="{% url 'store:product_detail' product.slug %}" class="qh-product-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
             
             <!-- Ảnh sản phẩm -->
             <div class="qh-product-image" style="position: relative; aspect-ratio: 1; background: #ffffff; overflow: hidden;">

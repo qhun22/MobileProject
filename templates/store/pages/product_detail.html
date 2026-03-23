@@ -2,17 +2,73 @@
 {% load custom_filters %}
 {% load static %}
 
-{% block title %}{{ product.name }} - QHUN22 Mobile{% endblock %}
+{% block title %}Mua {{ product.name }} Chính Hãng Giá Tốt - QHUN22 Mobile{% endblock %}
+
+{% block meta_description %}{{ product.name }} chính hãng tại QHUN22 Mobile. {% if first_variant %}Giá từ {{ first_variant.price|format_price }}đ.{% endif %}{% if product.brand %} Thương hiệu {{ product.brand.name }}.{% endif %} Bảo hành chính hãng, trả góp 0%, giao hàng toàn quốc.{% endblock %}
+
+{% block og_type %}product{% endblock %}
+{% block og_title %}{{ product.name }} - QHUN22 Mobile{% endblock %}
+{% block og_description %}{{ product.name }} chính hãng tại QHUN22 Mobile. {% if first_variant %}Giá từ {{ first_variant.price|format_price }}đ.{% endif %} Bảo hành chính hãng, trả góp 0%.{% endblock %}
+{% if product.image %}{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}{% endblock %}{% endif %}
+
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'store:product_detail' product.slug %}{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{{ product.name|escapejs }}",
+  "description": "{{ product.description|escapejs|truncatechars:300 }}",
+  {% if product.image %}"image": "{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}",{% endif %}
+  "brand": {
+    "@type": "Brand",
+    "name": "{{ product.brand.name|default:'QHUN22'|escapejs }}"
+  },
+  "sku": "{{ first_variant.sku|default:product.id }}",
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'store:product_detail' product.slug %}",
+    "priceCurrency": "VND",
+    "price": "{{ first_variant.price|default:product.price }}",
+    "availability": "{% if product.stock > 0 %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "seller": { "@type": "Organization", "name": "QHUN22 Mobile" }
+  }{% if review_count %},
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ avg_rating }}",
+    "reviewCount": "{{ review_count }}"
+  }{% endif %}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "{{ request.scheme }}://{{ request.get_host }}/"},
+    {% if product.brand %}
+    {"@type": "ListItem", "position": 2, "name": "{{ product.brand.name|escapejs }}", "item": "{{ request.scheme }}://{{ request.get_host }}/products/search/?brand={{ product.brand.slug }}"},
+    {"@type": "ListItem", "position": 3, "name": "{{ product.name|escapejs }}"}
+    {% else %}
+    {"@type": "ListItem", "position": 2, "name": "{{ product.name|escapejs }}"}
+    {% endif %}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+{% if product.image %}<link rel="preload" as="image" href="{{ product.image.url }}">{% endif %}
+{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
-
 <div class="pd-page">
     <!-- Điều hướng -->
     <div class="pd-breadcrumb">
         <a href="/">Trang chủ</a> <span>›</span>
-        <a href="/">Điện thoại</a> <span>›</span>
-        {% if product.brand %}<a href="/">{{ product.brand.name }}</a> <span>›</span>{% endif %}
+        {% if product.brand %}<a href="/products/search/?brand={{ product.brand.slug }}">{{ product.brand.name }}</a> <span>›</span>{% endif %}
         <span class="current">{{ product.name }}</span>
     </div>
 
@@ -28,7 +84,13 @@
                 <button class="pd-img-nav prev" onclick="prevImage()">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </button>
-                <img id="pdMainImg" src="{{ product.image.url|default:'/static/logos/sean.gif' }}" alt="{{ product.name }}" data-fallback="{{ product.image.url|default:'/static/logos/sean.gif' }}">
+                <img id="pdMainImg"
+                     src="{{ product.image.url|default:'/static/logos/sean.gif' }}"
+                     alt="{{ product.name }} - Điện thoại chính hãng QHUN22 Mobile"
+                     width="500" height="500"
+                     loading="eager"
+                     decoding="async"
+                     data-fallback="{{ product.image.url|default:'/static/logos/sean.gif' }}">
                 <button class="pd-img-nav next" onclick="nextImage()">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </button>
@@ -299,7 +361,7 @@
         <div class="pd-related-body">
             <div class="qh-product-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
                 {% for rp in related_products %}
-                <a href="{% url 'store:product_detail' rp.id %}" class="qh-product-card {% if rp.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
+                <a href="{% url 'store:product_detail' rp.slug %}" class="qh-product-card {% if rp.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
                     <div class="qh-product-image" style="position: relative; aspect-ratio: 1; background: #ffffff; overflow: hidden;">
                         {% if rp.image %}
                         <img src="{{ rp.image.url }}" alt="{{ rp.name }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -425,7 +487,7 @@
             <button class="pd-gallery-nav prev" onclick="galleryPrev()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <img class="pd-gallery-main-img" id="pdGalleryMainImg" src="" alt="" draggable="false">
+            <img class="pd-gallery-main-img" id="pdGalleryMainImg" src="" alt="{{ product.name }} - ảnh màu sắc" draggable="false">
             <button class="pd-gallery-nav next" onclick="galleryNext()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>

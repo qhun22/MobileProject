@@ -3,6 +3,7 @@
 {% load custom_filters %}
 
 {% block title %}Thanh toán VietQR - QHUN22 Mobile{% endblock %}
+{% block meta_robots %}noindex, follow{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/vietqr_payment.css' %}">
@@ -37,7 +38,7 @@
                     <div class="qh-vqr-qr-img">
                         <img id="vqrQrImage" src="" alt="VietQR">
                     </div>
-                    <div class="qh-vqr-qr-hint">Dùng app ngân hàng quét mã</div>
+                    <div class="qh-vqr-qr-hint">Dùng ngân hàng của bạn để quét mã nhé!</div>
                     <div class="qh-vqr-pill-list">
                         <span class="qh-vqr-pill"><i class="ri-shield-check-line"></i> VietQR chính thức</span>
                         <span class="qh-vqr-pill"><i class="ri-repeat-line"></i> Tự động cập nhật</span>
@@ -79,7 +80,7 @@
                         <div class="qh-vqr-row">
                             <span class="lbl">Nội dung</span>
                             <span class="val val-action">
-                                <span class="code" id="vqrTransferCode">{{ transfer_code }}</span>
+                                <span class="code" id="vqrTransferCode">{{ order.payment_code }}</span>
                                 <button type="button" class="qh-vqr-copy-btn" data-copy-target="vqrTransferCode">
                                     <i class="ri-file-copy-line"></i> Sao chép
                                 </button>
@@ -166,10 +167,12 @@
     var BANK_ID = '{{ bank_id }}';
     var ACCOUNT_NO = '{{ bank_account_no }}';
     var ACCOUNT_NAME = '{{ bank_account_name }}';
+    var ORDER_ID = {{ order.id }};
     var TIMEOUT_SECONDS = {{ timeout_seconds }};
-    var TRANSFER_CODE = '{{ transfer_code }}';
+    var TRANSFER_CODE = '{{ order.payment_code }}';
     var ORDER_CODE = '{{ order.order_code }}';
     var ORDER_STATUS = '{{ order_status|default:"" }}';
+    var PAYMENT_STATUS = '{{ payment_status|default:"" }}';
     var STATUS_URL = '{% url "store:vietqr_page_status" %}';
     var EXPIRE_URL = '{% url "store:vietqr_expire" %}';
     var SUCCESS_URL = '{% url "store:order_success" order_code=order.order_code %}';
@@ -244,7 +247,7 @@
      */
     function startPolling() {
         pollInterval = setInterval(function() {
-            fetch(STATUS_URL + '?code=' + encodeURIComponent(TRANSFER_CODE) + '&order_code=' + encodeURIComponent(ORDER_CODE))
+            fetch(STATUS_URL + '?order_id=' + ORDER_ID)
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
                     if (!data.success) return;
@@ -293,7 +296,7 @@
         return true;
     }
 
-    function notifyExpireApi() {
+    function notifyExpireApi(reason) {
         return fetch(EXPIRE_URL, {
             method: 'POST',
             headers: {
@@ -301,8 +304,8 @@
                 'X-CSRFToken': CSRF_TOKEN
             },
             body: JSON.stringify({
-                order_code: ORDER_CODE,
-                transfer_code: TRANSFER_CODE
+                order_id: ORDER_ID,
+                reason: reason || 'cancelled'
             })
         }).catch(function() {});
     }
@@ -327,11 +330,11 @@
 
         if (!setFinalState('expired')) return;
         if (opts.callExpireApi !== false) {
-            notifyExpireApi();
+            notifyExpireApi('expired');
         }
 
         if (window.QHToast) {
-            QHToast.show('Hết thời gian thanh toán. Đơn hàng đã bị huỷ.', 'error');
+            QHToast.show('Hết thời gian thanh toán. Đơn hàng đã bị huỷ.', 'warning');
         }
     }
 
@@ -340,11 +343,11 @@
 
         if (!setFinalState('cancelled')) return;
         if (opts.callExpireApi !== false) {
-            notifyExpireApi();
+            notifyExpireApi('cancelled');
         }
 
         if (opts.notify !== false && window.QHToast) {
-            QHToast.show('Đơn hàng đã được hủy.', 'error');
+            QHToast.show('Đơn hàng đã được hủy.', 'warning');
         }
     }
 
@@ -426,6 +429,16 @@
     loadQR();
     bindCopyActions();
     bindCancelAction();
+
+    if (ORDER_STATUS === 'payment_expired') {
+        // Phân biệt khách hủy vs hết giờ timer
+        if (PAYMENT_STATUS === 'cancelled') {
+            onCancelled({ callExpireApi: false, notify: false });
+        } else {
+            onExpired({ callExpireApi: false });
+        }
+        return;
+    }
 
     if (ORDER_STATUS === 'cancelled') {
         onCancelled({ callExpireApi: false, notify: false });

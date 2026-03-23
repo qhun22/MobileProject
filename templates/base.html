@@ -4,10 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}QHUN22 Mobile{% endblock %}</title>
+    <title>{% block title %}QHUN22 Mobile - Điện Thoại Chính Hãng{% endblock %}</title>
+
+    <!-- ===== SEO META ===== -->
+    <meta name="description" content="{% block meta_description %}QHUN22 Mobile – mua điện thoại iPhone, Samsung, Xiaomi, OPPO chính hãng, giá tốt, trả góp 0%, giao hàng toàn quốc.{% endblock %}">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+    <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}QHUN22 Mobile - Điện Thoại Chính Hãng{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}QHUN22 Mobile – mua điện thoại iPhone, Samsung, Xiaomi, OPPO chính hãng, giá tốt, trả góp 0%.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'logos/sean.gif' %}{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:site_name" content="QHUN22 Mobile">
+
+    <!-- JSON-LD Schema -->
+    {% block schema_json %}{% endblock %}
 
     <!-- Biểu tượng favicon -->
     <link rel="icon" type="image/jpeg" href="{% static 'logos/seanfavi.jpg' %}">
+
+    <!-- Preconnect CDN -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
 
     <!-- Các file CSS tĩnh -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -17,8 +39,6 @@
     <link rel="stylesheet" href="{% static 'css/contact-bar.css' %}">
 
     <!-- Font Google - Signika -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Remix Icon -->
@@ -26,10 +46,10 @@
 
     {% block extra_css %}{% endblock %}
 
-    <!-- Tải JS sớm -->
-    <script src="{% static 'js/toast.js' %}"></script>
-    <script src="{% static 'js/confirm.js' %}"></script>
-    <script src="{% static 'js/banner.js' %}"></script>
+    <!-- JS với defer để không block render -->
+    <script src="{% static 'js/toast.js' %}" defer></script>
+    <script src="{% static 'js/confirm.js' %}" defer></script>
+    <script src="{% static 'js/banner.js' %}" defer></script>
 </head>
 <body>
 
@@ -41,7 +61,10 @@
         (function() {
             const tags = "{{ message.tags|escapejs }}";
             const messageText = "{{ message|escapejs }}";
-            const type = tags.includes('error') ? 'error' : 'success';
+            const type = tags.includes('error') ? 'error'
+                       : tags.includes('warning') ? 'warning'
+                       : tags.includes('info') ? 'info'
+                       : 'success';
 
             if (window.QHToast && typeof window.QHToast.show === 'function') {
                 window.QHToast.show(messageText, type);
@@ -510,7 +533,7 @@
                 html += '<div class="qh-autocomplete-section">';
                 html += '<div class="qh-autocomplete-header">Sản phẩm</div>';
                 products.forEach(product => {
-                    const detailUrl = product.id ? '/product/' + product.id + '/' : '/product/' + (product.slug || '') + '/';
+                    const detailUrl = product.slug ? '/product/' + product.slug + '/' : '#';
                     html += `
                         <a href="${detailUrl}" class="qh-autocomplete-item qh-autocomplete-product">
                             ${product.image ? `<img src="${product.image}" alt="${escapeHtml(product.name)}" class="qh-autocomplete-img">` : '<div class="qh-autocomplete-img qh-autocomplete-img-placeholder"></div>'}

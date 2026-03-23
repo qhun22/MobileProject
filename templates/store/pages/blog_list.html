@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog Công Nghệ & Điện Thoại - QHUN22 Mobile{% endblock %}
+
+{% block meta_description %}Blog QHUN22 Mobile – tin tức, đánh giá, so sánh điện thoại iPhone, Samsung, Xiaomi, OPPO mới nhất. Tư vấn mua điện thoại chính hãng giá tốt.{% endblock %}
+
+{% block og_title %}Blog Công Nghệ - QHUN22 Mobile{% endblock %}
+{% block og_description %}Tin tức, đánh giá, so sánh điện thoại mới nhất từ QHUN22 Mobile.{% endblock %}
+
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}/blog/{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Blog QHUN22 Mobile",
+  "description": "Tin tức, đánh giá, so sánh điện thoại chính hãng",
+  "url": "{{ request.scheme }}://{{ request.get_host }}/blog/",
+  "publisher": { "@type": "Organization", "name": "QHUN22 Mobile" }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.qh-blog-page { max-width: 1200px; margin: 0 auto; padding: 32px 16px; }
+.qh-blog-page h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; color: var(--qh-primary, #e53e3e); }
+.qh-blog-page .qh-blog-subtitle { color: #666; margin-bottom: 32px; }
+.qh-blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+.qh-blog-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
+.qh-blog-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+.qh-blog-card a { text-decoration: none; color: inherit; display: block; }
+.qh-blog-card-image { width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #f5f5f5; }
+.qh-blog-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+.qh-blog-card:hover .qh-blog-card-image img { transform: scale(1.04); }
+.qh-blog-card-body { padding: 20px; }
+.qh-blog-card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.4; color: #1a202c; }
+.qh-blog-card-summary { font-size: 0.92rem; color: #666; line-height: 1.6; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.qh-blog-card-meta { font-size: 0.82rem; color: #999; }
+.qh-blog-empty { text-align: center; padding: 60px 20px; color: #999; font-size: 1.1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="qh-blog-page">
+    <h1>Blog Công Nghệ & Điện Thoại</h1>
+    <p class="qh-blog-subtitle">Tin tức, đánh giá, tư vấn mua điện thoại mới nhất từ QHUN22 Mobile</p>
+
+    {% if posts %}
+    <div class="qh-blog-grid">
+        {% for post in posts %}
+        <article class="qh-blog-card" itemscope itemtype="https://schema.org/BlogPosting">
+            <a href="{% url 'store:blog_page_detail' post.id %}">
+                <div class="qh-blog-card-image">
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}"
+                         alt="{{ post.title }} - QHUN22 Mobile"
+                         width="640" height="360"
+                         loading="lazy"
+                         decoding="async"
+                         itemprop="image">
+                    {% else %}
+                    <img src="{% static 'logos/sean.gif' %}"
+                         alt="QHUN22 Mobile Blog"
+                         width="640" height="360"
+                         loading="lazy">
+                    {% endif %}
+                </div>
+                <div class="qh-blog-card-body">
+                    <h2 class="qh-blog-card-title" itemprop="headline">{{ post.title }}</h2>
+                    {% if post.summary %}
+                    <p class="qh-blog-card-summary" itemprop="description">{{ post.summary }}</p>
+                    {% endif %}
+                    <div class="qh-blog-card-meta">
+                        <time itemprop="datePublished" datetime="{{ post.created_at|date:'c' }}">
+                            {{ post.created_at|date:"d/m/Y" }}
+                        </time>
+                    </div>
+                </div>
+            </a>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="qh-blog-empty">
+        <p>Chưa có bài viết nào. Vui lòng quay lại sau.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

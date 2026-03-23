@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - QHUN22 Mobile{% endblock %}
+
+{% block meta_description %}{% if post.summary %}{{ post.summary|truncatechars:160 }}{% else %}{{ post.title }} – bài viết từ QHUN22 Mobile, cửa hàng điện thoại chính hãng.{% endif %}{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ post.title }} - QHUN22 Mobile{% endblock %}
+{% block og_description %}{% if post.summary %}{{ post.summary|truncatechars:200 }}{% else %}{{ post.title }} – QHUN22 Mobile{% endif %}{% endblock %}
+{% if post.image %}{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{{ post.image.url }}{% endblock %}{% endif %}
+
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'store:blog_page_detail' post.id %}{% endblock %}
+
+{% block schema_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ post.title|escapejs }}",
+  "description": "{{ post.summary|default:post.title|escapejs|truncatechars:200 }}",
+  "datePublished": "{{ post.created_at|date:'c' }}",
+  "dateModified": "{{ post.updated_at|date:'c' }}",
+  {% if post.image %}"image": "{{ request.scheme }}://{{ request.get_host }}{{ post.image.url }}",{% endif %}
+  "author": { "@type": "Organization", "name": "QHUN22 Mobile" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "QHUN22 Mobile",
+    "logo": { "@type": "ImageObject", "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'logos/sean.gif' %}" }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ request.scheme }}://{{ request.get_host }}/blog/{{ post.id }}/"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.qh-blog-detail { max-width: 860px; margin: 0 auto; padding: 32px 16px; }
+.qh-blog-detail-breadcrumb { font-size: 0.88rem; color: #999; margin-bottom: 20px; }
+.qh-blog-detail-breadcrumb a { color: #666; text-decoration: none; }
+.qh-blog-detail-breadcrumb a:hover { color: var(--qh-primary, #e53e3e); }
+.qh-blog-detail-breadcrumb span { margin: 0 6px; }
+.qh-blog-detail h1 { font-size: 1.9rem; font-weight: 700; line-height: 1.35; margin-bottom: 12px; color: #1a202c; }
+.qh-blog-detail-meta { font-size: 0.88rem; color: #999; margin-bottom: 24px; }
+.qh-blog-detail-cover { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 32px; }
+.qh-blog-detail-cover img { width: 100%; height: auto; display: block; }
+.qh-blog-detail-content { font-size: 1rem; line-height: 1.8; color: #333; }
+.qh-blog-detail-content p { margin-bottom: 1.2em; }
+.qh-blog-detail-content h2, .qh-blog-detail-content h3 { font-weight: 600; margin: 1.6em 0 0.6em; color: #1a202c; }
+.qh-blog-recent { margin-top: 48px; border-top: 2px solid #f0f0f0; padding-top: 32px; }
+.qh-blog-recent h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; color: #1a202c; }
+.qh-blog-recent-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+.qh-blog-recent-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+.qh-blog-recent-card a { text-decoration: none; color: inherit; display: block; }
+.qh-blog-recent-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.qh-blog-recent-card-body { padding: 14px; }
+.qh-blog-recent-card-title { font-size: 0.95rem; font-weight: 600; line-height: 1.4; color: #1a202c; }
+.qh-blog-back { display: inline-block; margin-bottom: 24px; color: var(--qh-primary, #e53e3e); text-decoration: none; font-weight: 500; }
+.qh-blog-back:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="qh-blog-detail">
+    <!-- Breadcrumb -->
+    <nav class="qh-blog-detail-breadcrumb" aria-label="Điều hướng">
+        <a href="/">Trang chủ</a>
+        <span>›</span>
+        <a href="{% url 'store:blog_page_list' %}">Blog</a>
+        <span>›</span>
+        <span>{{ post.title|truncatechars:60 }}</span>
+    </nav>
+
+    <a href="{% url 'store:blog_page_list' %}" class="qh-blog-back">← Quay lại Blog</a>
+
+    <article itemscope itemtype="https://schema.org/Article">
+        <h1 itemprop="headline">{{ post.title }}</h1>
+        <div class="qh-blog-detail-meta">
+            Đăng ngày
+            <time itemprop="datePublished" datetime="{{ post.created_at|date:'c' }}">{{ post.created_at|date:"d/m/Y" }}</time>
+            &nbsp;| Bởi <span itemprop="author">QHUN22 Mobile</span>
+        </div>
+
+        {% if post.image %}
+        <div class="qh-blog-detail-cover">
+            <img src="{{ post.image.url }}"
+                 alt="{{ post.title }} - QHUN22 Mobile"
+                 width="860" height="484"
+                 loading="eager"
+                 decoding="async"
+                 itemprop="image">
+        </div>
+        {% endif %}
+
+        <div class="qh-blog-detail-content" itemprop="articleBody">
+            {% if post.content %}
+                {{ post.content|linebreaks }}
+            {% else %}
+                <p>{{ post.summary }}</p>
+            {% endif %}
+        </div>
+    </article>
+
+    <!-- Bài viết liên quan -->
+    {% if recent_posts %}
+    <section class="qh-blog-recent">
+        <h2>Bài viết liên quan</h2>
+        <div class="qh-blog-recent-list">
+            {% for rp in recent_posts %}
+            <div class="qh-blog-recent-card">
+                <a href="{% url 'store:blog_page_detail' rp.id %}">
+                    {% if rp.image %}
+                    <img src="{{ rp.image.url }}"
+                         alt="{{ rp.title }} - QHUN22 Mobile"
+                         width="320" height="180"
+                         loading="lazy"
+                         decoding="async">
+                    {% else %}
+                    <img src="{% static 'logos/sean.gif' %}"
+                         alt="QHUN22 Mobile"
+                         width="320" height="180"
+                         loading="lazy">
+                    {% endif %}
+                    <div class="qh-blog-recent-card-body">
+                        <div class="qh-blog-recent-card-title">{{ rp.title }}</div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

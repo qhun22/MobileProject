@@ -3,7 +3,18 @@
 {% load humanize %}
 {% load custom_filters %}
 
-{% block title %}TÌM KIẾM - QHUN22 Mobile{% endblock %}
+{% if current_brand %}
+{% block title %}Điện Thoại {{ current_brand.name }} Chính Hãng Giá Tốt - QHUN22 Mobile{% endblock %}
+{% block meta_description %}Mua điện thoại {{ current_brand.name }} chính hãng tại QHUN22 Mobile. Tìm thấy {{ products.paginator.count }} sản phẩm. Giá tốt, trả góp 0%, bảo hành chính hãng.{% endblock %}
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}/products/search/?brand={{ current_brand.slug }}{% endblock %}
+{% elif query %}
+{% block title %}Tìm kiếm "{{ query }}" - QHUN22 Mobile{% endblock %}
+{% block meta_description %}Kết quả tìm kiếm "{{ query }}" tại QHUN22 Mobile. Tìm thấy {{ products.paginator.count }} sản phẩm điện thoại chính hãng.{% endblock %}
+{% block meta_robots %}noindex, follow{% endblock %}
+{% else %}
+{% block title %}Tìm Kiếm Điện Thoại - QHUN22 Mobile{% endblock %}
+{% block meta_robots %}noindex, follow{% endblock %}
+{% endif %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
@@ -30,7 +41,7 @@
     <!-- Lưới sản phẩm - style y hệt home -->
     <div class="qh-product-grid">
         {% for product in products %}
-        <a href="{% url 'store:product_detail' product.id %}" class="qh-product-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
+        <a href="{% url 'store:product_detail' product.slug %}" class="qh-product-card {% if product.stock == 0 %}out-of-stock{% endif %}" style="text-decoration: none; color: inherit; display: block; background: var(--qh-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s;">
 
             <!-- Ảnh sản phẩm -->
             <div class="qh-product-image" style="position: relative; aspect-ratio: 1; background: #ffffff; overflow: hidden;">

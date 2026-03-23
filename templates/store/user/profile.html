@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block title %}TÀI KHOẢN - QHUN22 Mobile{% endblock %}
+{% block meta_robots %}noindex, follow{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
@@ -379,26 +380,39 @@
                     {% if user.is_student_verified or user.is_teacher_verified %}
                     {# Đã xác thực - hiển thị voucher #}
                     {% if edu_voucher and edu_voucher_status == 'available' %}
-                    <div class="qh-pf-student-voucher-code" style="text-align: center; padding: 24px;">
-                        <div class="qh-pf-student-voucher-code-title">🎉 Ưu đãi đặc biệt dành cho bạn!</div>
-                        <div class="qh-pf-student-voucher-code-discount">GIẢM 50%</div>
-                        <div class="qh-pf-student-voucher-code-limit">Cho 1 đơn hàng duy nhất</div>
-                        <div class="qh-pf-student-voucher-code-box">
-                            <div class="qh-pf-student-voucher-code-label">Mã voucher của bạn:</div>
-                            <div class="qh-pf-student-voucher-code-value">{{ edu_voucher.code }}</div>
+                    <div class="qh-pf-voucher-ticket">
+                        <div class="qh-pf-voucher-ticket-left">
+                            <i class="ri-coupon-3-line qh-pf-voucher-ticket-icon"></i>
+                            <div class="qh-pf-voucher-ticket-discount">50%</div>
+                            <div class="qh-pf-voucher-ticket-off">GIẢM</div>
                         </div>
-                        <div class="qh-pf-student-voucher-code-expire">Hết hạn: {{ edu_voucher.expire_at|date:"d/m/Y" }}</div>
+                        <div class="qh-pf-voucher-ticket-right">
+                            <div class="qh-pf-voucher-ticket-title">Ưu đãi Student / Teacher</div>
+                            <div class="qh-pf-voucher-ticket-limit">Áp dụng cho 1 đơn hàng duy nhất</div>
+                            <div class="qh-pf-voucher-ticket-code">
+                                <span class="qh-pf-voucher-ticket-code-label">Mã:</span>
+                                <span class="qh-pf-voucher-ticket-code-value">{{ edu_voucher.code }}</span>
+                            </div>
+                            <div class="qh-pf-voucher-ticket-expire">
+                                <i class="ri-time-line"></i> Hết hạn: {{ edu_voucher.expire_at|date:"d/m/Y" }}
+                            </div>
+                        </div>
                     </div>
                     {% elif edu_voucher_status == 'used' %}
-                    <label class="qh-label">Trạng thái</label>
-                    <div class="qh-pf-student-voucher-used">
-                        <svg class="qh-pf-student-voucher-used-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span class="qh-pf-student-voucher-used-text">Voucher đã được sử dụng</span>
+                    <div class="qh-form-group">
+                        <label class="qh-label">Trạng thái</label>
+                        <div class="qh-pf-student-status-badge">
+                            <i class="ri-checkbox-circle-line"></i>
+                            <span>Voucher đã được sử dụng</span>
+                        </div>
                     </div>
                     {% elif edu_voucher_status == 'expired' %}
-                    <div class="qh-pf-student-voucher-expired">
-                        <svg class="qh-pf-student-voucher-expired-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span class="qh-pf-student-voucher-expired-text">Voucher đã hết hạn</span>
+                    <div class="qh-form-group">
+                        <label class="qh-label">Trạng thái</label>
+                        <div class="qh-pf-student-voucher-expired">
+                            <i class="ri-error-warning-line qh-pf-student-voucher-expired-icon"></i>
+                            <span class="qh-pf-student-voucher-expired-text">Voucher đã hết hạn</span>
+                        </div>
                     </div>
                     {% else %}
                     <div class="qh-pf-empty">
@@ -482,21 +496,24 @@
 
         <!-- Hoàn tiền -->
         <div class="qh-pf-tab-panel" id="tab-refund">
-            <!-- Box bọc chia đôi -->
-            <div class="qh-pf-refund-split" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="qh-pf-pw-grid">
                 <!-- Danh sách đơn cần hoàn tiền -->
-                <div class="qh-pf-refund-list" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 20px;">
-                    <h3 style="font-size:16px;font-weight:700;color:var(--qh-text);margin-bottom:16px;">Đơn cần hoàn tiền</h3>
-                    <div id="qh-refund-pending-list" style="max-height: 300px; overflow-y: auto;">
-                        <p style="color:#94a3b8;font-size:14px;text-align:center;padding:20px;">Đang tải...</p>
+                <div class="qh-pf-pw-section">
+                    <div class="qh-pf-pw-title">
+                        <i class="ri-refund-2-line"></i> Đơn cần hoàn tiền
+                    </div>
+                    <div id="qh-refund-pending-list" class="qh-pf-refund-body">
+                        <p class="qh-pf-refund-loading">Đang tải...</p>
                     </div>
                 </div>
                 
                 <!-- Lịch sử hoàn tiền -->
-                <div class="qh-pf-refund-history" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 20px;">
-                    <h3 style="font-size:16px;font-weight:700;color:var(--qh-text);margin-bottom:16px;">Lịch sử hoàn tiền</h3>
-                    <div id="qh-refund-history-list" style="max-height: 300px; overflow-y: auto;">
-                        <p style="color:#94a3b8;font-size:14px;text-align:center;padding:20px;">Đang tải...</p>
+                <div class="qh-pf-pw-section">
+                    <div class="qh-pf-pw-title">
+                        <i class="ri-history-line"></i> Lịch sử hoàn tiền
+                    </div>
+                    <div id="qh-refund-history-list" class="qh-pf-refund-body">
+                        <p class="qh-pf-refund-loading">Đang tải...</p>
                     </div>
                 </div>
             </div>
