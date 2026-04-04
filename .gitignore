@@ -11,3 +11,5 @@ data/embeddings_cache/
 *.bin
 logs/chatbot.log
 logs/*.log
+SETUP.md
+
