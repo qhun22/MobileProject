@@ -468,6 +468,30 @@
                 </div>
             </div>
 
+            <!-- BIỂU ĐỒ ĐƠN HÀNG THEO TRẠNG THÁI -->
+            <div class="da-group-title">BIỂU ĐỒ ĐƠN HÀNG THEO TRẠNG THÁI</div>
+            <div class="da-chart-wrap">
+                <div class="da-chart-hd">
+                    <div class="da-chart-tit">PHÂN BỐ ĐƠN HÀNG</div>
+                    <span class="da-chart-yr">Tổng tất cả đơn</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:center;gap:40px;padding:10px 0;">
+                    <div style="width:260px;height:260px;position:relative;">
+                        <canvas id="orderStatusPieCanvas"></canvas>
+                    </div>
+                    <div id="orderStatusLegend" style="font-size:13px;line-height:2;"></div>
+                </div>
+                <div id="orderStatusPieData" style="display:none;"
+                     data-pending="{{ orders_pending }}"
+                     data-processing="{{ orders_processing }}"
+                     data-shipped="{{ orders_shipped }}"
+                     data-delivered="{{ orders_delivered }}"
+                     data-cancelled="{{ orders_cancelled }}"
+                     data-expired="{{ orders_payment_expired }}"
+                     data-refund="{{ orders_refund_pending }}">
+                </div>
+            </div>
+
         </div>
         <!-- Phần người dùng -->
         <div id="users-section" style="display: none;">

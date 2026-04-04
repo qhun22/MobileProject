@@ -692,6 +692,86 @@ function initRevenueChart() {
     });
 }
 
+// ======== BIỂU ĐỒ TRÒN ĐƠN HÀNG THEO TRẠNG THÁI ========
+function initOrderStatusPieChart() {
+    var dataEl = document.getElementById('orderStatusPieData');
+    var canvas = document.getElementById('orderStatusPieCanvas');
+    if (!dataEl || !canvas) return;
+
+    var labels = ['Chờ xử lý', 'Đang xử lý', 'Đang giao', 'Đã giao', 'Đã hủy', 'Hết hạn TT', 'Chờ hoàn tiền'];
+    var values = [
+        parseInt(dataEl.dataset.pending) || 0,
+        parseInt(dataEl.dataset.processing) || 0,
+        parseInt(dataEl.dataset.shipped) || 0,
+        parseInt(dataEl.dataset.delivered) || 0,
+        parseInt(dataEl.dataset.cancelled) || 0,
+        parseInt(dataEl.dataset.expired) || 0,
+        parseInt(dataEl.dataset.refund) || 0,
+    ];
+    var colors = ['#f59e0b', '#3b82f6', '#8b5cf6', '#10b981', '#ef4444', '#94a3b8', '#f97316'];
+
+    // Lọc bỏ mục có giá trị 0
+    var filtered = [];
+    for (var i = 0; i < values.length; i++) {
+        if (values[i] > 0) filtered.push({ label: labels[i], value: values[i], color: colors[i] });
+    }
+
+    if (filtered.length === 0) {
+        canvas.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:260px;color:#94a3b8;font-size:14px;">Chưa có đơn hàng</div>';
+        return;
+    }
+
+    var fLabels = filtered.map(function(f) { return f.label; });
+    var fValues = filtered.map(function(f) { return f.value; });
+    var fColors = filtered.map(function(f) { return f.color; });
+    var total = fValues.reduce(function(a, b) { return a + b; }, 0);
+
+    new Chart(canvas, {
+        type: 'doughnut',
+        data: {
+            labels: fLabels,
+            datasets: [{
+                data: fValues,
+                backgroundColor: fColors,
+                borderWidth: 2,
+                borderColor: '#fff',
+                hoverOffset: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            cutout: '55%',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(item) {
+                            var pct = (item.raw / total * 100).toFixed(1);
+                            return item.label + ': ' + item.raw + ' đơn (' + pct + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Render custom legend
+    var legendEl = document.getElementById('orderStatusLegend');
+    if (legendEl) {
+        var html = '';
+        for (var j = 0; j < filtered.length; j++) {
+            var pct = (filtered[j].value / total * 100).toFixed(1);
+            html += '<div style="display:flex;align-items:center;gap:8px;">'
+                + '<span style="width:12px;height:12px;border-radius:3px;background:' + filtered[j].color + ';display:inline-block;"></span>'
+                + '<span style="color:#334155;">' + filtered[j].label + '</span>'
+                + '<span style="color:#94a3b8;margin-left:4px;">' + filtered[j].value + ' (' + pct + '%)</span>'
+                + '</div>';
+        }
+        legendEl.innerHTML = html;
+    }
+}
+
 // Khởi tạo Dashboard
 document.addEventListener('DOMContentLoaded', function () {
     // Lấy section từ URL hoặc mặc định là stats
@@ -715,6 +795,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     showSidebarPage(pageToShow);
     initRevenueChart();
+    initOrderStatusPieChart();
 
     // Cập nhật sidebar active
     sidebarItems.forEach(item => {
