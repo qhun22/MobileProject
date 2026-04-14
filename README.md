@@ -1,263 +1,185 @@
-# QHUN22 — Website bán điện thoại
+# QHUN22 - Website ban dien thoai di dong (Django)
 
-> Báo cáo môn học · Django · Python  
+Do an mon hoc Phat trien ung dung Python.
 
----
+## 1. Muc tieu va pham vi
 
-## 1. Giới thiệu đề tài
+### Muc tieu
+- Xay dung he thong web ban dien thoai hoan chinh, chay duoc thuc te.
+- Co day du CSDL, giao dien, nghiep vu va phan quyen.
+- Minh hoa quy trinh mua hang end-to-end: tim kiem -> dat hang -> thanh toan -> theo doi don.
 
-**QHUN22** là website thương mại điện tử chuyên bán điện thoại di động, được xây dựng bằng **Django 4.2** (Python). Đồ án mô phỏng quy trình mua sắm online thực tế bao gồm: duyệt sản phẩm, thêm giỏ hàng, đặt hàng, thanh toán trực tuyến, và tích hợp chatbot AI tư vấn khách hàng.
+### Pham vi
+- He thong gom nhieu nhom nguoi dung: Guest, User, Admin.
+- Co it nhat 5 thuc the du lieu co quan he.
+- Co CRUD cho cac bang du lieu chinh, tim kiem/loc/sap xep.
+- Co thong ke bao cao va test co ban.
 
-### Mục tiêu
+## 2. Vai tro nguoi dung
 
-- Xây dựng hệ thống e-commerce hoàn chỉnh với đầy đủ tính năng mua bán
-- Tích hợp nhiều cổng thanh toán (VNPay, MoMo, VietQR, COD)
-- Ứng dụng AI (Claude API + RAG) vào chatbot hỗ trợ khách hàng
-- Hệ thống quản trị (dashboard) cho admin quản lý toàn bộ cửa hàng
+### Guest
+- Xem trang chu, danh sach san pham, chi tiet san pham.
+- Tim kiem va loc san pham.
+- Dang ky, dang nhap, quen mat khau.
 
----
+### User (da dang nhap)
+- Quan ly ho so ca nhan, so dia chi.
+- Them vao gio hang, dat hang, theo doi don.
+- Danh gia san pham, wishlist, so sanh san pham.
+- Su dung coupon va thanh toan (COD, VNPay, MoMo, VietQR).
 
-## 2. Công nghệ sử dụng
+### Admin
+- Quan ly user, phan quyen truy cap dashboard.
+- CRUD san pham, hang, blog, banner, hot sale, coupon.
+- Quan ly don hang, cap nhat trang thai, duyet thanh toan/hoan tien.
+- Xem thong ke doanh thu, san pham ban chay, xuat file Excel.
 
-| Thành phần | Công nghệ |
-| :---------- | :--------- |
-| **Backend** | Python 3.10+, Django 4.2 |
-| **Database** | SQLite3 (dev) · có thể nâng lên PostgreSQL |
-| **Frontend** | HTML5, CSS3 (thuần), JavaScript (ES6) |
-| **Authentication** | django-allauth (Email + Google OAuth2) |
-| **Thanh toán** | VNPay API v2.1, MoMo API v2, VietQR, COD |
-| **AI / Chatbot** | Claude API (Anthropic), FAISS, sentence-transformers |
-| **CAPTCHA** | Cloudflare Turnstile |
-| **Email** | SMTP (Gmail) |
-| **Khác** | python-dotenv, openpyxl (xuất Excel), Remix Icon |
+## 3. Chuc nang he thong (tom tat)
 
----
+He thong dap ung cac nhom chuc nang dong chinh:
 
-## 3. Cấu trúc thư mục
+1. Xac thuc va phan quyen
+- Dang ky, dang nhap, dang xuat.
+- Quen mat khau qua OTP va dat lai mat khau.
+- Kiem soat truy cap theo vai tro Guest/User/Admin.
 
-```text
-qhun22/
-├── config/                  # Cấu hình Django (settings, urls, wsgi)
-├── store/                   # App chính
-│   ├── models.py            # Tất cả model (User, Product, Order, ...)
-│   ├── views/               # Views chia theo chức năng
-│   │   ├── admin_views.py       # Dashboard, quản lý sản phẩm/đơn hàng
-│   │   ├── auth_views.py        # Đăng nhập, đăng ký, profile
-│   │   ├── product_views.py     # Trang chủ, chi tiết SP, tìm kiếm
-│   │   ├── cart_views.py        # Giỏ hàng
-│   │   ├── order_views.py       # Checkout, theo dõi đơn, hoàn tiền
-│   │   ├── payment_views.py     # Xử lý thanh toán (VNPay, MoMo, VietQR)
-│   │   ├── blog_views.py        # Blog
-│   │   ├── chatbot_views.py     # API chatbot
-│   │   ├── coupon_views.py      # Mã giảm giá
-│   │   └── hotsale_views.py     # Sản phẩm khuyến mãi
-│   ├── urls.py              # URL routing
-│   ├── momo_utils.py        # Helper MoMo payment
-│   ├── vnpay_utils.py       # Helper VNPay payment
-│   ├── chatbot_service.py   # Orchestrator chatbot
-│   ├── claude_service.py    # Gọi Claude API
-│   └── migrations/          # Database migrations
-├── ai/                      # Module AI riêng
-│   ├── embeddings.py        # Tạo vector embedding (multilingual)
-│   ├── vector_store.py      # FAISS vector database
-│   ├── intent_model.py      # Phân loại ý định người dùng
-│   ├── rag_pipeline.py      # RAG pipeline chính
-│   ├── prompt_builder.py    # Xây dựng prompt cho Claude
-│   ├── conversation_memory.py  # Quản lý lịch sử hội thoại
-│   ├── claude_client.py     # HTTP client gọi Claude API
-│   └── trainer.py           # Huấn luyện lại model
-├── templates/store/         # Giao diện HTML
-│   ├── pages/               # Trang công khai (home, product, blog, ...)
-│   ├── auth/                # Đăng nhập / Đăng ký
-│   ├── cart/                # Giỏ hàng, checkout
-│   ├── payment/             # Trang thanh toán (VietQR, ...)
-│   ├── user/                # Profile, theo dõi đơn hàng
-│   ├── admin/               # Dashboard quản trị
-│   └── fragments/           # Component tái sử dụng
-├── static/                  # CSS, JS, logo, icon
-├── media/                   # File upload (ảnh SP, banner, blog)
-├── data/                    # Vector store, embedding cache
-├── docs/                    # Tài liệu kỹ thuật
-├── logs/                    # Log chatbot
-├── manage.py
-├── requirements.txt         # Thư viện chính
-├── qhun22.bat               # Script cài đặt (Windows)
-└── .env                     # Biến môi trường (không push lên git)
-```
+2. CRUD du lieu
+- CRUD San pham.
+- CRUD Thuong hieu.
+- CRUD User (dashboard).
+- CRUD Blog/Banner/HotSale/Coupon.
 
----
+3. Tim kiem, loc, sap xep
+- Tim kiem san pham theo ten/tu khoa.
+- Loc theo hang, khoang gia, thuoc tinh.
+- Autocomplete tim kiem.
 
-## 4. Database — Các model chính
+4. Nghiep vu dac thu
+- Luong dat hang va thanh toan (COD, VNPay, MoMo, VietQR).
+- Luong duyet/huy/hoan tien voi trang thai xu ly.
 
-| Model | Mô tả |
-| :----- | :----- |
-| `CustomUser` | Tài khoản người dùng (email làm username, hỗ trợ OAuth, xác thực Student/Teacher) |
-| `Category` | Danh mục sản phẩm |
-| `Brand` | Hãng sản xuất (Apple, Samsung, ...) |
-| `Product` | Sản phẩm (tên, giá, ảnh, tồn kho, ...) |
-| `ProductDetail` | Chi tiết SP (YouTube, mô tả dài, giá gốc) |
-| `ProductVariant` | Biến thể SP (màu + dung lượng + giá riêng) |
-| `ProductSpecification` | Thông số kỹ thuật (JSON) |
-| `ProductImage` | Ảnh SP (cover, marketing, variant, gallery) |
-| `Cart` / `CartItem` | Giỏ hàng (1 cart/user, nhiều item) |
-| `Wishlist` | Danh sách yêu thích |
-| `Address` | Sổ địa chỉ giao hàng |
-| `Order` / `OrderItem` | Đơn hàng + chi tiết từng sản phẩm |
-| `VNPayPayment` | Giao dịch VNPay |
-| `PendingQRPayment` | Giao dịch VietQR (chờ duyệt) |
-| `ProductReview` | Đánh giá sản phẩm (1 review/user/product) |
-| `Banner` | Banner quảng cáo trang chủ |
-| `BlogPost` | Bài viết blog |
-| `HotSaleProduct` | Sản phẩm khuyến mãi nổi bật |
-| `SiteVisit` | Thống kê lượt truy cập |
-| `UserBrowseLog` | Log lịch sử duyệt SP (phục vụ gợi ý) |
+5. Upload va xu ly tep/anh
+- Upload anh san pham, banner, media noi dung.
+- Quan ly thu muc anh va cac thao tac them/xoa/sua ten.
 
----
+6. Thong ke bao cao
+- Dashboard doanh thu theo thang/nam.
+- Bang tong hop don hang, san pham ban chay.
 
-## 5. Chức năng hệ thống
+7. AI chatbot
+- Tu van san pham bang RAG + Claude API.
+- Luu nho hoi thoai va tra loi theo ngu canh.
 
-### 5.1. Phía khách hàng
+## 4. Cong nghe su dung
 
-| Chức năng | Mô tả |
-| :--------- | :----- |
-| Xem sản phẩm | Trang chủ, chi tiết SP, tìm kiếm, lọc theo hãng/giá |
-| Giỏ hàng | Thêm/xóa/cập nhật SP, chọn màu + dung lượng |
-| Yêu thích | Lưu SP yêu thích, toggle nhanh |
-| So sánh SP | So sánh 2-3 sản phẩm cạnh nhau |
-| Đặt hàng | Checkout với nhiều phương thức thanh toán |
-| Theo dõi đơn | Xem trạng thái đơn hàng realtime |
-| Đánh giá | Review SP sau khi mua thành công |
-| Mã giảm giá | Áp dụng voucher khi checkout |
-| Chatbot AI | Hỏi tư vấn SP, so sánh, hỏi giá 24/7 |
-| Xác thực Edu | Xác thực email `.edu.vn` → nhận voucher giảm 50% |
-| Hoàn tiền | Yêu cầu hoàn tiền cho đơn đã hủy |
+| Thanh phan | Cong nghe |
+| :-- | :-- |
+| Backend | Python 3.10+, Django 4.2 |
+| CSDL | SQLite3 (dev), co the nang cap PostgreSQL |
+| Frontend | HTML, CSS, JavaScript |
+| Xac thuc | django-allauth + OAuth2 |
+| Thanh toan | VNPay, MoMo, VietQR, COD |
+| AI | Anthropic Claude API, FAISS, sentence-transformers |
+| Bao mat bo sung | Cloudflare Turnstile |
+| Thu vien khac | python-dotenv, openpyxl |
 
-### 5.2. Phía admin (Dashboard)
+## 5. Kien truc tong quan
 
-| Chức năng | Mô tả |
-| :--------- | :----- |
-| Quản lý SP | CRUD sản phẩm, biến thể, ảnh, thông số kỹ thuật |
-| Quản lý đơn hàng | Xem/cập nhật trạng thái, duyệt hoàn tiền |
-| Quản lý user | Thêm/sửa/xóa người dùng |
-| Quản lý thương hiệu | CRUD hãng sản xuất |
-| Mã giảm giá | Tạo/sửa/xóa coupon |
-| Banner | Thay đổi banner trang chủ |
-| Blog | Viết bài blog |
-| Hot Sale | Quản lý SP khuyến mãi |
-| Thống kê | Doanh thu, SP bán chạy, xuất Excel |
+- Mo hinh MVC/MVT cua Django.
+- Tach lop theo module:
+  - config: cau hinh du an.
+  - store: app nghiep vu chinh (model/view/url/service).
+  - ai: module chatbot RAG.
+  - templates/static/media: giao dien va tai nguyen.
+- Duong dan URL trung tam:
+  - config/urls.py
+  - store/urls.py
 
----
+## 6. Thiet ke CSDL (thuc the chinh)
 
-## 6. Thanh toán
+He thong co tren 5 bang va quan he ro rang, vi du:
 
-Hệ thống hỗ trợ **4 phương thức** thanh toán:
+- CustomUser
+- Product
+- Brand
+- Category
+- Order
+- OrderItem
+- Cart
+- CartItem
+- Coupon
+- ProductReview
+- PendingQRPayment
 
-| Phương thức | Mô tả |
-| :----------- | :----- |
-| **COD** | Thanh toán khi nhận hàng |
-| **VNPay** | Chuyển hướng sang cổng VNPay, thanh toán bằng thẻ/QR, callback tự động |
-| **MoMo** | Chuyển hướng sang MoMo app, thanh toán bằng ví MoMo |
-| **VietQR** | Hiển thị mã QR chuyển khoản ngân hàng, admin duyệt thủ công |
+Quan he tieu bieu:
+- 1-n: User -> Order, Order -> OrderItem, Brand -> Product.
+- n-n (thong qua bang trung gian): Product va gio hang qua CartItem.
 
-> Chi tiết kỹ thuật thanh toán: xem [docs/tailieuvnpay.md](docs/tailieuvnpay.md) và [docs/tailieumomo.md](docs/tailieumomo.md)
+## 7. Cac route nghiep vu quan trong
 
----
+### Xac thuc
+- /login/
+- /register/
+- /forgot-password/
+- /send-otp-forgot-password/
+- /verify-otp-forgot-password/
+- /reset-password/
 
-## 7. Chatbot AI
+### Dat hang va thanh toan
+- /checkout/
+- /order/place/
+- /vnpay/create/
+- /momo/create/
+- /vietqr/create-order/
+- /vietqr-payment/<order_id>/
 
-### Kiến trúc
+### Dashboard quan tri
+- /dashboard/
+- /api/admin/orders/
+- /api/admin/order-update-status/
+- /best-sellers/
 
-```text
-Người dùng  →  Intent Classifier  →  Simple Intent?  →  Template Response
-                                          ↓ No
-                                   Vector Search (FAISS)
-                                          ↓
-                                   Build Context + Prompt
-                                          ↓
-                                   Claude API (Haiku)
-                                          ↓
-                                   Response → Lưu Memory
-```
+## 8. Huong dan cai dat va chay
 
-### Thành phần
+### Yeu cau
+- Python 3.10+
+- pip moi
+- He dieu hanh: Windows/Linux/macOS
 
-| Module | Chức năng |
-| :------ | :-------- |
-| `intent_model.py` | Phân loại ý định: greeting, product_search, price_query, compare, ... |
-| `embeddings.py` | Tạo embedding bằng `paraphrase-multilingual-MiniLM-L12-v2` (384 chiều) |
-| `vector_store.py` | Lưu trữ FAISS index cho products, brands, content |
-| `rag_pipeline.py` | Pipeline chính: intent → search → build prompt → gọi Claude → trả lời |
-| `claude_client.py` | HTTP client gọi Claude API (model: claude-3-haiku) |
-| `prompt_builder.py` | Xây dựng system prompt + context cho Claude |
-| `conversation_memory.py` | Quản lý session + lịch sử hội thoại (timeout 1h, max 20 tin nhắn) |
+### Cach 1 (Windows, khuyen nghi)
+- Chay file qhun22.bat.
+- Chon [0] setup full tu dong.
 
-### Phân loại ý định
-
-- **Simple intents** (trả lời luôn, không cần AI): chào hỏi, hỏi danh tính, hỏi bảo hành, hỏi trả góp, ...
-- **Complex intents** (cần Claude): tư vấn điện thoại, so sánh SP, hỏi thông số chi tiết, xử lý sự cố
-
----
-
-## 8. Hướng dẫn cài đặt
-
-### Yêu cầu
-
-- **Python** 3.10 trở lên (khuyến nghị 3.11)
-- **pip** 23.0+
-- **OS**: Windows / Linux / macOS
-
-### Cách 1: Dùng script (Windows)
-
-```text
-Chạy file qhun22.bat → chọn [0] Cài đặt lần đầu
-```
-
-Script sẽ tự động: kiểm tra Python → tạo venv → cài thư viện → chạy migrate.
-
-### Cách 2: Cài thủ công
+### Cach 2 (thu cong)
 
 ```bash
-# 1. Tạo môi trường ảo
-python -m venv venv
-venv\Scripts\activate          # Windows
-# source venv/bin/activate     # Linux/macOS
-
-# 2. Cài thư viện
+python -m venv .venv
+.venv\Scripts\activate
 pip install --upgrade pip
 pip install -r requirements.txt
-
-# 3. (Tùy chọn) Cài thêm module AI
 pip install -r ai/ai_requirements.txt
-
-# 4. Tạo file .env (xem mẫu bên dưới)
-
-# 5. Tạo database
 python manage.py migrate
-
-# 6. Tạo tài khoản admin
 python manage.py createsuperuser
-
-# 7. Chạy server
 python manage.py runserver
 ```
 
-Truy cập: <http://127.0.0.1:8000/>
+Truy cap: http://127.0.0.1:8000/
 
-### File `.env` mẫu
+## 9. Cau hinh moi truong (.env)
+
+Tao file .env tai thu muc goc voi noi dung mau:
 
 ```env
-# === Django ===
-SECRET_KEY=your-secret-key-here
+SECRET_KEY=your-secret-key
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
 
-# === VNPay (sandbox) ===
 VNPAY_TMN_CODE=
 VNPAY_HASH_SECRET=
-VNPAY_URL=
-VNPAY_RETURN_URL=
+VNPAY_URL=https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+VNPAY_RETURN_URL=http://localhost:8000/vnpay/return/
+VNPAY_IPN_URL=http://localhost:8000/vnpay/ipn/
 
-# === MoMo (test) ===
 MOMO_PARTNER_CODE=MOMO
 MOMO_ACCESS_KEY=
 MOMO_SECRET_KEY=
@@ -265,61 +187,67 @@ MOMO_ENDPOINT=
 MOMO_RETURN_URL=
 MOMO_IPN_URL=
 
-# === VietQR ===
 BANK_ID=TCB
-BANK_ACCOUNT_NO=your-account-number
-BANK_ACCOUNT_NAME=your-name
+BANK_ACCOUNT_NO=
+BANK_ACCOUNT_NAME=
 
-# === Cloudflare Turnstile ===
 CLOUDFLARE_TURNSTILE_SITE_KEY=
 CLOUDFLARE_TURNSTILE_SECRET_KEY=
 
-# === Google OAuth2 ===
 GOOGLE_OAUTH2_CLIENT_ID=
 GOOGLE_OAUTH2_CLIENT_SECRET=
 
-# === Claude AI ===
 ANTHROPIC_API_KEY=
 
-# === Email (Gmail SMTP) ===
 EMAIL_HOST_USER=
 EMAIL_HOST_PASSWORD=
 ```
 
+## 10. Du lieu mau va tai khoan mau
+
+- Du lieu mau da co san trong db.sqlite3 de test nhanh.
+- Tai khoan admin tao bang lenh:
+
+```bash
+python manage.py createsuperuser
+```
+
+- Tai khoan user thu nghiem co the tao truc tiep tren trang /register/.
+
+## 11. Kiem thu
+
+Da co test trong store/tests:
+- test_vietqr_payment.py
+- test_chatbot_orchestrator.py
+
+Chay test:
+
+```bash
+python manage.py test
+```
+
+## 12. Minh chung cho giang vien cham
+
+- Bao cao tong hop: docs/BAI DU AN_PTUD Python_Nhom 06.pdf
+- Tai lieu thanh toan test hoc phan: docs/dulieuthanhtoan.md
+- Ma nguon day du tren Git, lich su commit theo tien do.
+
+## 13. Doi chieu tieu chi hoc phan (tom tat)
+
+- He thong co CSDL quan he nhieu bang va khoa PK/FK.
+- Co role Guest/User/Admin va phan quyen.
+- Co CRUD cho cac nhom du lieu chinh.
+- Co tim kiem/loc/sap xep.
+- Co nghiep vu dat hang + xu ly trang thai thanh toan.
+- Co dashboard thong ke va bao cao.
+- Co test co ban va huong dan chay ro rang.
+
+## 14. Luu y
+
+- Moi thong tin API key/chung thuc de trong .env, khong hard-code vao source.
+- Moi truong production nen dung PostgreSQL va cau hinh ALLOWED_HOSTS/DEBUG phu hop.
+- Tai lieu nay uu tien tinh de cham, de cai dat va de demo.
+
 ---
 
-## 9. Lỗi thường gặp
-
-| Lỗi | Cách sửa |
-| :--- | :-------- |
-| `No module named 'openpyxl'` | `pip install openpyxl` |
-| `tzdata` conflict trên Linux | Bỏ qua — file requirements.txt tự skip trên Linux |
-| `typing_extensions` error | Nâng cấp Python lên 3.10+ |
-| `django-allauth` import error | `pip install -U django-allauth` |
-| `.env not found` | Tạo file `.env` theo mẫu ở mục 8 |
-| Chatbot không hoạt động | Kiểm tra `ANTHROPIC_API_KEY` trong `.env` |
-
----
-
-## 10. Tài liệu tham khảo
-
-- [docs/tailieuvnpay.md](docs/tailieuvnpay.md) — Tài liệu tích hợp VNPay
-- [docs/tailieumomo.md](docs/tailieumomo.md) — Tài liệu tích hợp MoMo
-- [Django Documentation](https://docs.djangoproject.com/en/4.2/)
-- [VNPay Developer](https://sandbox.vnpayment.vn/apis/)
-- [MoMo Developer](https://developers.momo.vn/)
-- [Anthropic Claude API](https://docs.anthropic.com/)
-
----
-
-## 11. Ghi chú
-
-- Database mặc định là **SQLite** (cho development). Production nên chuyển sang PostgreSQL.
-- Các tính năng VNPay, MoMo, Claude AI cần cấu hình API key trong `.env` mới hoạt động.
-- File `db.sqlite3` đã có sẵn dữ liệu mẫu để test.
-- Dự án dùng `>=` cho version package — không cần cài đúng version, chỉ cần Python 3.10+.
-
----
-
-**Sinh viên thực hiện:** Trương Quang Huy  
-**Email:** <qhun22@gmail.com>
+Sinh vien thuc hien: Truong Quang Huy
