@@ -10,7 +10,7 @@
 }
 
 /* ==================== MOBILE ONLY ==================== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
 
     /* Ẩn PC header, điều chỉnh body padding */
     .qh-header-container {

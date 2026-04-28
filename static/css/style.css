@@ -28,42 +28,26 @@ body {
 @import url('https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap');
 
 /* ==================== CUSTOM SCROLLBAR ==================== */
-/* PC: hiện thanh cuộn mỏng cho html/body và mọi elements */
-@media (min-width: 769px) {
-    ::-webkit-scrollbar,
-    *::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-
-    ::-webkit-scrollbar-track,
-    *::-webkit-scrollbar-track {
-        background: #f1f1f100;
-    }
-
-    ::-webkit-scrollbar-thumb,
-    *::-webkit-scrollbar-thumb {
-        background: #c1c1c1;
-    }
-
-    ::-webkit-scrollbar-thumb:hover,
-    *::-webkit-scrollbar-thumb:hover {
-        background: #a1a1a100;
-    }
+/* Ẩn hoàn toàn thanh cuộn trên mọi thiết bị (PC & Mobile) nhưng vẫn cho phép cuộn trang bình thường */
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
-/* Mobile: ẩn hoàn toàn thanh cuộn */
-@media (max-width: 768px) {
-    ::-webkit-scrollbar,
-    *::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-    }
-    html, body, * {
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
-    }
+::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+    background: transparent !important;
+    border: none !important;
+}
+
+html, body {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden !important;
 }
 
 /* CSS Variables - Brand Colors */

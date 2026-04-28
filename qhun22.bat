@@ -36,14 +36,16 @@ echo ╠════════════════════════
 echo ║                                        ║
 echo ║  [0] Setup Full Tự Động                ║
 echo ║  ─────────────────────────────────     ║
-echo ║  [1] Khởi động Server                  ║
+echo ║  [1] Khởi động Server (Chạy Local)     ║
+echo ║  [2] Khởi động Server (Production)     ║
 echo ║                                        ║
 echo ╚════════════════════════════════════════╝
 echo.
-set /p choice="Chọn chức năng [0-1]: "
+set /p choice="Chọn chức năng [0-2]: "
 
 if "%choice%"=="0" goto setup_full_auto
-if "%choice%"=="1" goto start_server
+if "%choice%"=="1" goto start_server_local
+if "%choice%"=="2" goto start_server_prod
 
 echo.
 echo [!] Lựa chọn không hợp lệ!
@@ -137,12 +139,37 @@ if errorlevel 1 (
 goto :eof
 
 
-:start_server
+:start_server_local
 cls
-echo ===================
-echo   Khởi Động Server
-echo ===================
+echo ==========================================
+echo   Khởi Động Server (Chạy Local)
+echo ==========================================
 echo.
+echo [i] Đang cấu hình biến môi trường cho Local...
+echo     - DEBUG=True
+echo     - ALLOWED_HOSTS=127.0.0.1, localhost
+echo     - CLOUDFLARE TURNSTILE = Bypass (Test Key)
+echo.
+set "DEBUG=True"
+set "ALLOWED_HOSTS=127.0.0.1,localhost,*"
+set "CLOUDFLARE_TURNSTILE_SITE_KEY=1x00000000000000000000AA"
+set "CLOUDFLARE_TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA"
+set "VNPAY_RETURN_URL=http://127.0.0.1:8000/vnpay/return/"
+set "VNPAY_IPN_URL=http://127.0.0.1:8000/vnpay/ipn/"
+set "MOMO_RETURN_URL=http://127.0.0.1:8000/momo/return/"
+set "MOMO_IPN_URL=http://127.0.0.1:8000/momo/ipn/"
+goto start_server_common
+
+:start_server_prod
+cls
+echo ==========================================
+echo   Khởi Động Server (Production / Hosting)
+echo ==========================================
+echo.
+echo [i] Đang sử dụng cấu hình gốc từ file .env...
+goto start_server_common
+
+:start_server_common
 call :activate_venv
 if errorlevel 1 (
     echo.
@@ -159,7 +186,11 @@ python manage.py migrate --run-syncdb
 echo.
 echo [OK] Database sẵn sàng!
 echo.
-echo [i] Đang khởi động server tại http://127.0.0.1:8000/
+if "%DEBUG%"=="True" (
+    echo [i] Đang khởi động server LOCAL tại http://127.0.0.1:8000/
+) else (
+    echo [i] Đang khởi động server PRODUCTION theo cấu hình .env
+)
 echo [i] Log server se hien thi truc tiep tren terminal
 echo [i] Log chatbot: logs\chatbot.log
 echo [i] Bấm Ctrl+C để dừng server

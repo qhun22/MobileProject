@@ -16,7 +16,7 @@ LOG_DIR.mkdir(parents=True, exist_ok=True)
 # Bảo mật
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-qhun22-mobile-shop-2024')
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'qhun22.com,www.qhun22.com,127.0.0.1,localhost').split(',')
 
 # Ứng dụng đã cài đặt
 INSTALLED_APPS = [
@@ -161,12 +161,20 @@ VNPAY_CONFIG = {
     'vnp_TmnCode': os.getenv('VNPAY_TMN_CODE', ''),
     'vnp_HashSecret': os.getenv('VNPAY_HASH_SECRET', ''),
     'vnp_Url': os.getenv('VNPAY_URL', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
-    'vnp_ReturnUrl': os.getenv('VNPAY_RETURN_URL', 'http://localhost:8000/vnpay/return/'),
-    'vnp_IpnUrl': os.getenv('VNPAY_IPN_URL', 'http://localhost:8000/vnpay/ipn/'),
+    'vnp_ReturnUrl': os.getenv('VNPAY_RETURN_URL', 'https://qhun22.com/vnpay/return/'),
+    'vnp_IpnUrl': os.getenv('VNPAY_IPN_URL', 'https://qhun22.com/vnpay/ipn/'),
     'vnp_OrderType': 'billpayment',
     'vnp_Version': '2.1.0',
     'vnp_Command': 'pay',
 }
+
+# ==================== MOMO PAYMENT GATEWAY CONFIG ====================
+MOMO_PARTNER_CODE = os.getenv('MOMO_PARTNER_CODE', 'MOMO')
+MOMO_ACCESS_KEY = os.getenv('MOMO_ACCESS_KEY', 'F8BBA842ECF85')
+MOMO_SECRET_KEY = os.getenv('MOMO_SECRET_KEY', 'K951B6PE1waDMi640xX08PD3vg6EkVlz')
+MOMO_ENDPOINT = os.getenv('MOMO_ENDPOINT', 'https://test-payment.momo.vn/v2/gateway/api/create')
+MOMO_RETURN_URL = os.getenv('MOMO_RETURN_URL', 'https://qhun22.com/momo/return/')
+MOMO_IPN_URL = os.getenv('MOMO_IPN_URL', 'https://qhun22.com/momo/ipn/')
 
 # ==================== BANK ACCOUNT CONFIG (VietQR) ====================
 BANK_ID = os.getenv('BANK_ID', 'TCB')
