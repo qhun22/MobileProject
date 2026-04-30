@@ -180,6 +180,19 @@
     font-size: 14px;
 }
 
+/* Cloudflare Turnstile widget wrapper */
+.auth-turnstile-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+    min-height: 65px;
+}
+
+.auth-turnstile-wrap .cf-turnstile {
+    display: flex;
+    justify-content: center;
+}
+
 .auth-check {
     display: flex;
     align-items: center;

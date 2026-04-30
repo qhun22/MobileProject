@@ -120,18 +120,18 @@ def login_view(request):
         password = request.POST.get('password')
         remember_me = request.POST.get('remember_me')
         
-        # turnstile_token = request.POST.get('cf-turnstile-response')
-        
-        # Cloudflare Turnstile - Enable when deploying to production
-        # if not turnstile_token:
-        #     messages.error(request, 'Vui lòng xác minh bạn không phải robot!')
-        #     return render(request, 'store/login.html')
-        
-        # # Xác minh Turnstile trước khi authenticate
-        # if not verify_turnstile(turnstile_token):
-        #     messages.error(request, 'Xác minh thất bại. Vui lòng thử lại!')
-        #     return render(request, 'store/login.html')
-        
+        turnstile_token = request.POST.get('cf-turnstile-response')
+
+        # Cloudflare Turnstile - bật khi deploy production
+        if settings.CLOUDFLARE_TURNSTILE_SITE_KEY:
+            if not turnstile_token:
+                messages.error(request, 'Vui lòng xác minh bạn không phải robot!')
+                return render(request, 'store/auth/auth.html', {'initial_mode': 'login'})
+
+            if not verify_turnstile(turnstile_token):
+                messages.error(request, 'Xác minh thất bại. Vui lòng thử lại!')
+                return render(request, 'store/auth/auth.html', {'initial_mode': 'login'})
+
         # Authenticate với email
         user = authenticate(request, username=email, password=password)
         if user is not None:

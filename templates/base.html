@@ -47,6 +47,11 @@
 
     {% block extra_css %}{% endblock %}
 
+    <!-- Cloudflare Turnstile -->
+    {% if CLOUDFLARE_TURNSTILE_SITE_KEY %}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    {% endif %}
+
     <!-- JS với defer để không block render -->
     <script src="{% static 'js/toast.js' %}" defer></script>
     <script src="{% static 'js/confirm.js' %}" defer></script>
