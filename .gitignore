@@ -49,6 +49,7 @@ staticfiles/
 .env.local
 .env.production
 .env.*.local
+.env.test2
 *.pem
 *.key
 
@@ -58,8 +59,10 @@ staticfiles/
 *.bin
 *.ckpt
 data/embeddings_cache/
-data/*.pkl
+# data/intent_model.pkl và data/vector_store/ cần thiết cho chatbot trên Render
 *.pkl
+!data/intent_model.pkl
+!data/intent_model_verify.pkl
 
 # ==================== Logs ====================
 logs/
@@ -68,6 +71,8 @@ logs/
 # ==================== Docs & Temp ====================
 *.md
 !README.md
+!RENDER_DEPLOY_AUDIT.md
+!RENDER_MIGRATION_PLAN.md
 SETUP.md
 DEPLOY_CHECKLIST.md
 migrate.py
@@ -81,6 +86,9 @@ backup/
 backup_unused/
 *.bak
 *.backup
+
+# ==================== Data Export (chứa dữ liệu thật) ====================
+scripts/data_export/
 
 # ==================== Config ====================
 config/__pycache__/

@@ -459,6 +459,18 @@ ORDER_CAPABILITY_PATTERNS_NORM = re.compile(
     re.IGNORECASE,
 )
 
+ORDER_GUIDE_PATTERNS = re.compile(
+    r"(cách đặt hàng|cach dat hang|"
+    r"hướng dẫn đặt hàng|huong dan dat hang|"
+    r"chỉ.*cách.*đặt hàng|chi.*cach.*dat hang|"
+    r"đặt hàng như thế nào|dat hang nhu the nao|"
+    r"mua hàng như thế nào|mua hang nhu the nao|"
+    r"quy trình đặt hàng|quy trinh dat hang|"
+    r"làm sao để đặt hàng|lam sao de dat hang|"
+    r"cách mua hàng|cach mua hang)",
+    re.IGNORECASE,
+)
+
 ORDER_CODE_PATTERN = re.compile(r"\b(QH\d{6,}|QHUN\d+)\b", re.IGNORECASE)
 
 # Session keys (multi-turn)
@@ -874,6 +886,9 @@ class ChatbotService:
         )
         if has_simple_stock_question:
             return "stock"
+
+        if matched(ORDER_GUIDE_PATTERNS, ORDER_GUIDE_PATTERNS):
+            return "order_guide"
 
         # Confirm phải check TRƯỚC consult: "vậy nên mua" vừa có confirm vừa có consult.
         if matched(CONFIRM_PATTERNS, CONFIRM_PATTERNS_NORM):
@@ -1662,6 +1677,19 @@ class ChatbotService:
             "suggestions": ["Kiểm tra đơn hàng", "Gặp nhân viên"],
         }
 
+    def _handle_order_guide(self) -> dict[str, Any]:
+        return {
+            "message": (
+                "Dạ, anh/chị đặt hàng trên hệ thống theo 4 bước ạ:\n"
+                "1. Chọn sản phẩm và phiên bản/màu sắc phù hợp.\n"
+                "2. Nhấn “Thêm vào giỏ” rồi mở giỏ hàng.\n"
+                "3. Kiểm tra sản phẩm, số lượng và nhấn “Thanh toán”.\n"
+                "4. Điền thông tin nhận hàng, chọn phương thức thanh toán và xác nhận đặt hàng.\n"
+                "Sau khi đặt thành công, hệ thống sẽ hiển thị mã đơn để anh/chị theo dõi."
+            ),
+            "suggestions": ["Tư vấn chọn máy", "Kiểm tra đơn hàng", "Gặp nhân viên"],
+        }
+
     def _extract_budget(self, message: str) -> tuple[int | None, str | None]:
         """Tách ngân sách từ câu chat: trả về (số tiền VND, kiểu ràng buộc)."""
         msg = (message or "").lower()
@@ -2215,6 +2243,9 @@ class ChatbotService:
                 return self._handle_series_stock_query(base)
 
         # ── Fixed responses (không gọi Claude) ──────────────────
+        if intent == "order_guide":
+            return self._handle_order_guide()
+
         if intent == "order_capability":
             return self._handle_order_capability()
 

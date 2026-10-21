@@ -110,12 +110,14 @@ goto :eof
 if exist "%VENV_DIR%\Scripts\activate.bat" (
     call %VENV_DIR%\Scripts\activate.bat >nul 2>&1
     if errorlevel 1 goto activate_venv_fail
+    set "VENV_PYTHON=%CD%\%VENV_DIR%\Scripts\python.exe"
     exit /b 0
 )
 if exist "venv\Scripts\activate.bat" (
     set "VENV_DIR=venv"
     call venv\Scripts\activate.bat >nul 2>&1
     if errorlevel 1 goto activate_venv_fail
+    set "VENV_PYTHON=%CD%\%VENV_DIR%\Scripts\python.exe"
     exit /b 0
 )
 echo [!] Không tìm thấy venv! Hãy chạy [0] Setup Full trước.
@@ -181,7 +183,7 @@ if errorlevel 1 (
 
 echo.
 echo [i] Đang kiểm tra database...
-python manage.py migrate --run-syncdb
+"%VENV_PYTHON%" manage.py migrate --run-syncdb
 
 echo.
 echo [OK] Database sẵn sàng!
@@ -197,7 +199,8 @@ echo [i] Bấm Ctrl+C để dừng server
 echo.
 set "DJANGO_LOG_LEVEL=INFO"
 set "QH_CHATBOT_LOG_LEVEL=INFO"
-python manage.py runserver
+echo [i] Python chatbot: %VENV_PYTHON%
+"%VENV_PYTHON%" manage.py runserver
 goto main_menu
 
 

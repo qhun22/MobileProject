@@ -27,11 +27,7 @@ class MoMoUtil:
         )
 
         # Dung ascii nhu MoMo SDK
-        signature = hmac.new(
-            bytes(self.secret_key, 'ascii'),
-            bytes(raw_signature, 'ascii'),
-            hashlib.sha256
-        ).hexdigest()
+        signature = self._sign(raw_signature)
 
         data = {
             'partnerCode': self.partner_code,
@@ -65,20 +61,32 @@ class MoMoUtil:
             return {'error': True, 'message': str(e)}
 
     def verify_signature(self, data):
+        return self.verify_return_signature(data)
+
+    def verify_return_signature(self, data):
+        access_key = data.get('accessKey', self.access_key)
         raw_signature = (
-            f"accessKey={self.access_key}&amount={data.get('amount')}"
-            f"&extraData={data.get('extraData', '')}&orderId={data.get('orderId')}"
-            f"&orderInfo={data.get('orderInfo', '')}&partnerCode={data.get('partnerCode')}"
-            f"&requestId={data.get('requestId')}"
+            f"accessKey={access_key}&amount={data.get('amount', '')}"
+            f"&extraData={data.get('extraData', '')}&message={data.get('message', '')}"
+            f"&orderId={data.get('orderId', '')}&orderInfo={data.get('orderInfo', '')}"
+            f"&orderType={data.get('orderType', '')}&partnerCode={data.get('partnerCode', '')}"
+            f"&payType={data.get('payType', '')}&requestId={data.get('requestId', '')}"
+            f"&responseTime={data.get('responseTime', '')}"
+            f"&resultCode={data.get('resultCode', '')}&transId={data.get('transId', '')}"
         )
 
-        expected_signature = hmac.new(
+        expected_signature = self._sign(raw_signature)
+        return data.get('signature') == expected_signature
+
+    def verify_ipn_signature(self, data):
+        return self.verify_return_signature(data)
+
+    def _sign(self, raw_signature):
+        return hmac.new(
             bytes(self.secret_key, 'ascii'),
             bytes(raw_signature, 'ascii'),
             hashlib.sha256
         ).hexdigest()
-
-        return data.get('signature') == expected_signature
 
     @staticmethod
     def build_payment_url(amount, order_id, order_info):

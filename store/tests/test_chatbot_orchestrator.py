@@ -74,6 +74,21 @@ class HybridChatbotOrchestratorTests(SimpleTestCase):
         self.assertEqual(local.process_calls, 1)
         self.assertEqual(ai.calls, 0)
 
+    def test_order_guide_routes_local(self):
+        local = _FakeLocalService(
+            intent='order_guide',
+            response={'message': 'order-guide', 'suggestions': ['Tư vấn chọn máy']},
+        )
+        ai = _FakeAIPipeline()
+        orchestrator = HybridChatbotOrchestrator(local_service=local, ai_pipeline=ai)
+
+        out = orchestrator.process_message('chỉ tôi cách đặt hàng của hệ thống')
+
+        self.assertEqual(out.get('message'), 'order-guide')
+        self.assertEqual(out.get('engine'), 'django_local')
+        self.assertEqual(local.process_calls, 1)
+        self.assertEqual(ai.calls, 0)
+
     def test_reset_clears_local_and_ai_memory(self):
         local = _FakeLocalService(intent='unknown')
         ai = _FakeAIPipeline()

@@ -2,6 +2,7 @@
 Cấu hình Django cho dự án QHUN22
 """
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -20,6 +21,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'qhun22.com,www.qhun22.com,127.0.0.1,
 CSRF_TRUSTED_ORIGINS = [
     'https://qhun22.com',
     'https://www.qhun22.com',
+    'https://*.onrender.com',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
 ]
@@ -85,12 +87,13 @@ TEMPLATES = [
 # WSGI
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
+# Database — đọc DATABASE_URL từ env (PostgreSQL trên Render), fallback SQLite cho dev
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 # Xác thực
@@ -271,4 +274,14 @@ LOGGING = {
         'level': 'WARNING',
     },
 }
+
+# ==================== PRODUCTION SECURITY (Render) ====================
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 

@@ -1063,12 +1063,22 @@ def momo_return(request):
     from django.contrib import messages
     from django.views.decorators.csrf import csrf_exempt
     from store.models import Cart, Order, OrderItem, ProductDetail, FolderColorImage
+    from store.momo_utils import MoMoUtil
 
     try:
-        result_code = request.GET.get('resultCode') or (request.POST.get('resultCode') if request.method == 'POST' else None)
-        order_id = request.GET.get('orderId') or (request.POST.get('orderId') if request.method == 'POST' else None)
-        message = request.GET.get('message') or (request.POST.get('message') if request.method == 'POST' else None)
-        amount = request.GET.get('amount') or (request.POST.get('amount') if request.method == 'POST' else None)
+        data_source = request.GET if request.method == 'GET' else request.POST
+        result_code = data_source.get('resultCode')
+        order_id = data_source.get('orderId')
+        message = data_source.get('message')
+        amount = data_source.get('amount')
+        signature = data_source.get('signature')
+
+        if signature:
+            momo = MoMoUtil()
+            if not momo.verify_return_signature(data_source):
+                return render(request, 'store/payment/payment_error.html', {
+                    'message': 'Chữ ký MoMo không hợp lệ'
+                })
 
         # Lấy thông tin từ session
         order_code = request.session.get('momo_order_code')
@@ -1187,11 +1197,16 @@ def momo_ipn(request):
     from django.http import JsonResponse
     from django.views.decorators.csrf import csrf_exempt
     from store.models import Order
+    from store.momo_utils import MoMoUtil
 
     try:
         result_code = request.POST.get('resultCode')
         order_id = request.POST.get('orderId')
         message = request.POST.get('message')
+
+        momo = MoMoUtil()
+        if request.POST.get('signature') and not momo.verify_ipn_signature(request.POST):
+            return JsonResponse({'RspCode': '97', 'Message': 'Invalid signature'})
 
         if not order_id:
             return JsonResponse({'RspCode': '01', 'Message': 'Missing orderId'})

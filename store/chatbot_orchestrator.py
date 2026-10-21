@@ -19,6 +19,7 @@ class HybridChatbotOrchestrator:
 
     LOCAL_ONLY_INTENTS = {
         "order",
+        "order_guide",
         "order_capability",
         "staff",
         "installment",
@@ -57,7 +58,11 @@ class HybridChatbotOrchestrator:
 
     def _get_ai_pipeline(self):
         if self.ai_pipeline is None:
-            self.ai_pipeline = create_rag_pipeline()
+            try:
+                self.ai_pipeline = create_rag_pipeline()
+            except Exception as exc:
+                logger.error("Khong the khoi tao AI pipeline: %s", exc)
+                self.ai_pipeline = None
         return self.ai_pipeline
 
     @staticmethod
