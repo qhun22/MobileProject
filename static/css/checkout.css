@@ -113,7 +113,7 @@
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.2s;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-checkout-addr-change:hover {
@@ -565,7 +565,7 @@
     cursor: pointer;
     margin-top: 20px;
     transition: all 0.3s;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-checkout-submit-btn:hover {
@@ -670,7 +670,7 @@
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     text-decoration: none;
 }
 

@@ -59,6 +59,11 @@ print(f"Upload {total} files ({total_size / 1024 / 1024:.1f} MB) lên R2 bucket 
 print()
 
 import mimetypes
+# Windows mimetypes missing some types — add manually
+mimetypes.add_type('image/webp', '.webp')
+mimetypes.add_type('image/avif', '.avif')
+mimetypes.add_type('image/heic', '.heic')
+
 uploaded = 0
 skipped = 0
 errors = 0

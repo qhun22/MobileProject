@@ -6,7 +6,7 @@
 .pd-page {
     width: 100%;
     padding: 0 0 40px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 /* ========== Breadcrumb ========== */
@@ -152,7 +152,7 @@
     font-size: 13px;
     color: #059669;
     margin-bottom: 20px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 /* ========== Variant Sections (Storage & Color) ========== */
@@ -183,7 +183,7 @@
     text-align: center;
     transition: all 0.2s;
     position: relative;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     box-sizing: border-box;
 }
 
@@ -243,7 +243,7 @@
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     box-sizing: border-box;
 }
 
@@ -324,7 +324,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     white-space: nowrap;
 }
 
@@ -410,7 +410,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     line-height: 1.2;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 /* ========== Gallery Lightbox ========== */
@@ -426,7 +426,7 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-gallery-overlay.show {
@@ -477,7 +477,7 @@
     border-bottom: 2.5px solid transparent;
     transition: color 0.2s, border-color 0.2s;
     white-space: nowrap;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-gallery-color-tab:hover {
@@ -635,7 +635,7 @@
     background: rgba(0, 0, 0, 0.45);
     z-index: 10000;
     display: none;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-spec-overlay.show {
@@ -675,7 +675,7 @@
     font-weight: 700;
     color: #1e293b;
     margin: 0;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-spec-panel-close {
@@ -730,7 +730,7 @@
     transition: color 0.15s, border-color 0.15s;
     white-space: nowrap;
     flex-shrink: 0;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-spec-tab:hover {
@@ -765,7 +765,7 @@
     top: 0;
     background: #fff;
     z-index: 1;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-spec-group table {
@@ -781,7 +781,7 @@
     padding: 12px 22px;
     font-size: 14px;
     vertical-align: top;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-spec-group td:first-child {
@@ -804,7 +804,7 @@
     margin: 0;
     padding-left: 18px;
     list-style: disc;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-spec-list li {
@@ -849,7 +849,7 @@
     color: #1e293b;
     white-space: nowrap;
     text-decoration: none;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     flex-shrink: 0;
     transition: color 0.2s;
     background: none;
@@ -882,7 +882,7 @@
 /* ========== Product Content Panel Body (rich HTML from CKEditor) ========== */
 .pd-content-body {
     padding: 20px 22px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     font-size: 15px;
     color: #1e293b;
     line-height: 1.8;
@@ -895,7 +895,7 @@
     color: #0f172a;
     margin-top: 20px;
     margin-bottom: 10px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     line-height: 1.4;
 }
 
@@ -1010,7 +1010,7 @@
     margin: 0;
     border-bottom: 1px solid #e2e8f0;
     background: #f8fafc;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-extra-title svg {
@@ -1059,7 +1059,7 @@
     font-size: 16px;
     color: #334155;
     line-height: 1.55;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-commit-icon {
@@ -1121,13 +1121,13 @@
     font-size: 18px;
     font-weight: 700;
     color: #f59e0b;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-review-avg-count {
     font-size: 13px;
     color: #94a3b8;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 /* Review Form */
@@ -1147,7 +1147,7 @@
     border-radius: 8px;
     font-size: 14px;
     color: #64748b;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     line-height: 1.55;
 }
 
@@ -1224,7 +1224,7 @@
     font-weight: 500;
     color: #334155;
     margin: 0;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     flex-shrink: 0;
 }
 
@@ -1319,7 +1319,7 @@
     font-weight: 500;
     color: #475569;
     cursor: pointer;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     transition: background 0.2s, border-color 0.2s;
 }
 
@@ -1343,7 +1343,7 @@
     font-size: 13px;
     font-weight: 600;
     color: #475569;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-review-preview {
@@ -1370,7 +1370,7 @@
 .pd-review-images-count {
     font-size: 12px;
     color: #94a3b8;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 /* Footer: message trái, nút Gửi đánh giá phải */
@@ -1387,7 +1387,7 @@
 
 .pd-review-msg {
     font-size: 13px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     min-height: 20px;
     flex: 1;
 }
@@ -1409,7 +1409,7 @@
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     transition: background 0.2s, opacity 0.2s;
 }
 
@@ -1477,7 +1477,7 @@
     font-size: 13px;
     font-weight: 600;
     color: #1e293b;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1486,7 +1486,7 @@
 .pd-review-date {
     font-size: 11px;
     color: #94a3b8;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .pd-review-rating {
@@ -1662,7 +1662,7 @@
 
 /* Compare button behavior giống Home */
 .qh-compare-btn {
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-compare-btn:hover {
@@ -2000,7 +2000,7 @@
         border: 1.5px solid #e2e8f0;
         border-radius: 8px;
         cursor: pointer;
-        font-family: 'Signika', sans-serif;
+        font-family: Saira, Arial, sans-serif;
         font-size: 13px;
         font-weight: 500;
         color: #64748b;

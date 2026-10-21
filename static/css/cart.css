@@ -199,7 +199,7 @@
     transition: border-color 0.2s;
     -webkit-user-select: none;
     user-select: none;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-cart-color-selected:hover {
@@ -241,7 +241,7 @@
     color: var(--qh-text);
     background: white;
     transition: all 0.2s;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-cart-color-opt:hover {
@@ -281,7 +281,7 @@
     transition: border-color 0.2s;
     -webkit-user-select: none;
     user-select: none;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-cart-storage-selected:hover {
@@ -319,7 +319,7 @@
     color: var(--qh-text);
     background: white;
     transition: all 0.2s;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-cart-storage-opt:hover {
@@ -388,7 +388,7 @@
     font-weight: 500;
     color: var(--qh-text);
     transition: background 0.2s;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-cart-qty-btn:hover:not(:disabled) {
@@ -411,7 +411,7 @@
     font-weight: 600;
     color: var(--qh-text);
     outline: none;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     -moz-appearance: textfield;
     appearance: textfield;
 }
@@ -505,7 +505,7 @@
     cursor: pointer;
     margin-top: 20px;
     transition: all 0.3s;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-cart-checkout-btn:hover {

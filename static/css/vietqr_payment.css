@@ -262,7 +262,7 @@
     border-radius: 999px;
     background: #fff;
     color: #475569;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     font-size: 12px;
     font-weight: 600;
     padding: 5px 10px;
@@ -335,7 +335,7 @@
     padding: 8px 12px;
     font-size: 13px;
     font-weight: 600;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -489,7 +489,7 @@
     width: 100%;
     padding: 14px 20px;
     border-radius: 8px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;

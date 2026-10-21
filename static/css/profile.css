@@ -206,7 +206,7 @@
     border-radius: 10px;
     cursor: pointer;
     color: var(--qh-text-light);
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     font-size: 13px;
     font-weight: 500;
     transition: all 0.2s;
@@ -534,7 +534,7 @@
     border: 1px solid var(--qh-border);
     background: white;
     color: var(--qh-text);
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     transition: all 0.2s;
     display: flex;
     align-items: center;
@@ -638,7 +638,7 @@
     font-size: 14px;
     font-weight: 700;
     color: var(--qh-text);
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     transition: all 0.2s ease;
 }
 

@@ -120,7 +120,7 @@
     color: #059669;
     font-size: 13px;
     font-weight: 600;
-    font-family: 'Signika', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: Saira, Arial, sans-serif;
     border-radius: 999px;
     padding: 5px 14px;
     line-height: 1.1;
@@ -148,7 +148,7 @@
     margin: 0;
     font-size: 15px;
     font-weight: 600;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-chat-header-info small {
@@ -245,7 +245,7 @@
     font-size: 13.5px;
     line-height: 1.5;
     word-wrap: break-word;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-chat-msg.bot .qh-chat-msg-bubble {
@@ -285,7 +285,7 @@
     font-size: 12.5px;
     cursor: pointer;
     transition: all .15s;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     white-space: nowrap;
 }
 
@@ -415,7 +415,7 @@
     padding: 9px 16px;
     font-size: 13.5px;
     outline: none;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     transition: border-color .15s;
     background: #f8f9fc;
 }

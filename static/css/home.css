@@ -150,7 +150,7 @@
 
 /* ==================== Compare Button ==================== */
 .qh-compare-btn {
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-compare-btn:hover {
@@ -544,7 +544,7 @@
     font-weight: 800;
     color: #222;
     letter-spacing: clamp(0.4px, 0.2vw, 1.2px);
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     background: linear-gradient(90deg, #565555 0%, #626161 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -631,7 +631,7 @@
     color: var(--qh-price);
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     background: none;
     -webkit-text-fill-color: var(--qh-price);
 }
@@ -876,7 +876,7 @@
     font-size: 13px;
     font-weight: 600;
     color: #1e293b;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -975,7 +975,7 @@
     color: #ffffff;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-bestseller-grid {
@@ -1423,12 +1423,19 @@
 /* --- Responsive --- */
 @media (max-width: 1300px) {
 
-    /* Khi body hẹp hơn ~1300px, 2 bên không còn chỗ cho icon trang trí */
-    .qh-hotsale-corner--tl,
-    .qh-hotsale-corner--bl,
-    .qh-hotsale-corner--tr,
-    .qh-hotsale-corner--br {
-        display: none;
+    /* Khi body hẹp hơn ~1300px, thu nhỏ icon trang trí */
+    .qh-hotsale-corner {
+        width: 36px;
+    }
+    .qh-hotsale-corner--tl { top: 10px; left: 8px; }
+    .qh-hotsale-corner--bl { bottom: 10px; left: 8px; }
+    .qh-hotsale-corner--tr { top: 10px; right: 8px; }
+    .qh-hotsale-corner--br { bottom: 10px; right: 8px; }
+}
+
+@media (max-width: 600px) {
+    .qh-hotsale-corner {
+        width: 24px;
     }
 }
 
@@ -1740,7 +1747,7 @@
     color: #555;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-filter-select {
@@ -1759,7 +1766,7 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-filter-select:focus {
@@ -1793,7 +1800,7 @@
     transition: all 0.2s ease;
     text-decoration: none;
     white-space: nowrap;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     line-height: 1.4;
 }
 
@@ -2255,7 +2262,7 @@
     line-height: 1.3;
     color: var(--qh-text);
     font-weight: 700;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
 }
 
 .qh-newsletter-subtitle {
@@ -2291,7 +2298,7 @@
     height: 46px;
     padding: 0 16px;
     font-size: 16px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     outline: none;
     min-width: 260px;
     max-width: 380px;

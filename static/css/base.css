@@ -229,7 +229,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     line-height: 1.4;
     background: #f3f4f6;
     color: #555;
@@ -257,7 +257,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     line-height: 1.4;
     background: var(--qh-primary);
     color: #fff;

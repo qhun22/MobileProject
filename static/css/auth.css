@@ -114,7 +114,7 @@
     border: 1.5px solid #e5e7eb;
     border-radius: 14px;
     padding: 0 44px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     font-size: 16px;
     color: var(--qh-text);
     background: #fff;
@@ -218,7 +218,7 @@
     color: #fff;
     border: none;
     border-radius: 14px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
@@ -242,7 +242,7 @@
     background: none;
     border: none;
     color: var(--qh-primary);
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -282,7 +282,7 @@
     background: #fff;
     border: 1.5px solid #e5e7eb;
     border-radius: 14px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     font-size: 15px;
     font-weight: 500;
     color: var(--qh-text);
@@ -327,7 +327,7 @@
     color: #fff;
     border: none;
     border-radius: 14px;
-    font-family: 'Signika', sans-serif;
+    font-family: Saira, Arial, sans-serif;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
