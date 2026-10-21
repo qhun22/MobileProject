@@ -115,9 +115,37 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Media files (Upload)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# Media files — dùng Cloudflare R2 nếu có cấu hình, fallback local
+_R2_ACCOUNT_ID = os.getenv('R2_ACCOUNT_ID', '')
+_R2_ACCESS_KEY = os.getenv('R2_ACCESS_KEY_ID', '')
+_R2_SECRET_KEY = os.getenv('R2_SECRET_ACCESS_KEY', '')
+_R2_BUCKET = os.getenv('R2_BUCKET_NAME', '')
+_R2_PUBLIC_URL = os.getenv('R2_PUBLIC_URL', '')  # e.g. https://media.example.com
+
+if _R2_ACCOUNT_ID and _R2_ACCESS_KEY and _R2_SECRET_KEY and _R2_BUCKET:
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+            'OPTIONS': {
+                'access_key': _R2_ACCESS_KEY,
+                'secret_key': _R2_SECRET_KEY,
+                'bucket_name': _R2_BUCKET,
+                'endpoint_url': f'https://{_R2_ACCOUNT_ID}.r2.cloudflarestorage.com',
+                'region_name': 'auto',
+                'default_acl': None,
+                'querystring_auth': False,
+                'custom_domain': _R2_PUBLIC_URL.replace('https://', '').replace('http://', '').rstrip('/') if _R2_PUBLIC_URL else None,
+            },
+        },
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
+    MEDIA_URL = _R2_PUBLIC_URL.rstrip('/') + '/' if _R2_PUBLIC_URL else f'https://pub-{_R2_BUCKET}.r2.dev/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

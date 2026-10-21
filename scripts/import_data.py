@@ -11,6 +11,10 @@ import sys
 import json
 from pathlib import Path
 
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
@@ -63,11 +67,7 @@ try:
     kwargs = dict(
         verbosity=1,
     )
-    if ignore:
-        # Dùng ignoreconflicts tránh duplicate
-        call_command('loaddata', str(dump_file), **kwargs, ignoreconflicts=True)
-    else:
-        call_command('loaddata', str(dump_file), **kwargs)
+    call_command('loaddata', str(dump_file), **kwargs, ignore=True)
     print("loaddata hoàn tất!")
 except Exception as e:
     print(f"ERROR loaddata: {e}")
