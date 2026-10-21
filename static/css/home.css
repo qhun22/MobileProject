@@ -1120,7 +1120,7 @@
     --hs-tab-y: -20px;
     /* dịch cả tab: âm = lên,  dương = xuống */
     transform: translate(var(--hs-tab-x), var(--hs-tab-y));
-    background-image: url('/media/hotsale/hs-tab-title-20-10.webp');
+    background-image: url('https://pub-77ac9c86c5ac4e35ac04e6b9dacaaeb8.r2.dev/hotsale/hs-tab-title-20-10.webp');
     background-position: center center;
     background-size: 100% 100%;
     background-repeat: no-repeat;
