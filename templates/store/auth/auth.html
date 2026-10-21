@@ -49,12 +49,6 @@
                         </button>
                     </div>
 
-                    {% if CLOUDFLARE_TURNSTILE_SITE_KEY %}
-                    <div class="auth-turnstile-wrap">
-                        <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}" data-theme="light"></div>
-                    </div>
-                    {% endif %}
-
                     <button type="submit" class="auth-btn" id="loginSubmitBtn">Đăng nhập</button>
                 </form>
 
