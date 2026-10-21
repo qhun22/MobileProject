@@ -155,71 +155,13 @@ function initLogin() {
 }
 
 function initRegister() {
-    const emailInput = document.getElementById('regEmail');
-    const otpBtn = document.getElementById('regOtpBtn');
     const regForm = document.getElementById('regForm');
-
-    function updateOtpBtn() {
-        if (!otpBtn || !emailInput) return;
-        const ok = isValidEmail(emailInput.value.trim());
-        otpBtn.disabled = !ok;
-        otpBtn.style.opacity = ok ? '1' : '';
-    }
-
-    if (emailInput) {
-        emailInput.addEventListener('input', updateOtpBtn);
-        updateOtpBtn();
-    }
-
-    if (otpBtn) {
-        otpBtn.addEventListener('click', function () {
-            const email = emailInput.value.trim();
-            if (!isValidEmail(email)) {
-                window.QHToast && window.QHToast.error('Email không hợp lệ!');
-                return;
-            }
-            otpBtn.disabled = true;
-            otpBtn.textContent = 'Đang gửi...';
-
-            fetch('/send-otp/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': getCsrf() },
-                body: 'email=' + encodeURIComponent(email),
-            })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        window.QHToast && window.QHToast.success('Đã gửi mã OTP về email của bạn!');
-                        let cd = 60;
-                        const iv = setInterval(() => {
-                            otpBtn.textContent = 'Gửi lại sau ' + cd + 's';
-                            cd--;
-                            if (cd < 0) {
-                                clearInterval(iv);
-                                otpBtn.textContent = 'Lấy mã';
-                                updateOtpBtn();
-                            }
-                        }, 1000);
-                    } else {
-                        window.QHToast && window.QHToast.error(data.message || 'Gửi OTP thất bại!');
-                        otpBtn.textContent = 'Lấy mã';
-                        updateOtpBtn();
-                    }
-                })
-                .catch(() => {
-                    window.QHToast && window.QHToast.error('Lỗi kết nối server!');
-                    otpBtn.textContent = 'Lấy mã';
-                    updateOtpBtn();
-                });
-        });
-    }
 
     if (regForm) {
         regForm.addEventListener('submit', function (e) {
             const get = n => (regForm.querySelector(`input[name="${n}"]`) || {}).value || '';
             if (!get('fullname').trim()) { e.preventDefault(); window.QHToast && window.QHToast.error('Vui lòng nhập họ tên!'); return; }
             if (!get('email').trim()) { e.preventDefault(); window.QHToast && window.QHToast.error('Vui lòng nhập email!'); return; }
-            if (!get('otp').trim()) { e.preventDefault(); window.QHToast && window.QHToast.error('Vui lòng nhập mã OTP!'); return; }
             if (!get('phone').trim()) { e.preventDefault(); window.QHToast && window.QHToast.error('Vui lòng nhập số điện thoại!'); return; }
             if (!get('password').trim()) { e.preventDefault(); window.QHToast && window.QHToast.error('Vui lòng nhập mật khẩu!'); return; }
             if (!get('confirm_password').trim()) { e.preventDefault(); window.QHToast && window.QHToast.error('Vui lòng nhập lại mật khẩu!'); return; }

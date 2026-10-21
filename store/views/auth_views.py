@@ -296,27 +296,14 @@ def register_view(request):
         phone = request.POST.get('phone')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
-        otp_input = request.POST.get('otp')
-        
         # Kiểm tra các trường không rỗng
-        if not fullname or not email or not phone or not password or not confirm_password or not otp_input:
+        if not fullname or not email or not phone or not password or not confirm_password:
             messages.error(request, 'Vui lòng điền đầy đủ thông tin!')
             return render(request, 'store/auth/auth.html', {'initial_mode': 'register'})
-        
+
         # Kiểm tra mật khẩu khớp
         if password != confirm_password:
             messages.error(request, 'Mật khẩu không khớp!')
-            return render(request, 'store/auth/auth.html', {'initial_mode': 'register'})
-        
-        # Kiểm tra OTP
-        session_otp = request.session.get('otp')
-        session_email = request.session.get('otp_email')
-        session_created_at = request.session.get('otp_created_at', 0)
-        session_expire = request.session.get('otp_expire', 300)
-        
-        # Kiểm tra OTP hết hạn
-        if not session_otp or session_email != email or session_otp != otp_input or int(time.time()) > (session_created_at + session_expire):
-            messages.error(request, 'OTP không hợp lệ hoặc đã hết hạn!')
             return render(request, 'store/auth/auth.html', {'initial_mode': 'register'})
         
         # Kiểm tra email đã tồn tại chưa
@@ -390,11 +377,6 @@ def register_view(request):
                     )
         
         user.save()
-        
-        # Xóa OTP khỏi session
-        request.session.pop('otp', None)
-        request.session.pop('otp_email', None)
-        request.session.pop('otp_expire', None)
         
         messages.success(request, 'Đăng ký thành công! Vui lòng đăng nhập.')
         return redirect('store:login')
